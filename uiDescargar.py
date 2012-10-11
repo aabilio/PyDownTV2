@@ -127,7 +127,6 @@ class Descargar(object):
 
     
     def descargarVideo(self):
-        print self.__TIPO
         if self.__TIPO == "http": self.__getHTTP()
         elif self.__TIPO == "rtmp" or self.__TIPO == "rtmpe": self.__getRTMP()
         elif self.__TIPO == "mms": self.__getMMS()

@@ -25,8 +25,8 @@ import Descargar
 
 _TYPE = "script"
 # Recordar subir antes los archivos a Downloads aumentar la versión en VERSION
-_PDT_VERSION_NIX = "0.1.0-BETA"
-_PDT_VERSION_WIN = "0.1.0-BETA"
+_PDT_VERSION_NIX = "0.1.0-ALPHA"
+_PDT_VERSION_WIN = "0.1.0-ALPHA"
 _URL_VERSION = "http://pydowntv.googlecode.com/svn/trunk/trunk/VERSION"
 
 def isWin():

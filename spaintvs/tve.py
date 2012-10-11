@@ -83,8 +83,11 @@ class TVE(Canal.Canal):
             videoID.find(".html") != -1:
             videoID = videoID.split('.')[0]
         
+        self.debug(u"[DEBUG] ID del vídeo en url = " + videoID)
+        
         # Añadido para vídeos nuevos (periodo de prueba):
         sourceHTML = Descargar.getHtml(self.url)
+        videoID_comp = None
         if sourceHTML.find("flashcontentId:\'videoplayer") != -1:
             videoID_comp = sourceHTML.split("flashcontentId:\'videoplayer")[1].split("\'")[0]
             if videoID_comp != videoID: videoID = videoID_comp
@@ -93,10 +96,11 @@ class TVE(Canal.Canal):
             if videoID_comp != videoID: videoID = videoID_comp
         ########################################################
         
-        
+        self.debug(u"[DEBUG] ID del vídeo en HTML = " + videoID_comp if videoID_comp else "[DEBUG] No ID en HTML")
         self.log(u"[INFO] ID del Vídeo :", videoID)
 
         # -- Método 1 Octubre 2012:
+        self.debug(u"[DEBUG] Probando método de 1 de uno de Octubre de 2012")
         url = "http://www.rtve.es/ztnr/consumer/xl/video/alta/" + videoID + "_es_292525252525111"
         
         user_agent="Mozilla"
@@ -108,18 +112,18 @@ class TVE(Canal.Canal):
         try:
             urlVideo = u.info().getheaders("Location")[0]
         except:
-            return "ERROR"
+            raise Utiles.GeneralPyspainTVsError("No se encuentra Location")
         u.close()
         if urlVideo != "":
             url_video = urlVideo.replace("www.rtve.es", "media5.rtve.es")
             titulo = sourceHTML.split("<title>")[1].split("</")[0] + ".mp4"
             titulo = Utiles.formatearNombre(titulo)
-            sourceHTML = sourceHTML.split("<div id=\"video")[1].split("flashvars")[0] # Me quedo solo con la parte del vídeo principal
+            #sourceHTML = sourceHTML.split("<div id=\"video")[1].split("flashvars")[0] # Me quedo solo con la parte del vídeo principal
             url_img = sourceHTML.split("\"thumbnail\" content=\"")[1].split("\"")[0]
         else:
             raise Utiles.GeneralPyspainTVsError("No se pudo encontrar el enlace de descarga")
         # -- Método 1 Octubre 2012 FIN
-    
+        
         return {
             "url_video" : [url_video],
             "url_img"   : url_img,

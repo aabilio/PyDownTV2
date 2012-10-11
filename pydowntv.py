@@ -20,7 +20,7 @@
 
 __author__ = "aabilio"
 __date__ = "$10-oct-2012 11:01:48$"
-__version__ = "0.1.0-BETA"
+__version__ = "0.1.0-ALPHA"
 
 import sys
 import re
@@ -138,13 +138,14 @@ if __name__ == "__main__":
             if not canal:
                 Utiles.salir(u"ERROR: La URL \"%s\" no pertenece a ninguna Televisión soportada" % url)
                 continue
-            #Chapucilla
             try:
                 info = canal.getInfo()
+                if options.debug:
+                    Utiles.printt(u"[DEBUG] Info del vídeo obtenida:\n"+str(info))
             except Utiles.GeneralPyspainTVsError, e:
                 Utiles.salir(unicode(e))
-            except Exception, e:
-                Utiles.salir(unicode(e))
+            #except Exception, e:
+            #    Utiles.salir(unicode(e))
                 
             if info["exito"]:
                 if options.show:
