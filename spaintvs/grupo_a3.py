@@ -155,10 +155,10 @@ class GrupoA3(Canal.Canal):
         name = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0] + ".mp4"
         return [url2down, name]
     
-    def __modoF1(self, streamHTML):
+    def __modoF1(self, streamHTML):#TODO: ¡¡¡Acabar esta función para devolver todos los videos y sus partes!!!
         '''
            <param value="_urlData=http://www.antena3.com/gestorf1/swf/player_hitos/xml/data.xml&_image=http://www.antena3.com/gestorf1/pictures/361/361/malasia-portada_crop1.png&_id_list=1405&_promo1=http://www.smartadserver.com/call/pubx/15272/241149/4654/S/&_promo2=http://www.smartadserver.com/call/pubx/15272/241148/4654/S/" name="flashVars">
-       '''
+        '''
         streamHTML = Descargar.getHtmlUtf8(self.url)
         # Qué vídeo:
         streamVids = streamHTML.split("<ul class=\"a3_gp_visor_menu\">")[1].split("</ul>")[0].replace("\t", "")
@@ -200,7 +200,7 @@ class GrupoA3(Canal.Canal):
         '''
             Devuelve toda la información asociada a la URL recibida, de la siguiente forma:
             {
-             "exito"     : bool,  <-- True (si por lo menos "url_video" está definida, sino False
+             "exito"     : bool,  <-- True (si se han obtenido videos)
              "num_video" : int,   <-- Número de vídeos obtenidos
              "mensaje"   : u"" ,  <-- Mensajes de la API (ej.: El vídeo no ha sido encontrado ["exito": False])
              "videos"    :  [{

@@ -51,7 +51,7 @@ class TVE(Canal.Canal):
         '''
             Devuelve toda la información asociada a la URL recibida, de la siguiente forma:
             {
-             "exito"     : bool,  <-- True (si por lo menos "url_video" está definida, sino False
+             "exito"     : bool,  <-- True (si se han obtenido videos)
              "num_video" : int,   <-- Número de vídeos obtenidos
              "mensaje"   : u"" ,  <-- Mensajes de la API (ej.: El vídeo no ha sido encontrado ["exito": False])
              "videos"    :  [{
