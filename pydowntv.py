@@ -165,8 +165,8 @@ if __name__ == "__main__":
                         for parte in video["url_video"]: Utiles.printt(u"\t[URL DESCARGA] %s" % parte)
                 else: # Descargar el vídeo
                     if info["num_videos"] == 1:
-                        for video in info["videos"]: # Aunque solo debería haber una
-                            for indice_parte in range(video["partes"]):
+                        for video in info["videos"]: # for, aunque solo debería de haber un vídeo
+                            for indice_parte in range(video["partes"]): #TODO: Cómo descargar, todas las partes o preguntar
                                 d = uiDescargar.Descargar(
                                                           video["url_video"][indice_parte],
                                                           video["titulo"][indice_parte],
@@ -176,7 +176,7 @@ if __name__ == "__main__":
                                                           )
                                 d.descargarVideo()
                     else:
-                        pass # TODO: Decidir qué hacer con los vídeo aquí (descargar, preguntar cuál,...)
+                        pass # TODO: Decidir qué hacer con los vídeo aquí (descargar, preguntar cuál,...) y luego las partes de cada uno
             else: ## NO éxito
                 Utiles.salir(u"[ERROR] No se ha encontrado el vídeo buscado")
 
