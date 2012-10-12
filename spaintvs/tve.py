@@ -51,26 +51,33 @@ class TVE(Canal.Canal):
         '''
             Devuelve toda la información asociada a la URL recibida, de la siguiente forma:
             {
-            "url_video" : [],   <-- Url de descarga de vídeo
-            "url_img"   : "",   <-- Url de la miniatura del video
-            "titulo"    : [],   <-- Título del vídeo
-            "tipo"      : "",   <-- http, rtmp[e,..], mms, ...
-            "partes"    : int,  <-- Número de partes que tiene el vídeo
-            "rtmpd_cmd" : [],   <-- Comando rtmpdump (si tipo == rtmp) sino None
-            "menco_cmd" : [],   <-- Comando mencoder (Si tipo == rtmp) sino None
-            "url_publi" : "",   <-- Url del vídeo de publicidad asociado al vídeo
-            "otros"     : [],   <-- Lista donde se pueden pasar cosas opcionales
-            "exito"     : bool, <-- True (si por lo menos "url_video" está definida, sino False
-            "mensaje"   : ""    <-- Mensajes de la API (ej.: El vídeo no ha sido encontrado ["exito": False])
+             "exito"     : bool,  <-- True (si por lo menos "url_video" está definida, sino False
+             "num_video" : int,   <-- Número de vídeos obtenidos
+             "mensaje"   : u"" ,  <-- Mensajes de la API (ej.: El vídeo no ha sido encontrado ["exito": False])
+             "videos"    :  [{
+                            "url_video" : [],   <-- Url de descarga de vídeo
+                            "url_img"   : "",   <-- Url de la miniatura del video
+                            "titulo"    : [],   <-- Título de las partes
+                            "tipo"      : "",   <-- http, rtmp[e,..], mms, ...
+                            "partes"    : int,  <-- Número de partes que tiene el vídeo
+                            "rtmpd_cmd" : [],   <-- Comando rtmpdump (si tipo == rtmp) sino None
+                            "menco_cmd" : [],   <-- Comando mencoder (Si tipo == rtmp) sino None
+                            "url_publi" : "",   <-- Url del vídeo de publicidad asociado al vídeo
+                            "otros"     : [],   <-- Lista donde se pueden pasar cosas opcionales
+                            "mensaje"   : ""    <-- Mensajes de la API
+                            }], <-- Debe ser una lista de tamaño "num_videos"
+             "titulos"   : [u""] <-- Titulos de los videos
             }
+            
             Los valores que no se rellenen, deberán devolver None.
             La clave "exito" es obligatoria, sino se puede encontrar el vídeo se puede devolver directamente:
             {
             "exito": False
-            "mensjae": "No se pudo descargar el video"  
+            "mensaje": "No se pudo descargar el video"  
             }
             
-            "url_video", "titulo", "rtmp_cmd", "menco_cmd" deben ser listas de cadenas.
+            "videos" y "mesajes" deben ser listas de cadenas (si no son None)
+            "url_video", "titulo", "rtmp_cmd", "menco_cmd" (de "videos") deben ser listas de cadenas (si no son None)
         '''
         #TODO: Cuida con las paginas que tiene más de un vídeo. De momento funciona porque es el primer video que aparece!
         
@@ -124,19 +131,23 @@ class TVE(Canal.Canal):
             raise Utiles.GeneralPyspainTVsError("No se pudo encontrar el enlace de descarga")
         # -- Método 1 Octubre 2012 FIN
         
-        return {
-            "url_video" : [url_video],
-            "url_img"   : url_img,
-            "titulo"    : [titulo],
-            "tipo"      : "http",
-            "partes"    : 1,
-            "rtmpd_cmd" : [None],
-            "menco_cmd" : [None],
-            "url_publi" : None,
-            "otros"     : None,
-            "exito"     : True,
-            "mensaje"   : u"URL obtenida correctamente"
-            }
+        return {"exito" : True,
+                "num_videos" : 1,
+                "mensaje"   : u"URL obtenido correctamente",
+                "videos":[{
+                        "url_video" : [url_video],
+                        "url_img"   : url_img,
+                        "titulo"    : [titulo],
+                        "tipo"      : "http",
+                        "partes"    : 1,
+                        "rtmpd_cmd" : None,
+                        "menco_cmd" : None,
+                        "url_publi" : None,
+                        "otros"     : None,
+                        "mensaje"   : None
+                        }],
+                "titulos": None
+                }
 
 class NoRedirectHandler(urllib2.HTTPRedirectHandler):
     def http_error_302(self, req, fp, code, msg, headers):

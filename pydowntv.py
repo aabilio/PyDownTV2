@@ -41,6 +41,13 @@ class Canales(object):
     def isTVE(self):
         '''return True si la URL pertenece a Televisión Española'''
         if self._url.find("rtve.es") != -1: return True
+    
+    def isGrupoAntena3(self):
+        '''return True si la URL pertenece al Grupo de Antena 3'''
+        urls = ["antena3.com", "lasexta.com", "lasextadeportes.com", "lasextanoticias.com"]
+        for url in urls:
+            if self._url.find(url) != -1: return True
+        return False
  
     
 def qCanal(url, opcs):
@@ -54,6 +61,9 @@ def qCanal(url, opcs):
     if canal.isTVE(): # Tienes que comprobarse antes que isTVE
         Utiles.printt(u"[INFO] Radio Televión Española")
         return tve.TVE(url, opcs)
+    elif canal.isGrupoAntena3():
+        Utiles.printt(u"[INFO] Grupo Antena 3 (- La Sexta)")
+        return grupo_a3.GrupoA3(url, opcs)
     else:
         return None
         
@@ -146,21 +156,28 @@ if __name__ == "__main__":
                 Utiles.salir(unicode(e))
             #except Exception, e:
             #    Utiles.salir(unicode(e))
-                
-            if info["exito"]:
-                if options.show:
-                    if type(info["url_video"]) is list:
-                        for i in info["url_video"]: Utiles.salir(u"[URL DESCARGA] %s" % i)
-                    else: Utiles.salir(u"[URL DESCARGA] %s" % info["url_video"])
-                else:
-                    for i in range(info["partes"]): #TODO: Manejar aquí todo lo de las partes de PyDownTV1
-                        D = uiDescargar.Descargar(info["url_video"][i],
-                                            info["titulo"][i],
-                                            info["tipo"],
-                                            info["rtmpd_cmd"][i],
-                                            info["menco_cmd"][i])
-                        D.descargarVideo()
-            else:
+             
+            if info["exito"]: ## TODO OK
+                if options.show: # Solo mostrar enlaces
+                    for video in info["videos"]: # No importa si solo es un vídeo o varios, muestra todo
+                        if info["titulos"]:
+                            Utiles.printt(info["titulos"][info["videos"].index(video)])
+                        for parte in video["url_video"]: Utiles.printt(u"\t[URL DESCARGA] %s" % parte)
+                else: # Descargar el vídeo
+                    if info["num_videos"] == 1:
+                        for video in info["videos"]: # Aunque solo debería haber una
+                            for indice_parte in range(video["partes"]):
+                                d = uiDescargar.Descargar(
+                                                          video["url_video"][indice_parte],
+                                                          video["titulo"][indice_parte],
+                                                          video["tipo"],
+                                                          video["rtmpd_cmd"][indice_parte] if video["rtmpd_cmd"] is not None else None,
+                                                          video["menco_cmd"][indice_parte] if video["menco_cmd"] is not None else None,
+                                                          )
+                                d.descargarVideo()
+                    else:
+                        pass # TODO: Decidir qué hacer con los vídeo aquí (descargar, preguntar cuál,...)
+            else: ## NO éxito
                 Utiles.salir(u"[ERROR] No se ha encontrado el vídeo buscado")
-            
+
     Utiles.windows_end()
