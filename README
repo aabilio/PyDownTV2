@@ -7,6 +7,8 @@ de los vídeos de las principales webs de TVs españolas.
 La Librería se llama "spaintvs" y aquí también se pone a disposición un script
 de muestra de su uso "pydowntv.py".
 
+Se puede probar la API online aquí: http://newapi.pydowntv.appspot.com/
+
 A wel script programado en python se le pasa una url de un vídeo y muestra la
 url de localización final del vídeo y lo descarga.
 

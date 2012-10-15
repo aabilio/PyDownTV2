@@ -243,7 +243,7 @@ class GrupoA3(Canal.Canal):
             Los valores que no se rellenen, deberán devolver None.
             La clave "exito" es obligatoria, sino se puede encontrar el vídeo se puede devolver directamente:
             {
-            "exito": False
+            "exito": False,
             "mensaje": "No se pudo descargar el video"  
             }
             
