@@ -90,7 +90,7 @@ class TVE(Canal.Canal):
             videoID.find(".html") != -1:
             videoID = videoID.split('.')[0]
         
-        self.debug(u"[DEBUG] ID del vídeo en url = " + videoID)
+        self.debug(u"ID del vídeo en url = " + videoID)
         
         # Añadido para vídeos nuevos (periodo de prueba):
         sourceHTML = Descargar.getHtml(self.url)
@@ -103,11 +103,11 @@ class TVE(Canal.Canal):
             if videoID_comp != videoID: videoID = videoID_comp
         ########################################################
         
-        self.debug(u"[DEBUG] ID del vídeo en HTML = " + videoID_comp if videoID_comp else "[DEBUG] No ID en HTML")
+        self.debug(u"ID del vídeo en HTML = " + videoID_comp if videoID_comp else "No ID en HTML")
         self.log(u"[INFO] ID del Vídeo :", videoID)
 
         # -- Método 1 Octubre 2012:
-        self.debug(u"[DEBUG] Probando método de 1 de uno de Octubre de 2012")
+        self.debug(u"Probando método de 1 de uno de Octubre de 2012")
         url = "http://www.rtve.es/ztnr/consumer/xl/video/alta/" + videoID + "_es_292525252525111"
         
         user_agent="Mozilla"

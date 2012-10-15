@@ -80,10 +80,21 @@ class Canal(object):
     def log(self, *msg):
         if self.__OPCS.has_key("log"):
             if self.__OPCS["log"]: Utiles.printt(*msg)
+    info = log
     
     def debug(self, *msg):
         if self.__OPCS.has_key("debug"):
-            if self.__OPCS["debug"]: Utiles.printt(*msg)
+            if self.__OPCS["debug"]: Utiles.printt(u"[DEBUG]", *msg)
+    
+    def pprint(self, *msg):
+        from pprint import pprint
+        pprint(" ".join(msg))
+    
+    def pprintDict(self, dicts):
+        from pprint import pprint
+        pprint(dicts)
+    
+    
         
         
         

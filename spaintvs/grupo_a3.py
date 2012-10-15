@@ -164,36 +164,58 @@ class GrupoA3(Canal.Canal):
         streamVids = streamHTML.split("<ul class=\"a3_gp_visor_menu\">")[1].split("</ul>")[0].replace("\t", "")
         streamVids = streamVids.split("<li>")[1:]
         
-        from pprint import pprint
-        pprint(streamVids)
+        #self.debug(streamVids)
+        ret =   {
+                "exito" : True,
+                "num_videos" : 0,
+                "mensaje"   : u"URLs obtenido correctamente",
+                "videos":[],
+                "titulos": []
+                }
         
-        otros = []
-        b = 0
-        for i in streamVids:
-            otros.append(i.split(">")[1].split("<")[0].capitalize())
-            streamVid = streamVids[b]
+        v = -1
+        for i in streamVids: #todos los vídeos con todas sus partes
+            video = {
+                "url_video" : [],
+                "url_img"   : None, #TODO: ibtener miniatura
+                "titulo"    : [],
+                "tipo"      : "http",
+                "partes"    : 0,
+                "rtmpd_cmd" : None,
+                "menco_cmd" : None,
+                "url_publi" : None,
+                "otros"     : None,
+                "mensaje"   : u""
+                }
+            v+=1
+            streamVid = streamVids[v]
             streamVidUrl = self.URL_DE_ANTENA3 + streamVid.split("href=\"")[1].split("\"")[0]
-            #streamHTML = Descargar.getHtml(streamVidUrl)
-                  
+            self.debug(u"URL Video: " + streamVidUrl)
+            streamHTML = Descargar.getHtml(streamVidUrl)
+            
+            #Partes
+            id_list = streamHTML.split("_id_list=")[1].split("&")[0]
+            listXMLurl = self.URL_DE_F1 + id_list + "_playlist.xml"
+            self.debug(u"URL XML list: " + listXMLurl)
+            listxml = Descargar.getHtml(listXMLurl)
+            video["url_image"] = listxml.split("<picture>")[1].split("<")[0]
+            listxml = listxml.split("<video>")[1:]
+            #print listxml
+            for b in listxml:
+                video["partes"] += 1
+                video["mensaje"] = unicode(i.split(">")[1].split("<")[0].capitalize())
+                endurl = b.split("<url>")[1].split("<")[0]
+                video["url_video"].append(endurl.replace(endurl.split("mp_")[0],"http://desprogresiva.antena3.com/"))
+                ext = "." + video["url_video"][-1].split(".")[-1]
+                tit = b.split("<title>")[1].split("<")[0] + ext
+                tit = Utiles.formatearNombre(tit)
+                video["titulo"].append(tit)
                 
-        #streamVid = streamVids[opc-1]
-        #streamVidUrl = self.URL_DE_ANTENA3 + streamVid.split("href=\"")[1].split("\"")[0]
-        
-        # Vamos a por el vídeo
-        streamHTML = Descargar.getHtml(streamVidUrl)
-        
-        url2down = []
-        name = []
-        id_list = streamHTML.split("_id_list=")[1].split("&")[0]
-        #printt(u"[DEBUG] url2down", str(id_list))
-        listxml = Descargar.getHtml(self.URL_DE_F1 + id_list + "_playlist.xml")
-        listxml = listxml.split("<video>")[1:]
-        print listxml
-        for i in listxml:
-            url2down.append(i.split("<url>")[1].split("<")[0])
-            ext = "." + url2down[-1].split(".")[-1]
-            name.append(i.split("<title>")[1].split("<")[0] + ext)
-        return [url2down, name]
+            ret["titulos"].append(i.split(">")[1].split("<")[0].capitalize())
+            ret["videos"].append(video)
+            ret["num_videos"] += 1
+
+        return ret
 
 
     def getInfo(self):
@@ -237,26 +259,27 @@ class GrupoA3(Canal.Canal):
             if streamHTML.find(".seoURL='") != -1: # Url directamente en HTML
                 url2down, name = self.__modoNormalConURL(streamHTML)
             elif streamHTML.find("a3_gp_visor_player") != -1:
-                url2down, name = self.__modoF1(streamHTML)
+                self.log(u"[INFO] Vídeo de Fórmula 1")
+                return self.__modoF1(streamHTML) # return directamente aquí
             else: # No está la url en el hmtl (buscar por varias partes)
                 if streamHTML.find("<div class=\"visor\">") != -1: # Más de 1 parte # Quizas mejor "carrusel"?
                     url2down, name = self.__modoNormalVariasPartes(streamHTML)
                 else: # Solo una parte
                     url2down, name = self.__modoNormalUnaParte(streamHTML)
         
-        if type(url2down) == list:
-            for i in url2down:
-                if i.find("geobloqueo") != -1:
-                    self.log(u"[!!!] El vídeo \"" + i + "\" no se puedo descargar (geobloqueado)")
-                    url2down.remove(i)
-                    # TODO: Borrar también su nombre correspondiente
-                
-            # Comprobar si todas las partes están geobloqueadas (no quedan elementos en la lista):
-            if len(url2down) == 0:
-                raise Utiles.GeneralPyspainTVsError("Grupo Antena 3. Todo el contenido Geobloqueado.")
-        else:
-            if url2down.find("geobloqueo") != -1:
-                raise Utiles.GeneralPyspainTVsError("Grupo Antena 3. Todo el contenido Geobloqueado.")
+        #if type(url2down) == list:
+        #    for i in url2down:
+        #        if i.find("geobloqueo") != -1:
+        #            self.log(u"[!!!] El vídeo \"" + i + "\" no se puedo descargar (geobloqueado)")
+        #            url2down.remove(i)
+        #            # TODO: Borrar también su nombre correspondiente
+        #        
+        #    # Comprobar si todas las partes están geobloqueadas (no quedan elementos en la lista):
+        #    if len(url2down) == 0:
+        #        raise Utiles.GeneralPyspainTVsError("Grupo Antena 3. Todo el contenido Geobloqueado.")
+        #else:
+        #    if url2down.find("geobloqueo") != -1:
+        #        raise Utiles.GeneralPyspainTVsError("Grupo Antena 3. Todo el contenido Geobloqueado.")
 
         if type(name) == list:
             for i in name:

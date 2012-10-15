@@ -151,7 +151,9 @@ if __name__ == "__main__":
             try:
                 info = canal.getInfo()
                 if options.debug:
-                    Utiles.printt(u"[DEBUG] Info del vídeo obtenida:\n"+str(info))
+                    from pprint import pprint
+                    Utiles.printt(u"[DEBUG] Info del vídeo obtenida:\n")
+                    pprint(info)
             except Utiles.GeneralPyspainTVsError, e:
                 Utiles.salir(unicode(e))
             #except Exception, e:
@@ -161,7 +163,7 @@ if __name__ == "__main__":
                 if options.show: # Solo mostrar enlaces
                     for video in info["videos"]: # No importa si solo es un vídeo o varios, muestra todo
                         if info["titulos"]:
-                            Utiles.printt(info["titulos"][info["videos"].index(video)])
+                            Utiles.printt("\n"+info["titulos"][info["videos"].index(video)] +":\n"+"-"*len(info["titulos"][info["videos"].index(video)]))
                         for parte in video["url_video"]: Utiles.printt(u"\t[URL DESCARGA] %s" % parte)
                 else: # Descargar el vídeo
                     if info["num_videos"] == 1:
