@@ -29,43 +29,36 @@ from optparse import OptionParser
 from spaintvs import *
 import uiDescargar
 
-class Canales(object):
-    '''
-        Contiene los métodos para identificar a qué TV pertenece la url que
-        introdujo el usuario.
-    '''
-    def __init__(self, url=None):
-        '''Recibe la url'''
-        self._url = url
-    
-    def isTVE(self):
-        '''return True si la URL pertenece a Televisión Española'''
-        if self._url.find("rtve.es") != -1: return True
-    
-    def isGrupoAntena3(self):
-        '''return True si la URL pertenece al Grupo de Antena 3'''
-        urls = ["antena3.com", "lasexta.com", "lasextadeportes.com", "lasextanoticias.com"]
-        for url in urls:
-            if self._url.find(url) != -1: return True
-        return False
+# Opciones para añadir canales
+_url_canales = {
+               "rtve": ["rtve.es"],
+               "grupo_a3": ["antena3.com", "lasexta.com", "lasextadeportes.com", "lasextanoticias.com"],
+               "cuatro": ["cuatro.com"]
+               }
+_mod_tv = {
+           "rtve": {"mod":tve.TVE,"comentario":"[INFO] Radio Televión Española", "urls":_url_canales["rtve"]},
+           "grupo_a3": {"mod":grupo_a3.GrupoA3,"comentario":"[INFO] Grupo Antena 3 (- La Sexta)", "urls":_url_canales["grupo_a3"]},
+           "cuatro": {"mod":cuatro.Cuatro,"comentario":"[INFO] Cuatro.com", "urls":_url_canales["cuatro"]}
+           #"nombre" : {"mod":rutaAlaClase, "comentario":"infoParaImprimir", "urls":_url_canales["canal"]}
+           }
+# Fin de edición
  
-    
+def isUrlEnCanal(orig, urls=[]):
+    for url in urls:
+        if orig.find(url) != -1: return True
+    return False  
 def qCanal(url, opcs):
     '''
         Comprueba utlizando la clase Servidor de que servicio ha recibido la url
         y devuelve el objeto según el servicio que del cual se haya pasado la
         url
     '''
-    # Descomentar return según se vañan añadiendo
-    canal = Canales(url)
-    if canal.isTVE(): # Tienes que comprobarse antes que isTVE
-        Utiles.printt(u"[INFO] Radio Televión Española")
-        return tve.TVE(url, opcs)
-    elif canal.isGrupoAntena3():
-        Utiles.printt(u"[INFO] Grupo Antena 3 (- La Sexta)")
-        return grupo_a3.GrupoA3(url, opcs)
-    else:
-        return None
+    mod_tv = _mod_tv
+    for canal in mod_tv.values():
+        if isUrlEnCanal(url, canal["urls"]):
+            Utiles.printt(canal["comentario"])
+            return canal["mod"](url, opcs)
+    return None
         
 def argsparse():
     #TODO: Ver 15.5.2.6.1 en http://docs.python.org/library/optparse.html
@@ -146,7 +139,7 @@ if __name__ == "__main__":
             Utiles.printt(u"\n[ URL ] %s" % url)
             canal = qCanal(url, opcs)
             if not canal:
-                Utiles.salir(u"ERROR: La URL \"%s\" no pertenece a ninguna Televisión soportada" % url)
+                Utiles.printt(u"ERROR: La URL \"%s\" no pertenece a ninguna Televisión soportada" % url)
                 continue
             try:
                 info = canal.getInfo()

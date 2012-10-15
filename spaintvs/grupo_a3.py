@@ -69,8 +69,8 @@ class GrupoA3(Canal.Canal):
             url2down = url2down1
             name = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0] + ".f4v"
         except urllib2.HTTPError: # Descargar por partes:
-            self.log(u"[!!!]  No se puede descargar el vídeo en un archivo (000.m4v)")
-            self.log(u"[INFO] El vídeo se descargará por partes")
+            self.log(u"[!!!]  No se puede encuentra el vídeo en un archivo (000.m4v)")
+            self.log(u"[INFO] El vídeo consta de varias partes")
             parts = re.findall("\<archivo\>\<\!\[CDATA\[.*\.f4v\]\]\>\<\/archivo\>", streamXML)
             if parts:
                 name1 = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0]
@@ -108,8 +108,8 @@ class GrupoA3(Canal.Canal):
             url2down = url2down1
             name = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0] + ".mp4"
         except urllib2.HTTPError: # Descargar por partes:
-            self.log(u"[!!!]  No se puede descargar el vídeo en un archivo (000.mp4)")
-            self.log(u"[INFO] El vídeo se descargará por partes")
+            self.log(u"[!!!]  No se puede encuentra el vídeo en un archivo (000.m4v)")
+            self.log(u"[INFO] El vídeo consta de varias partes")
             parts = re.findall("\<archivo\>\<\!\[CDATA\[.*\.mp4\]\]\>\<\/archivo\>", streamXML)
             if parts:
                 name1 = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0]
@@ -250,13 +250,16 @@ class GrupoA3(Canal.Canal):
             "videos" y "mesajes" deben ser listas de cadenas (si no son None)
             "url_video", "titulo", "rtmp_cmd", "menco_cmd" (de "videos") deben ser listas de cadenas (si no son None)
         '''
+        img = None
         # print "[+] Procesando descarga"
         streamHTML = Descargar.getHtml(self.url)
         if self.url.find(".com/videos/") != -1: # Modo Salón
+            img = self.URL_DE_ANTENA3 + Utiles.qe(streamHTML).split("player_capitulo.poster=\'/")[1].split("\'")[0]
             url2down, name = self.__modoSalon(streamHTML)
         else: # Otro vídeos (No modo salón)
             self.log(u"[INFO] Vídeo normal (no Modo Salón)")
             if streamHTML.find(".seoURL='") != -1: # Url directamente en HTML
+                img = self.URL_DE_ANTENA3 + streamHTML.split(".poster=\'/")[1].split("\'")[0]
                 url2down, name = self.__modoNormalConURL(streamHTML)
             elif streamHTML.find("a3_gp_visor_player") != -1:
                 self.log(u"[INFO] Vídeo de Fórmula 1")
@@ -280,12 +283,13 @@ class GrupoA3(Canal.Canal):
         #else:
         #    if url2down.find("geobloqueo") != -1:
         #        raise Utiles.GeneralPyspainTVsError("Grupo Antena 3. Todo el contenido Geobloqueado.")
-
         if type(name) == list:
+            tit_vid = name[0].split(".")[0]
             for i in name:
                 b = Utiles.formatearNombre(i)
                 name[name.index(i)] = b
         else:
+            tit_vid = name.split(".")[0]
             name = Utiles.formatearNombre(name)
         
         return {"exito" : True,
@@ -293,7 +297,7 @@ class GrupoA3(Canal.Canal):
                 "mensaje"   : u"URL obtenido correctamente",
                 "videos":[{
                         "url_video" : [url2down] if type(url2down) != list else url2down,
-                        "url_img"   : None, #TODO: ibtener miniatura
+                        "url_img"   : img if img is not None else None,
                         "titulo"    : [name] if type(name) != list else name,
                         "tipo"      : "http",
                         "partes"    : 1 if type(url2down) != list else len(url2down),
@@ -303,6 +307,6 @@ class GrupoA3(Canal.Canal):
                         "otros"     : None,
                         "mensaje"   : u"URL obtenida correctamente" if type(url2down) != list else u"URLs obtenida correctamente"
                         }],
-                "titulos": None
+                "titulos": [tit_vid] if tit_vid is not None else None
                 }
 

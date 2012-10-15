@@ -46,6 +46,7 @@ class TVE(Canal.Canal):
     #    - self.opcs (diccionario de opciones) Ver Módulo Canal "_default_opcs" para opciones
     # Métodos disponibles de clase Canal:
     #    - log() para mostrar por pantalla (está disponible si self.opcs["log"] es True)
+    #    - self.debug() mostrar información de debug (está disponible si self.opcs["debug"] es True)
 
     def getInfo(self):
         '''

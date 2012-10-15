@@ -247,3 +247,6 @@ def stringFormat(s):
     s = s.replace("\xc3\x89", "E")
     
     return s
+
+def qe(s):
+    return s.replace(" ", "")
