@@ -129,7 +129,7 @@ def getHtml(url, withHeader=False, utf8=False, header=std_headers):
                'Accept-Language': 'en-us,en;q=0.5',
             } <-- Esto se enviará en caso de omitir el header.
         Return:
-            - stream html de una web
+            - Respuesta del GET
     '''
     if url.find("http://") == -1: url = "http://" + url
     if withHeader: return getHtmlHeaders(url, header)
@@ -152,6 +152,24 @@ def isReachable(url): # Retro compatibilidad con módulo de TVE
     
 
 def doPOST(url, path, post_args, doseq=True, headers=None):
+    '''
+        Recibe:
+            - url (http://ejemplo.com)
+            - path (/ruta/de/ejemplo.php)
+            - post_args (dicy, ej.: {"usuario":"antonio", "password":"pass"})
+            - doseq (bool)
+            - headers, de la forma:
+            {
+               'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; '
+               'en-US; rv:1.9.2) Gecko/20100115 Firefox/3.6',
+               'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
+               'Accept': 'text/xml,application/xml,application/xhtml+xml,'
+               'text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
+               'Accept-Language': 'en-us,en;q=0.5',
+            } <-- Esto se enviará en caso de omitir el header.
+        Return:
+            - Respuesta del POST
+    '''
     Post = urllib.urlencode(post_args, doseq=True)
     headers = {
                 "User-Agent": "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0)", 
