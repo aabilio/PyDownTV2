@@ -33,6 +33,18 @@ class Cuatro(Canal.Canal):
         Clase para manejar los vídeos de Cuatro (dominio propio).
     '''
     
+    URL_STREAMS_START = "http://api.cuatro.webtv.flumotion.com/videos/"
+    URL_STREAMS_END = "/streams"
+    
+    URL_CUATRO = "http://cuatro.com"
+    URL_PLAY_CUATRO = "http://play.cuatro.com"
+    
+    URL_CUAVIDEO = "http://www.cuatro.com/cuavideo/info.xml?xref="
+    #Nuevo CUAVIDEO:
+    URL_SOURCES = "http://www.cuatro.com/mdsvideo/sources.json?contentId="
+    
+    URL_JSON = "http://www.cuatro.com/mdsvideo/sources.json?"
+    
     def __init__(self, url="", opcs=None):
         Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
         
@@ -76,4 +88,64 @@ class Cuatro(Canal.Canal):
             "videos" y "mesajes" deben ser listas de cadenas (si no son None)
             "url_video", "titulo", "rtmp_cmd", "menco_cmd" (de "videos") deben ser listas de cadenas (si no son None)
         '''
-        pass
+        url_img = None
+        streamHTML = Descargar.getHtml(self.url)
+        if streamHTML.find("CUAVID") != -1:
+            self.debug(u"CUAVID")
+            ContentID = streamHTML.split("imageContentId: \'")[1].split("\'")[0]
+            streamJSON = Descargar.getHtml(self.URL_SOURCES + ContentID)
+            url2down = streamJSON.split("\"src\":\"")[1].split("\"")[0].replace("\/", "/")
+            name = streamJSON.split("\"wrpContent\":\"")[1].split("\"")[0] + ".mp4"
+        elif streamHTML.find("MDS.embedObj(video") != -1: # Este parece ser el único método a 16/10/2012 (pero dejo los demás..)
+            self.debug(u"MDS.embedObj")
+            contentID = streamHTML.split("MDS.embedObj(video, \"")[1].split("\"")[0]
+            clippingID = streamHTML.split("imageClippingId: \'")[1].split("\'")[0]
+            imageContentID = streamHTML.split("imageContentId: \'")[1].split("\'")[0]
+            self.debug("URL Json: "+self.URL_JSON + "contentId=" + contentID + "&clippingId=" + clippingID + "&imageContentId=" + imageContentID)
+            streamJSON = Descargar.getHtml( self.URL_JSON +
+                                            "contentId=" + contentID +
+                                             "&clippingId=" + clippingID +
+                                             "&imageContentId=" + imageContentID
+                                             )
+            
+            #streamJSON = dict(streamJSON)
+            #url2down = streamJSON["sources"][0]["src"]
+            url2down = streamJSON.split("({\"sources\":[{\"src\":\"")[1].split("\"")[0].replace("\/", "/")
+            name = streamHTML.split("<title>")[1].split("<")[0]
+            name += "." + url2down.split(".")[-1].split("?")[0]
+            url_img = streamJSON.split("\"poster\":\"")[1].split("\"")[0].replace("\/", "/")
+        else:
+            self.info(u"[INFO] Vídeo Común")
+            name = streamHTML.split("<title>")[1].split("<")[0]
+            urlComunes = self.URL_CUATRO + streamHTML.split("src_iframe:")[1].replace(" ", "").split("\'")[1].split("\'")[0]
+            streamComunes = Descargar.getHtml(urlComunes)
+            url2down = streamComunes.split("document.write(\'<video id=")[1].split("src=\"")[1].split("\"")[0]
+            ext= "." + url2down.split(".")[-1]
+            name += ext
+
+        if name:
+            name = name.replace("Ver vídeo online","")
+            tit_vid = name.split(".")[0]
+            name = Utiles.formatearNombre(name)
+    
+        return {"exito" : True,
+                "num_videos" : 1,
+                "mensaje"   : u"URL obtenido correctamente",
+                "videos":[{
+                        "url_video" : [url2down],
+                        "url_img"   : url_img if url_img is not None else None,
+                        "titulo"    : [name] if name is not None else None,
+                        "tipo"      : "http",
+                        "partes"    : 1,
+                        "rtmpd_cmd" : None,
+                        "menco_cmd" : None,
+                        "url_publi" : None,
+                        "otros"     : None,
+                        "mensaje"   : None
+                        }],
+                "titulos": [tit_vid]
+                }
+
+
+
+
