@@ -16,35 +16,27 @@
 #    You should have received a copy of the GNU General Public License
 #    along with spaintvs.  If not, see <http://www.gnu.org/licenses/>.
 
-# Módulo para descargar todos los vídeos de la web de rtve.es ("A la carta" o no)
-# Antes era el módulo de tvalacarta.py modificado para dar soporte a todos los vídeos
+# Módulo para descargar todos los vídeos de la web de Telecinco.es
 
 __author__="aabilio"
-__date__ ="$15-oct-2012 11:35:37$"
+__date__ ="$16-oct-2012 11:35:37$"
 
 import Canal
 import Utiles
 import Descargar
 import Error
 
-url_validas = ["cuatro.com"]
+url_validas = ["telecinco.es"]
 
-class Cuatro(Canal.Canal):
+class Telecinco(Canal.Canal):
     '''
-        Clase para manejar los vídeos de Cuatro (dominio propio).
+        Clase para manejar los vídeos de Telecinco (dominio propio).
     '''
     
-    URL_STREAMS_START = "http://api.cuatro.webtv.flumotion.com/videos/"
-    URL_STREAMS_END = "/streams"
-    
-    URL_CUATRO = "http://cuatro.com"
-    URL_PLAY_CUATRO = "http://play.cuatro.com"
-    
-    URL_CUAVIDEO = "http://www.cuatro.com/cuavideo/info.xml?xref="
-    #Nuevo CUAVIDEO:
-    URL_SOURCES = "http://www.cuatro.com/mdsvideo/sources.json?contentId="
-    
-    URL_JSON = "http://www.cuatro.com/mdsvideo/sources.json?"
+    URL_DESCARGA_TELECINCO = "http://www.mitele.telecinco.es/deliverty/demo/resources/flv/"
+    URL_ASK4TOKEN = "http://www.mitele.telecinco.es/services/tk.php?provider=level3&protohash=/CDN/videos/"
+    string2split4id = ["xmlVideo: 'http://estaticos.telecinco.es/xml/Video/Video_", "\'"]
+    URL_JSON = "http://www.telecinco.es/mdsvideo/sources.json?"
     
     def __init__(self, url="", opcs=None):
         Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
@@ -91,25 +83,43 @@ class Cuatro(Canal.Canal):
             "videos" y "mesajes" deben ser listas de cadenas (si no son None)
             "url_video", "titulo", "rtmp_cmd", "menco_cmd" (de "videos") deben ser listas de cadenas (si no son None)
         '''
+        
         url_img = None
         streamHTML = Descargar.getHtml(self.url)
-        if streamHTML.find("CUAVID") != -1:
-            self.debug(u"CUAVID")
-            ContentID = streamHTML.split("imageContentId: \'")[1].split("\'")[0]
-            streamJSON = Descargar.getHtml(self.URL_SOURCES + ContentID)
-            url2down = streamJSON.split("\"src\":\"")[1].split("\"")[0].replace("\/", "/")
-            name = streamJSON.split("\"wrpContent\":\"")[1].split("\"")[0] + ".mp4"
-        elif streamHTML.find("MDS.embedObj(video") != -1: # Este parece ser el único método a 16/10/2012 (pero dejo los demás..)
-            self.debug(u"MDS.embedObj")
+        
+        if streamHTML.find("http://level3/") != -1: # Método antiguo
+            self.info(u"[INFO] Método antiguo (mitele)")
+            videoID = streamHTML.split("\'http://level3/")[1].split(".")[0]
+            videoEXT = streamHTML.split("\'http://level3/")[1].split("\'")[0].split(".")[1]
+            videoEXT = "." + videoEXT
+            url2down = self.URL_DESCARGA_TELECINCO + videoID[-1] + "/" + videoID[-2] + "/" + videoID + videoEXT
+            name = None
+        elif streamHTML.find(self.string2split4id[0]) != -1: # Método nuevo
+            newID = streamHTML.split(self.string2split4id[0])[1].split(self.string2split4id[1])[0].split(".")[0]
+            self.info(u"[INFO] Nuevo Video ID:", newID)
+            ask4token = self.URL_ASK4TOKEN + newID[-3:] + "/" + newID + ".mp4"
+            self.debug(u"[+] Pidiendo nuevo token")
+            url2down = Descargar.getHtml(ask4token)
+            name = streamHTML.split("var title = \'")[1].split("\'")[0] + ".mp4"
+        elif self.url.find("videoURL=") != -1: # Forma con el ID en la URL (nueva??)
+            videoID = self.url.split("videoURL=")[1]
+            ask4token = self.URL_ASK4TOKEN + videoID[-3:] + "/" + videoID + ".mp4"
+            self.debug(u"[+] Pidiendo nuevo token")
+            url2down = Descargar.getHtml(ask4token)
+            # Obtner nombre:
+            xmlURL = "http://estaticos.telecinco.es/xml/Video/Video_" + videoID + ".xml"
+            streamXML = Descargar.getHtml(xmlURL)
+            name = streamXML.split("<![CDATA[")[1].split("]")[0] + ".mp4"
+        elif streamHTML.find("MDS.embedObj(video") != -1:
             contentID = streamHTML.split("MDS.embedObj(video, \"")[1].split("\"")[0]
             clippingID = streamHTML.split("imageClippingId: \'")[1].split("\'")[0]
             imageContentID = streamHTML.split("imageContentId: \'")[1].split("\'")[0]
-            self.debug("URL Json: "+self.URL_JSON + "contentId=" + contentID + "&clippingId=" + clippingID + "&imageContentId=" + imageContentID)
-            streamJSON = Descargar.getHtml( self.URL_JSON +
-                                            "contentId=" + contentID +
-                                             "&clippingId=" + clippingID +
-                                             "&imageContentId=" + imageContentID
-                                             )
+            self.debug(u"URL JSON: " + self.URL_JSON + "contentId=" + contentID + "&clippingId=" + clippingID + "&imageContentId=" + imageContentID)
+            streamJSON = Descargar.getHtml(self.URL_JSON +
+                                         "contentId=" + contentID +
+                                         "&clippingId=" + clippingID +
+                                         "&imageContentId=" + imageContentID
+                                         )
             
             #streamJSON = dict(streamJSON)
             #url2down = streamJSON["sources"][0]["src"]
@@ -117,23 +127,15 @@ class Cuatro(Canal.Canal):
             name = streamHTML.split("<title>")[1].split("<")[0]
             name += "." + url2down.split(".")[-1].split("?")[0]
             url_img = streamJSON.split("\"poster\":\"")[1].split("\"")[0].replace("\/", "/")
-        elif streamHTML.find("src_iframe:") != -1:
-            self.info(u"[INFO] Vídeo Común")
-            name = streamHTML.split("<title>")[1].split("<")[0]
-            urlComunes = self.URL_CUATRO + streamHTML.split("src_iframe:")[1].replace(" ", "").split("\'")[1].split("\'")[0]
-            streamComunes = Descargar.getHtml(urlComunes)
-            url2down = streamComunes.split("document.write(\'<video id=")[1].split("src=\"")[1].split("\"")[0]
-            ext= "." + url2down.split(".")[-1]
-            name += ext
         else:
-            raise Error.GeneralPyspainTVsError("Cuatro.com: No se encuentra contenido")
-        
+            Error.GeneralPyspainTVsError("Telecinco.es. No se encuentra contenido.")
+
         tit_vid = None
-        if name:
+        if name != None:
             name = name.replace("Ver vídeo online","")
             tit_vid = name.split(".")[0]
             name = Utiles.formatearNombre(name)
-    
+        
         return {"exito" : True,
                 "num_videos" : 1,
                 "mensaje"   : u"URL obtenido correctamente",
