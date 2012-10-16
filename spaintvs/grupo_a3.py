@@ -36,6 +36,7 @@ class GrupoA3(Canal.Canal):
     '''
     
     URL_DE_ANTENA3  = "http://www.antena3.com/"
+    URL_DE_LASEXTA = "http://www.lasexta.com/"
     URL_DE_DESCARGA = "http://desprogresiva.antena3.com/"
     URL_DE_F1 = "http://www.antena3.com/gestorf1/xml_visor/"
     URL_VISOR_F1 = "http://www.antena3.com/gestorf1/static_visor/"
@@ -85,6 +86,7 @@ class GrupoA3(Canal.Canal):
         return [url2down,  name]
     
     def __modoSalon(self, streamHTML):
+        #TODO: Poner cada Canal su URL, no solo a todos la de antena 3 ;)
         self.log(u"[INFO] Modo Salón")
         if streamHTML.find("so.addVariable(\"xml\"") != -1:
             streamXML = \
@@ -96,8 +98,13 @@ class GrupoA3(Canal.Canal):
             raise Utiles.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra XML.")
         # Comprobar aquí si se puede descargar 000.mp4:
         if streamXML.find(".mp4") != -1:
+            tipo = ".mp4"
             url2down1 = self.URL_DE_DESCARGA + \
                 streamXML.split("<archivo><![CDATA[")[1].split("001.mp4]]></archivo>")[0] + "000.mp4"
+        if streamXML.find(".flv") != -1:
+            tipo = ".flv"
+            url2down1 = self.URL_DE_DESCARGA + \
+                streamXML.split("<archivo><![CDATA[")[1].split("001.flv]]></archivo>")[0] + "000.flv"
         elif streamXML.find(".f4v") != -1:
             [url2down, name] = self.__modoSalonNuevo(streamXML)
             return [url2down, name]
@@ -106,11 +113,11 @@ class GrupoA3(Canal.Canal):
         try: # Descargar entero
             urllib2.urlopen(url2down1)
             url2down = url2down1
-            name = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0] + ".mp4"
+            name = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0] + tipo
         except urllib2.HTTPError: # Descargar por partes:
             self.log(u"[!!!]  No se puede encuentra el vídeo en un archivo (000.m4v)")
             self.log(u"[INFO] El vídeo consta de varias partes")
-            parts = re.findall("\<archivo\>\<\!\[CDATA\[.*\.mp4\]\]\>\<\/archivo\>", streamXML)
+            parts = re.findall("\<archivo\>\<\!\[CDATA\[.*"+tipo+"\]\]\>\<\/archivo\>", streamXML)
             if parts:
                 name1 = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0]
                 url2down = []
