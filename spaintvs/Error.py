@@ -16,11 +16,20 @@
 #    You should have received a copy of the GNU General Public License
 #    along with spaintvs.  If not, see <http://www.gnu.org/licenses/>.
 
-# Módulo para descargar todos los vídeos de la web de rtve.es ("A la carta" o no)
-# Antes era el módulo de tvalacarta.py modificado para dar soporte a todos los vídeos
+# Excepciones de pyspaintvs
 
+__author__="aabilio"
+__date__ ="$16-oct-2012 11:35:37$"
 
-__all__ = ["cuatro", "Error", "grupo_a3", "tve"] #Canal, Descargar u Utiles no deberían ser utilizadas fuera del paquete
-__version__ = "0.0.1"
-__author__ = "aabilio <aabilio@gmail.com>"
-__date__ = "$10-oct-2012 11:01:48$"
+class GeneralPyspainTVsError(Exception):
+    def __init__(self, msg=None):
+        self.__msg = msg if msg is not None else "Error general al obtener el enlace de descarga"
+    def __str__(self):
+        return self.__msg
+    
+class BadURL(Exception): # Solo para uso internno de spaintvs
+    def __init__(self, msg=None):
+        self.__msg = msg if msg is not None else "La Url recibida no se corresponde con el canal"
+        raise GeneralPyspainTVsError(self.__msg) # A nivel de usuario solo utilizar GeneralPyspainTVsError()
+    def __str__(self):
+        return self.__msg

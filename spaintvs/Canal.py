@@ -1,35 +1,30 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# This file is part of PyDownTV2.
+# This file is part of spaintvs.
 #
-#    PyDownTV2 is free software: you can redistribute it and/or modify
+#    spaintvs is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    PyDownTV2 is distributed in the hope that it will be useful,
+#    spaintvs is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with PyDownTV2.  If not, see <http://www.gnu.org/licenses/>.
+#    along with spaintvs.  If not, see <http://www.gnu.org/licenses/>.
 
 # Clase abstracta con atributos y métodos comunes a todos los canales
 
 import Utiles
+import Error
 
 _default_opcs = {
                 "log": True,
                 "debug": False
                 }
-
-class BadURL(Exception):
-    def __init__(self, msg=None):
-        self.__msg = msg if msg is not None else "La Url recibida no se corresponde con el canal"
-    def __str__(self):
-        return self.__msg
 
 class Canal(object):
     '''
@@ -46,7 +41,7 @@ class Canal(object):
         self.__URL_VALIDAS = url_validas
         self.__NOMBRE_CANAL = nombre_canal
         self.__URL = url
-        if not self.__isUrlValida(): raise BadURL("%s no pertenece a %s" % (self.__URL, self.__NOMBRE_CANAL))
+        if not self.__isUrlValida(): raise Error.BadURL("%s no pertenece a %s" % (self.__URL, self.__NOMBRE_CANAL))
         
     def getURL(self):
         '''
@@ -58,7 +53,7 @@ class Canal(object):
             return la URL válida de TVE que se le pasa a la clase
         '''
         self.__URL = url
-        if not self.__isUrlValida(): raise BadURL("%s no pertenece a %s" % (self.__URL, self.__NOMBRE_CANAL))
+        if not self.__isUrlValida(): raise Error.BadURL("%s no pertenece a %s" % (self.__URL, self.__NOMBRE_CANAL))
     url = property(getURL, setURL)
     
     def getOPCS(self):

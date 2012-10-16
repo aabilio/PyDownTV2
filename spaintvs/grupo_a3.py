@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# This file is part of PyDownTV2.
+# This file is part of spaintvs.
 #
-#    PyDownTV2 is free software: you can redistribute it and/or modify
+#    spaintvs is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    PyDownTV2 is distributed in the hope that it will be useful,
+#    spaintvs is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with PyDownTV2.  If not, see <http://www.gnu.org/licenses/>.
+#    along with spaintvs.  If not, see <http://www.gnu.org/licenses/>.
 
 # Se establece la Clase del objeto a3: que maneja los métodos para descargar
 # los vídeos de la página de Antena 3 Televisón:
@@ -24,9 +24,11 @@ __date__ ="$12-oct-2012 11:03:38$"
 
 import urllib2
 import re
+
 import Canal
 import Descargar
 import Utiles
+import Error
 
 url_validas = ["antena3.com", "lasexta.com", "lasextadeportes.com", "lasextanoticias.com"]
 
@@ -55,6 +57,8 @@ class GrupoA3(Canal.Canal):
     # Métodos disponibles de clase Canal:
     #    - self.log() para mostrar por pantalla (está disponible si self.opcs["log"] es True)
     #    - self.debug() mostrar información de debug (está disponible si self.opcs["debug"] es True)
+    # Comunicación de errores con nivel de aplicación:
+    #    - lanzar la excepción: raise Error.GeneralPyspainTVsError("mensaje")
     
     def __modoSalonNuevo(self, streamXML):
         '''Nuevos vídeos con extensión .m4v'''
@@ -81,7 +85,7 @@ class GrupoA3(Canal.Canal):
                     url2down.append(self.URL_DE_DESCARGA + i.split("<archivo><![CDATA[")[1].split("]]></archivo>")[0])
                     name.append(name1 + "_" + i.split("]")[0].split("/")[-1])
             else:
-                raise Utiles.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra ninguna parte de contenido")
+                raise Error.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra ninguna parte de contenido.")
         
         return [url2down,  name]
     
@@ -95,13 +99,13 @@ class GrupoA3(Canal.Canal):
             streamXML = \
             Descargar.getHtml(self.URL_DE_ANTENA3 + streamHTML.split("player_capitulo.xml='")[1].split("'")[0])
         else:
-            raise Utiles.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra XML.")
+            raise Error.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra XML.")
         # Comprobar aquí si se puede descargar 000.mp4:
         if streamXML.find(".mp4") != -1:
             tipo = ".mp4"
             url2down1 = self.URL_DE_DESCARGA + \
                 streamXML.split("<archivo><![CDATA[")[1].split("001.mp4]]></archivo>")[0] + "000.mp4"
-        if streamXML.find(".flv") != -1:
+        elif streamXML.find(".flv") != -1:
             tipo = ".flv"
             url2down1 = self.URL_DE_DESCARGA + \
                 streamXML.split("<archivo><![CDATA[")[1].split("001.flv]]></archivo>")[0] + "000.flv"
@@ -109,7 +113,7 @@ class GrupoA3(Canal.Canal):
             [url2down, name] = self.__modoSalonNuevo(streamXML)
             return [url2down, name]
         else:
-            raise Utiles.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra mp4 ni f4v")
+            raise Error.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra mp4, f4v ni flv")
         try: # Descargar entero
             urllib2.urlopen(url2down1)
             url2down = url2down1
@@ -126,7 +130,7 @@ class GrupoA3(Canal.Canal):
                     url2down.append(self.URL_DE_DESCARGA + i.split("<archivo><![CDATA[")[1].split("]]></archivo>")[0])
                     name.append(name1 + "_" + i.split("]")[0].split("/")[-1])
             else:
-                raise Utiles.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra niguna parte de contenido.")
+                raise Error.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra niguna parte de contenido.")
         return [url2down,  name]
     
     def __modoNormalConURL(self,  streamHTML):
@@ -286,10 +290,10 @@ class GrupoA3(Canal.Canal):
         #        
         #    # Comprobar si todas las partes están geobloqueadas (no quedan elementos en la lista):
         #    if len(url2down) == 0:
-        #        raise Utiles.GeneralPyspainTVsError("Grupo Antena 3. Todo el contenido Geobloqueado.")
+        #        raise Error.GeneralPyspainTVsError("Grupo Antena 3. Todo el contenido Geobloqueado.")
         #else:
         #    if url2down.find("geobloqueo") != -1:
-        #        raise Utiles.GeneralPyspainTVsError("Grupo Antena 3. Todo el contenido Geobloqueado.")
+        #        raise Error.GeneralPyspainTVsError("Grupo Antena 3. Todo el contenido Geobloqueado.")
         if type(name) == list:
             tit_vid = name[0].split(".")[0]
             for i in name:

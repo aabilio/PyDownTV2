@@ -26,7 +26,7 @@ import subprocess
 import sys
 
 from pyaxel import pyaxel
-from spaintvs.Utiles import salir, printt
+from uiUtiles import salir, printt
 
 
 class Descargar(object):

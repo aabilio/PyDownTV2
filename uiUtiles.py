@@ -1,32 +1,47 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# This file is part of spaintvs.
+# This file is part of PyDownTV2.
 #
-#    spaintvs is free software: you can redistribute it and/or modify
+#    PyDownTV2 is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    spaintvs is distributed in the hope that it will be useful,
+#    PyDownTV2 is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with spaintvs.  If not, see <http://www.gnu.org/licenses/>.
+#    along with PyDownTV2.  If not, see <http://www.gnu.org/licenses/>.
 
-# Funciones para facilitar algunas labores al Módulo
-# Incluye funciones también para el script, que al ser pocas, las dejo en este módulo por ahora
+# Utiles para el script de pydowntv
 
+import re
 import sys
+import uiDescargar
 
 def isWin():
-    ''' return True si se están en Windows '''
     return True if sys.platform == "win32" else False
 
-def log(do=True, *msg):
-    if do: printt(*msg)
+def salir(*msg):
+    '''
+        Recibe una cadena y sustituye al exit() de python para:
+        - primero: Parar la ejecución del programa en entornos win32
+        - segundo: Mostrar una buena configuración de la codificación en Windows
+    '''
+    if sys.platform == "win32":
+        for i in msg:
+            print i.encode("cp850"), 
+        print ""
+        raw_input("[FIN] Presiona ENTER para SALIR")
+        exit()
+    else:
+        for i in msg:
+            print i, 
+        print ""
+        exit()
         
 def printt(*msg):
     '''
@@ -50,6 +65,70 @@ def printt(*msg):
         for i in msg:
             print i, 
         print ""
+
+class PdtVersion(object):
+    '''
+        Clase que maneja el control de la versión del cliente con las correspondientes
+        versiones oficialmente puestas para descargar en la web de proyecto
+    '''
+    
+    # Recordar subir antes los archivos a Downloads aumentar la versión en VERSION
+    PDT_VERSION_NIX = "6.0-BETA"
+    PDT_VERSION_WIN = "6.0-BETA"
+    URL_VERSION = "http://pydowntv.googlecode.com/svn/trunk/trunk/VERSION"
+    
+    def __init__(self):
+        pass
+
+    def get_new_version(self):
+        '''
+            Obtiene y devuelve la última versión oficial lanzada descargándola de URL_VERSION
+            y su changelog
+        '''
+        new_version = uiDescargar.Descargar(self.URL_VERSION)
+        
+        # Comprobar que es un formao de versión válido:
+        p = re.compile('^\"[0-9]\.[0-9\-].*\".*', re.IGNORECASE)
+        m = p.match(new_version.descargar())
+        if m:
+            stream = new_version.descargar()
+            stream_version_nix = stream.split("\"")[1]
+            stream_version_win = stream.split("\"")[3]
+            if sys.platform == "win32":
+                changelog = stream.split("\"")[7]
+            else:
+                changelog = stream.split("\"")[5]
+            
+            ver2return = stream_version_win if sys.platform == "win32" else stream_version_nix
+            
+            return [ver2return, changelog]
+        else:
+            return [-1, -1]
+        
+    def comp_version(self, version, changelog):
+        '''
+            Compara las versiones y muestra un mensaje con el changelog en caso de que
+            exista una versión nueva de el script
+        '''
+        ver2compare = self.PDT_VERSION_WIN if sys.platform == "win32" else self.PDT_VERSION_NIX
+        if ver2compare < version:
+            printt(u"[INFO VERSIÓN] Existe un nueva versión de PyDownTV:", version)
+            printt(u"[INFO VERSIÓN] Cambios en la nueva versión:")
+            printt(changelog)
+            # TODO: Añadir URL de descarga aquí y quitar de changelog
+            printt(u"")
+        else:
+            printt(u"[INFO VERSIÓN] Tu versión de PyDownTV es la más reciente")
+            printt(u"")
+
+def windows_end():
+    '''
+        Para el ciclo del programa a la espera de pulsación de ENTER en
+        sistemas win32 al acabar las descargas
+    '''
+    if sys.platform == "win32":
+        raw_input("[FIN] Presiona ENTER para SALIR")
+        exit()
 
 def formatearNombre(nombre):
     '''
@@ -147,6 +226,3 @@ def stringFormat(s):
     s = s.replace("\xc3\x89", "E")
     
     return s
-
-def qe(s):
-    return s.replace(" ", "")

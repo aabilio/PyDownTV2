@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with PyDownTV2.  If not, see <http://www.gnu.org/licenses/>.
 
-# Archivo MAIN (principal) del proyecto PyDownTV para la muestra del módulo spaintvs:
+# Archivo MAIN (principal) del proyecto PyDownTV2 para la muestra del módulo spaintvs:
 
 __author__ = "aabilio"
 __date__ = "$10-oct-2012 11:01:48$"
@@ -28,6 +28,7 @@ from optparse import OptionParser
 
 from spaintvs import *
 import uiDescargar
+import uiUtiles
 
 # Opciones para añadir canales
 _url_canales = {
@@ -56,13 +57,13 @@ def qCanal(url, opcs):
     mod_tv = _mod_tv
     for canal in mod_tv.values():
         if isUrlEnCanal(url, canal["urls"]):
-            Utiles.printt(canal["comentario"])
+            uiUtiles.printt(canal["comentario"])
             return canal["mod"](url, opcs)
     return None
         
 def argsparse():
     #TODO: Ver 15.5.2.6.1 en http://docs.python.org/library/optparse.html
-    rVersion = Utiles.PdtVersion().PDT_VERSION_WIN if sys.platform == "win32" else Utiles.PdtVersion().PDT_VERSION_NIX
+    rVersion = uiUtiles.PdtVersion().PDT_VERSION_WIN if sys.platform == "win32" else uiUtiles.PdtVersion().PDT_VERSION_NIX
     parser = OptionParser(usage="%prog [-n --no-check-version] [-s --show] <\"url1\" \"url2\" ...>", 
                           version="PyDownTV "+rVersion)
     parser.add_option("-n", "--no-check-version", dest="check_version", action="store_true", 
@@ -80,18 +81,18 @@ def comprobar_version():
         Comprueba la versión del cliente con la última lanzada utilizando la clase
         PdtVersion() de utilies.py
     '''
-    Utiles.printt(u"[INFO VERSIÓN] Comprobando si existen nuevas versiones de PyDownTV")
-    pdtv = Utiles.PdtVersion()
+    uiUtiles.printt(u"[INFO VERSIÓN] Comprobando si existen nuevas versiones de PyDownTV")
+    pdtv = uiUtiles.PdtVersion()
     try:
         new_version, changelog = pdtv.get_new_version()
         if new_version == -1:
-            Utiles.printt(u"[!!!] ERROR al comprobar la versión del cliente")
+            uiUtiles.printt(u"[!!!] ERROR al comprobar la versión del cliente")
         else:
             pdtv.comp_version(new_version, changelog)
     except KeyboardInterrupt:
-        Utiles.printt(u"[+] Comprobación cancelada")
+        uiUtiles.printt(u"[+] Comprobación cancelada")
     except Exception:
-        Utiles.printt(u"[!!!] ERROR al comprobar la versión del cliente")
+        uiUtiles.printt(u"[!!!] ERROR al comprobar la versión del cliente")
 
     
 def isURL(url):
@@ -109,7 +110,7 @@ def isURL(url):
 if __name__ == "__main__":
     (options, urls) = argsparse()
     
-    if not urls: Utiles.printt(u"PyDownTV (Descarga vídeos de las webs de TV españolas):\n--------\n")
+    if not urls: uiUtiles.printt(u"PyDownTV (Descarga vídeos de las webs de TV españolas):\n--------\n")
     if not options.check_version: comprobar_version()
     
     # Serializar las opciones que se mandaran al módulo de la TV:
@@ -120,7 +121,7 @@ if __name__ == "__main__":
     ####
     
     if not urls:
-        Utiles.printt(u"[--->] Introduce las URL de los vídeos (separadas por espacios):")
+        uiUtiles.printt(u"[--->] Introduce las URL de los vídeos (separadas por espacios):")
         inPut = raw_input()
         urls = inPut.split(" ")
     
@@ -128,27 +129,27 @@ if __name__ == "__main__":
     iUrls = [url for url in urls if not isURL(url)]
     
     if iUrls:
-        Utiles.printt(u"[!!!] Las siguientes urls no son válidas:")
-        for url in iUrls: Utiles.printt(u"-> %s" % url)
-        Utiles.printt()
+        uiUtiles.printt(u"[!!!] Las siguientes urls no son válidas:")
+        for url in iUrls: uiUtiles.printt(u"-> %s" % url)
+        uiUtiles.printt()
     
     if not vUrls:
-        Utiles.salir(u"[!!!] Ninguna url válida")
+        uiUtiles.salir(u"[!!!] Ninguna url válida")
     else:
         for url in vUrls:
-            Utiles.printt(u"\n[ URL ] %s" % url)
+            uiUtiles.printt(u"\n[ URL ] %s" % url)
             canal = qCanal(url, opcs)
             if not canal:
-                Utiles.printt(u"ERROR: La URL \"%s\" no pertenece a ninguna Televisión soportada" % url)
+                uiUtiles.printt(u"ERROR: La URL \"%s\" no pertenece a ninguna Televisión soportada" % url)
                 continue
             try:
                 info = canal.getInfo()
                 if options.debug:
                     from pprint import pprint
-                    Utiles.printt(u"[DEBUG] Info del vídeo obtenida:\n")
+                    uiUtiles.printt(u"[DEBUG] Info del vídeo obtenida:\n")
                     pprint(info)
-            except Utiles.GeneralPyspainTVsError, e:
-                Utiles.salir(unicode(e))
+            except Error.GeneralPyspainTVsError, e:
+                uiUtiles.salir(unicode(e))
             #except Exception, e:
             #    Utiles.salir(unicode(e))
              
@@ -156,8 +157,8 @@ if __name__ == "__main__":
                 if options.show: # Solo mostrar enlaces
                     for video in info["videos"]: # No importa si solo es un vídeo o varios, muestra todo
                         if info["titulos"]:
-                            Utiles.printt("\n"+info["titulos"][info["videos"].index(video)] +":\n"+"-"*len(info["titulos"][info["videos"].index(video)]))
-                        for parte in video["url_video"]: Utiles.printt(u"\t[URL DESCARGA] %s" % parte)
+                            uiUtiles.printt("\n"+info["titulos"][info["videos"].index(video)] +":\n"+"-"*len(info["titulos"][info["videos"].index(video)]))
+                        for parte in video["url_video"]: uiUtiles.printt(u"\t[URL DESCARGA] %s" % parte)
                 else: # Descargar el vídeo
                     if info["num_videos"] == 1:
                         for video in info["videos"]: # for, aunque solo debería de haber un vídeo
@@ -173,6 +174,6 @@ if __name__ == "__main__":
                     else:
                         pass # TODO: Decidir qué hacer con los vídeo aquí (descargar, preguntar cuál,...) y luego las partes de cada uno
             else: ## NO éxito
-                Utiles.salir(u"[ERROR] No se ha encontrado el vídeo buscado")
+                uiUtiles.salir(u"[ERROR] No se ha encontrado el vídeo buscado")
 
-    Utiles.windows_end()
+    uiUtiles.windows_end()

@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# This file is part of PyDownTV2.
+# This file is part of spaintvs.
 #
-#    PyDownTV2 is free software: you can redistribute it and/or modify
+#    spaintvs is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    PyDownTV2 is distributed in the hope that it will be useful,
+#    spaintvs is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with PyDownTV2.  If not, see <http://www.gnu.org/licenses/>.
+#    along with spaintvs.  If not, see <http://www.gnu.org/licenses/>.
 
 # Módulo para descargar todos los vídeos de la web de rtve.es ("A la carta" o no)
 # Antes era el módulo de tvalacarta.py modificado para dar soporte a todos los vídeos
@@ -25,6 +25,7 @@ __date__ ="$15-oct-2012 11:35:37$"
 import Canal
 import Utiles
 import Descargar
+import Error
 
 url_validas = ["cuatro.com"]
 
@@ -55,6 +56,8 @@ class Cuatro(Canal.Canal):
     # Métodos disponibles de clase Canal:
     #    - log() para mostrar por pantalla (está disponible si self.opcs["log"] es True)
     #    - self.debug() mostrar información de debug (está disponible si self.opcs["debug"] es True)
+    # Comunicación de errores con nivel de aplicación:
+    #    - lanzar la excepción: raise Error.GeneralPyspainTVsError("mensaje")
 
     def getInfo(self):
         '''
