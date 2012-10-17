@@ -170,7 +170,7 @@ def doPOST(url, path, post_args, doseq=True, headers=None):
         Return:
             - Respuesta del POST
     '''
-    Post = urllib.urlencode(post_args, doseq=True)
+    Post = urllib.urlencode(post_args, doseq=doseq)
     headers = {
                 "User-Agent": "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0)", 
                 "Host": "servicios.mitele.es", 

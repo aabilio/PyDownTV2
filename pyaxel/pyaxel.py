@@ -313,7 +313,7 @@ def download(url, options):
             #salir("1")
             if url != None:
                 ext = url.split('.')[-1]
-                output_file = salida + ext
+                #output_file = salida + ext
             else:
                 salir(u"URL y archivo de salida inválido")
 

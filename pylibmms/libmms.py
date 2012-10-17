@@ -28,20 +28,20 @@ if platform == "darwin":
         libmms = cdll.LoadLibrary("libmms.0.dylib")
     except Exception, e:
         print e
-        sys.exit("[!!!] ERROR: No se encuentra dependencia: libmms\nhttp://sourceforge.net/projects/libmms/")
+        exit("[!!!] ERROR: No se encuentra dependencia: libmms\nhttp://sourceforge.net/projects/libmms/")
 elif platform == "win32": # Nunca entrará por aquí, se filtra en Descargar.py antes de entrar aquí (se deja a futuro)
     exit("[!!!] ERROR: libmms aun no disponible en Windows")
     try:
         libmms = cdll.LoadLibrary("libmms/cygmms-0.dll")
     except Exception, e:
         print e
-        sys.exit("[!!!] ERROR: No se encuentra dependencia: libmms\nhttp://sourceforge.net/projects/libmms/")
+        exit("[!!!] ERROR: No se encuentra dependencia: libmms\nhttp://sourceforge.net/projects/libmms/")
 else:
     try:
         libmms = cdll.LoadLibrary("libmms.so.0")
     except Exception, e:
         print e
-        sys.exit("[!!!] ERROR: No se encuentra dependencia: libmms\nhttp://sourceforge.net/projects/libmms/")
+        exit("[!!!] ERROR: No se encuentra dependencia: libmms\nhttp://sourceforge.net/projects/libmms/")
 
 # opening and closing the stream
 libmms.mmsx_connect.argtypes = [c_void_p, c_void_p, c_char_p, c_int]
