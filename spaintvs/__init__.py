@@ -20,7 +20,7 @@
 # Antes era el módulo de tvalacarta.py modificado para dar soporte a todos los vídeos
 
 
-__all__ = ["cuatro", "Error", "grupo_a3", "mitele", "telecinco", "tve"] #Canal, Descargar u Utiles no deberían ser utilizadas fuera del paquete
+__all__ = ["crtvg", "cuatro", "Error", "grupo_a3", "mitele", "telecinco", "tve"] #Canal, Descargar u Utiles no deberían ser utilizadas fuera del paquete
 __version__ = "0.0.1"
 __author__ = "aabilio <aabilio@gmail.com>"
 __date__ = "$10-oct-2012 11:01:48$"

@@ -36,14 +36,16 @@ _url_canales = {
                "grupo_a3": ["antena3.com", "lasexta.com", "lasextadeportes.com", "lasextanoticias.com"],
                "cuatro": ["cuatro.com"],
                "telecinco": ["telecinco.es"],
-               "mitele": ["mitele.es"]
+               "mitele": ["mitele.es"],
+               "crtvg": ["crtvg.es"]
                }
 _mod_tv = {
            "rtve": {"mod":tve.TVE,"comentario":"[INFO] Radio Televión Española", "urls":_url_canales["rtve"]},
            "grupo_a3": {"mod":grupo_a3.GrupoA3,"comentario":"[INFO] Grupo Antena 3 (- La Sexta)", "urls":_url_canales["grupo_a3"]},
            "cuatro": {"mod":cuatro.Cuatro,"comentario":"[INFO] Cuatro.com", "urls":_url_canales["cuatro"]},
            "telecinco": {"mod":telecinco.Telecinco,"comentario":"[INFO] Telecinco.es", "urls":_url_canales["telecinco"]},
-           "mitele": {"mod":mitele.MiTele,"comentario":"[INFO] Mitele.es","urls":_url_canales["mitele"]}
+           "mitele": {"mod":mitele.MiTele,"comentario":"[INFO] Mitele.es","urls":_url_canales["mitele"]},
+           "crtvg": {"mod":crtvg.CRTVG,"comentario":"[INFO] Televisión de Galiza","urls":_url_canales["crtvg"]}
            #"nombre" : {"mod":rutaAlaClase, "comentario":"infoParaImprimir", "urls":_url_canales["canal"]}
            }
 # Fin de edición
@@ -162,7 +164,13 @@ if __name__ == "__main__":
                     for video in info["videos"]: # No importa si solo es un vídeo o varios, muestra todo
                         if info["titulos"]:
                             uiUtiles.printt("\n"+info["titulos"][info["videos"].index(video)] +":\n"+"-"*len(info["titulos"][info["videos"].index(video)]))
-                        for parte in video["url_video"]: uiUtiles.printt(u"\t[URL DESCARGA] %s" % parte)
+                        if video["tipo"] == "http":
+                            for parte in video["url_video"]: uiUtiles.printt(u"\t[URL DESCARGA] %s" % parte)
+                        elif video["tipo"] == "rtmp":
+                            if video["rtmpd_cmd"] is not None:
+                                for parte in video["rtmpd_cmd"]: uiUtiles.printt(u"\t[COMANDO] %s" % parte)
+                            elif video["menco_cmd"] is not None:
+                                for parte in video["menco_cmd"]: uiUtiles.printt(u"\t[COMANDO] %s" % parte)
                 else: # Descargar el vídeo
                     if info["num_videos"] == 1:
                         for video in info["videos"]: # for, aunque solo debería de haber un vídeo

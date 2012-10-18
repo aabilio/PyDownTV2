@@ -79,7 +79,7 @@ class Descargar(object):
         printt(u"")
         printt(u"DESCARGAR:")
         printt(u"----------------------------------------------------------------")
-        printt(u"[ URL DE DESCARGA FINAL ]", self.__URL)
+        printt(u"[ COMANDO ]", self.__COMANDO_RTMPD if self.__COMANDO_RTMPD is not None else self.__COMANDO_MENCO)
         printt(u"[   DESTINO   ]", self.__TITULO)
         printt(u"\n[INFO] Presiona \"Ctrl + C\" para cancelar\n")
         
