@@ -35,13 +35,15 @@ _url_canales = {
                "rtve": ["rtve.es"],
                "grupo_a3": ["antena3.com", "lasexta.com", "lasextadeportes.com", "lasextanoticias.com"],
                "cuatro": ["cuatro.com"],
-               "telecinco": ["telecinco.es"]
+               "telecinco": ["telecinco.es"],
+               "mitele": ["mitele.es"]
                }
 _mod_tv = {
            "rtve": {"mod":tve.TVE,"comentario":"[INFO] Radio Televión Española", "urls":_url_canales["rtve"]},
            "grupo_a3": {"mod":grupo_a3.GrupoA3,"comentario":"[INFO] Grupo Antena 3 (- La Sexta)", "urls":_url_canales["grupo_a3"]},
            "cuatro": {"mod":cuatro.Cuatro,"comentario":"[INFO] Cuatro.com", "urls":_url_canales["cuatro"]},
-           "telecinco": {"mod":telecinco.Telecinco,"comentario":"[INFO] Telecinco.es", "urls":_url_canales["telecinco"]}
+           "telecinco": {"mod":telecinco.Telecinco,"comentario":"[INFO] Telecinco.es", "urls":_url_canales["telecinco"]},
+           "mitele": {"mod":mitele.MiTele,"comentario":"[INFO] Mitele.es","urls":_url_canales["mitele"]}
            #"nombre" : {"mod":rutaAlaClase, "comentario":"infoParaImprimir", "urls":_url_canales["canal"]}
            }
 # Fin de edición

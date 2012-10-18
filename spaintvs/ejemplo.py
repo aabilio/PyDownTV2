@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with spaintvs.  If not, see <http://www.gnu.org/licenses/>.
 
-# Mñodulo de ejemplo para la creación de un canal
+# Módulo de ejemplo para la creación de un canal
 
 __author__="nombre"
 __date__ ="$xx-xxx-20xx xx:xx:xx$"
@@ -28,7 +28,7 @@ import Error
 
 url_validas = ["ejemplo.es", "ejemplo.com"]
 
-class TVE(Canal.Canal):
+class Ejemplo(Canal.Canal):
     '''
         Clase para manejar los vídeos del canal XXXXX
     '''

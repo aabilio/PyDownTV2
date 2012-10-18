@@ -136,6 +136,8 @@ def getHtml(url, withHeader=False, utf8=False, header=std_headers):
     elif utf8: return getHtmlUtf8(url)
     else: return getHtml_(url)
 
+get = getHtml
+
 def isReachable(url): # Retro compatibilidad con módulo de TVE
     '''
         Recibe: 
@@ -154,7 +156,7 @@ def isReachable(url): # Retro compatibilidad con módulo de TVE
 def doPOST(url, path, post_args, doseq=True, headers=None):
     '''
         Recibe:
-            - url (http://ejemplo.com)
+            - url (ejemplo.com)
             - path (/ruta/de/ejemplo.php)
             - post_args (dicy, ej.: {"usuario":"antonio", "password":"pass"})
             - doseq (bool)
