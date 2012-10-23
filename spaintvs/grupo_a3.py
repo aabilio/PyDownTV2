@@ -22,7 +22,6 @@
 __author__="aabilio"
 __date__ ="$12-oct-2012 11:03:38$"
 
-import urllib2
 import re
 
 import Canal
@@ -69,13 +68,13 @@ class GrupoA3(Canal.Canal):
         else:
             url2down1 = self.URL_DE_DESCARGA + \
                 streamXML.split("<archivo><![CDATA[")[1].split("001.f4v]]></archivo>")[0] + "000.f4v"
-        try: # Descargar entero
-            urllib2.urlopen(url2down1)
+        
+        if Descargar.isReachable(url2down1): # Vídeo en una parte
             url2down = url2down1
             name = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0] + ".f4v"
-        except urllib2.HTTPError: # Descargar por partes:
-            self.log(u"[!!!]  No se puede encuentra el vídeo en un archivo (000.m4v)")
-            self.log(u"[INFO] El vídeo consta de varias partes")
+        else: # Vídeo en varias partes
+            self.info(u"[!!!]  No se puede encuentra el vídeo en un archivo (000.m4v)")
+            self.info(u"[INFO] El vídeo consta de varias partes")
             parts = re.findall("\<archivo\>\<\!\[CDATA\[.*\.f4v\]\]\>\<\/archivo\>", streamXML)
             if parts:
                 name1 = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0]
@@ -86,7 +85,6 @@ class GrupoA3(Canal.Canal):
                     name.append(name1 + "_" + i.split("]")[0].split("/")[-1])
             else:
                 raise Error.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra ninguna parte de contenido.")
-        
         return [url2down,  name]
     
     def __modoSalon(self, streamHTML):
@@ -100,6 +98,7 @@ class GrupoA3(Canal.Canal):
             Descargar.getHtml(self.URL_DE_ANTENA3 + streamHTML.split("player_capitulo.xml='")[1].split("'")[0])
         else:
             raise Error.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra XML.")
+        
         # Comprobar aquí si se puede descargar 000.mp4:
         if streamXML.find(".mp4") != -1:
             tipo = ".mp4"
@@ -114,13 +113,13 @@ class GrupoA3(Canal.Canal):
             return [url2down, name]
         else:
             raise Error.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra mp4, f4v ni flv")
-        try: # Descargar entero
-            urllib2.urlopen(url2down1)
+        
+        if Descargar.isReachable(url2down1): # Vídeo completo en una parte
             url2down = url2down1
             name = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0] + tipo
-        except urllib2.HTTPError: # Descargar por partes:
-            self.log(u"[!!!]  No se puede encuentra el vídeo en un archivo (000.m4v)")
-            self.log(u"[INFO] El vídeo consta de varias partes")
+        else: # Vídeo en varias partes
+            self.info(u"[!!!]  No se puede encuentra el vídeo en un archivo (000.m4v)")
+            self.info(u"[INFO] El vídeo consta de varias partes")
             parts = re.findall("\<archivo\>\<\!\[CDATA\[.*"+tipo+"\]\]\>\<\/archivo\>", streamXML)
             if parts:
                 name1 = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0]
