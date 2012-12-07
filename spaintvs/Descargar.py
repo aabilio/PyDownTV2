@@ -139,6 +139,7 @@ def getHtml(url, withHeader=False, utf8=False, header=std_headers):
 get = getHtml
 
 def isReachable(url): # Retro compatibilidad con módulo de TVE
+    #TODO: Meter headers
     '''
         Recibe: 
             - url (http://ejemplo.com/ruta/de/ejemplo)
@@ -146,7 +147,7 @@ def isReachable(url): # Retro compatibilidad con módulo de TVE
     '''
     try:
         f = urllib2.urlopen(url)
-        f.read()
+        #f.read()
         f.close()
         return True
     except Exception:
