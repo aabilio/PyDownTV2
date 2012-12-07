@@ -180,7 +180,8 @@ class GrupoA3(Canal.Canal):
                 "num_videos" : 0,
                 "mensaje"   : u"URLs obtenido correctamente",
                 "videos":[],
-                "titulos": []
+                "titulos": [],
+                "descs": None
                 }
         
         v = -1
@@ -247,7 +248,8 @@ class GrupoA3(Canal.Canal):
                             "otros"     : [],   <-- Lista donde se pueden pasar cosas opcionales
                             "mensaje"   : ""    <-- Mensajes de la API
                             }], <-- Debe ser una lista de tamaño "num_videos"
-             "titulos"   : [u""] <-- Titulos de los videos
+             "titulos"   : [u""], <-- Titulos de los videos
+             "descs"     : [u""] <-- Descripción de cada vídeo
             }
             
             Los valores que no se rellenen, deberán devolver None.
@@ -257,8 +259,8 @@ class GrupoA3(Canal.Canal):
             "mensaje": "No se pudo descargar el video"  
             }
             
-            "videos" y "mesajes" deben ser listas de cadenas (si no son None)
-            "url_video", "titulo", "rtmp_cmd", "menco_cmd" (de "videos") deben ser listas de cadenas (si no son None)
+            "videos", "mesajes" y "descs" deben ser listas de cadenas (si no son None)
+            "url_video", "filename", "rtmp_cmd", "menco_cmd" (de "videos") deben ser listas de cadenas (si no son None)
         '''
         img = None
         # print "[+] Procesando descarga"
@@ -317,6 +319,7 @@ class GrupoA3(Canal.Canal):
                         "otros"     : None,
                         "mensaje"   : u"URL obtenida correctamente" if type(url2down) != list else u"URLs obtenida correctamente"
                         }],
-                "titulos": [tit_vid] if tit_vid is not None else None
+                "titulos": [tit_vid] if tit_vid is not None else None,
+                "descs": None
                 }
 

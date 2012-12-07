@@ -99,22 +99,23 @@ class Ejemplo(Canal.Canal):
         '''
             Devuelve toda la información asociada a la URL recibida, de la siguiente forma:
             {
-             "exito"     : bool,  <-- True (si se han obtenido videos) (bool)
-             "num_video" : int,   <-- Número de vídeos obtenidos (int)
-             "mensaje"   : u"" ,  <-- Mensajes de la API (ej.: El vídeo no ha sido encontrado ["exito": False]) (unicode)
-             "videos"    :  [{ (dict)
-                            "url_video" : [],   <-- Url de descarga de vídeo (list)
-                            "url_img"   : "",   <-- Url de la miniatura del video (str/unicode)
-                            "filename"  : [],   <-- Nombre de las partes para guardar en disco (list)
-                            "tipo"      : "",   <-- http, rtmp[e,..], mms, ... (str/unicode)
-                            "partes"    : int,  <-- Número de partes que tiene el vídeo (int)
-                            "rtmpd_cmd" : [],   <-- Comando rtmpdump (si tipo == rtmp) sino None (list)
-                            "menco_cmd" : [],   <-- Comando mencoder (Si tipo == rtmp) sino None (list)
-                            "url_publi" : "",   <-- Url del vídeo de publicidad asociado al vídeo (str/unicode)
-                            "otros"     : [],   <-- Lista donde se pueden pasar cosas opcionales (list)
-                            "mensaje"   : ""    <-- Mensajes de la API (str/unicode)
-                            }], <-- Debe ser una lista de tamaño "num_videos" (list)
-             "titulos"   : [u""] <-- Titulos de los videos (list)
+             "exito"     : bool,  <-- True (si se han obtenido videos)
+             "num_video" : int,   <-- Número de vídeos obtenidos
+             "mensaje"   : u"" ,  <-- Mensajes de la API (ej.: El vídeo no ha sido encontrado ["exito": False])
+             "videos"    :  [{
+                            "url_video" : [],   <-- Url de descarga de vídeo
+                            "url_img"   : "",   <-- Url de la miniatura del video
+                            "filename"  : [],   <-- Nombre de las partes para guardar en disco
+                            "tipo"      : "",   <-- http, rtmp[e,..], mms, ...
+                            "partes"    : int,  <-- Número de partes que tiene el vídeo
+                            "rtmpd_cmd" : [],   <-- Comando rtmpdump (si tipo == rtmp) sino None
+                            "menco_cmd" : [],   <-- Comando mencoder (Si tipo == rtmp) sino None
+                            "url_publi" : "",   <-- Url del vídeo de publicidad asociado al vídeo
+                            "otros"     : [],   <-- Lista donde se pueden pasar cosas opcionales
+                            "mensaje"   : ""    <-- Mensajes de la API
+                            }], <-- Debe ser una lista de tamaño "num_videos"
+             "titulos"   : [u""], <-- Titulos de los videos
+             "descs"     : [u""] <-- Descripción de cada vídeo
             }
             
             Los valores que no se rellenen, deberán devolver None.
@@ -124,8 +125,8 @@ class Ejemplo(Canal.Canal):
             "mensaje": "No se pudo descargar el video"  
             }
             
-            "videos" y "mesajes" deben ser listas de cadenas (si no son None)
-            "url_video", "titulo", "rtmp_cmd", "menco_cmd" (de "videos") deben ser listas de cadenas (si no son None)
+            "videos", "mesajes" y "descs" deben ser listas de cadenas (si no son None)
+            "url_video", "filename", "rtmp_cmd", "menco_cmd" (de "videos") deben ser listas de cadenas (si no son None)
         '''
         #Ejemplo:
         try:
@@ -154,6 +155,7 @@ class Ejemplo(Canal.Canal):
                             "otros"     : None,
                             "mensaje"   : None
                             }],
-                    "titulos": [tit_vid] if tit_vid is not None else None
+                    "titulos": [tit_vid] if tit_vid is not None else None,
+                    "descs": None
                     }
         return ejemplo
