@@ -1,33 +1,31 @@
-PyDownTV2:
-=========
+PyDownTV2 Script:
+================
 
-PyDownTV2 es una librería Python, destinada a obtener los enlace de descarga 
-de los vídeos de las principales webs de TVs españolas.
+PyDownTV2 Script, es un programa para terminal (consola) para descargar
+los vídeos de las webs de las principales televisiones españolas.
 
-La Librería se llama "spaintvs" y aquí también se pone a disposición un script
-de muestra de su uso "pydowntv.py".
-
-Se puede probar la API online aquí: http://newapi.pydowntv.appspot.com/
-
-A wel script programado en python se le pasa una url de un vídeo y muestra la
+A el script programado en python se le pasa una url de un vídeo y muestra la
 url de localización final del vídeo y lo descarga.
 
-PyDownTV2 (spaintvs) soportará todas las cadenas que soportaba PyDownTV: 
-- TVE
-- TVE a la carta
-- Antena 3 (Modo Salón)
-- Cualquier vdeo de la web de Antena 3 (no solo modo salón)
-- Audios de Radio Nacional
-- Telecinco
+El script utiliza la librería "spaintvs" que de moemento soportara:
+- Radio Televisión Española
+- Antena 3
+- Cuatro
+- Telecinco (y MiTele)
 - La Sexta
 
----> Lista completa y actualizada de TVs soportadas (PyDownTV) en: http://code.google.com/p/pydowntv/wiki/Televisiones_Soportadas
+- Televisión de Galicia
+
+** Se intentará que PyDownTV2 soporte todas las cadenas que soportaba
+su primera versión: http://code.google.com/p/pydowntv/wiki/Televisiones_Soportadas
 
 
---------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 
 
-Todo lo que viene a continuación es información sobre la primera versión (PyDownTV):
+INFORMACIÓN SOBRE LA PRIMERA VERSIÓN DE PYDOWNTV (SCRIPT):
+
 Website: http://code.google.com/p/pydowntv/
 Repository (Google Code): http://pydowntv.googlecode.com/svn/trunk/
   $ svn checkout http://pydowntv.googlecode.com/svn/trunk/ pydowntv-read-only

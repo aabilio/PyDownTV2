@@ -1,0 +1,24 @@
+PYDOWNTV2
+=========
+
+PyDownTV versión 2, son un conjunto de apps destinadas a ayudar a realizar 
+descargas de los vídeos de las webs de las principales televisones españolas.
+
+PyDownTV2 está dividido en distintos módulos:
+
+* "spaintvs", la librería. Programada en Python, es el núcleo de resto de apps.
+Es la que se encarga de obtener toda la info sobre los vídeos que se intentan
+descargar.
+
+* "Script", es la versión de Terminal (consola) para GNU/Linux, MAC OS X, y Windows.
+
+* "Web". La versión web, disponible a través de http://web.pydowntv.com
+
+* "Escritorio". Versión de escritorio programada en C++ y QT.
+
+* "Android". Versión para los smartphone con Android.
+
+
+Todo el código es y será software libre. Se espera que todo el artwork también lo sea.
+Cada app tiene a su vez un README propio para empezar a informarse de cómo utilizar o,
+cómo programar para ese módulo en cuestión.

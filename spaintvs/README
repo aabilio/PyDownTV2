@@ -1,0 +1,16 @@
+Spaintvs:
+========
+
+Librería que se encarga de obtener información de descarga de vídeos
+de las webs de las principales televisiones españolas.
+
+Para empezar a programar un módulo para un canal se puede ver el archivo:
+"ejemplo.py", para ver la estrutura principal del Canal, y de las funciones
+de la librería que están disponibles.
+
+En un principio en PyDownTV no se establecieron Expresiones Regulares, ni
+ninguna librería externa de tratamiento de HTML por restricciones en las
+primeras versiones de Google App Engine (Servidor en la que está alojada
+la versión web de PyDownTV). Hoy en día GAE proporciona más facilidades 
+para la inclusión de estas librerías, por lo que en principio se podrían
+utilizar gran cantidad de librerías externas.
