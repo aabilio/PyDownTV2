@@ -188,7 +188,7 @@ class GrupoA3(Canal.Canal):
             video = {
                 "url_video" : [],
                 "url_img"   : None, #TODO: ibtener miniatura
-                "titulo"    : [],
+                "filename"  : [],
                 "tipo"      : "http",
                 "partes"    : 0,
                 "rtmpd_cmd" : None,
@@ -219,7 +219,7 @@ class GrupoA3(Canal.Canal):
                 ext = "." + video["url_video"][-1].split(".")[-1]
                 tit = b.split("<title>")[1].split("<")[0] + ext
                 tit = Utiles.formatearNombre(tit)
-                video["titulo"].append(tit)
+                video["filename"].append(tit)
                 
             ret["titulos"].append(i.split(">")[1].split("<")[0].capitalize())
             ret["videos"].append(video)
@@ -238,7 +238,7 @@ class GrupoA3(Canal.Canal):
              "videos"    :  [{
                             "url_video" : [],   <-- Url de descarga de vídeo
                             "url_img"   : "",   <-- Url de la miniatura del video
-                            "titulo"    : [],   <-- Título de las partes
+                            "filename"  : [],   <-- Nombre de las partes para guardar en disco
                             "tipo"      : "",   <-- http, rtmp[e,..], mms, ...
                             "partes"    : int,  <-- Número de partes que tiene el vídeo
                             "rtmpd_cmd" : [],   <-- Comando rtmpdump (si tipo == rtmp) sino None
@@ -308,7 +308,7 @@ class GrupoA3(Canal.Canal):
                 "videos":[{
                         "url_video" : [url2down] if type(url2down) != list else url2down,
                         "url_img"   : img if img is not None else None,
-                        "titulo"    : [name] if type(name) != list else name,
+                        "filename"  : [name] if type(name) != list else name,
                         "tipo"      : "http",
                         "partes"    : 1 if type(url2down) != list else len(url2down),
                         "rtmpd_cmd" : None,

@@ -177,7 +177,7 @@ if __name__ == "__main__":
                             for indice_parte in range(video["partes"]): #TODO: Cómo descargar, todas las partes o preguntar
                                 d = uiDescargar.Descargar(
                                                           video["url_video"][indice_parte],
-                                                          video["titulo"][indice_parte],
+                                                          video["filename"][indice_parte],
                                                           video["tipo"],
                                                           video["rtmpd_cmd"][indice_parte] if video["rtmpd_cmd"] is not None else None,
                                                           video["menco_cmd"][indice_parte] if video["menco_cmd"] is not None else None,

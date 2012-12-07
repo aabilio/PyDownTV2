@@ -108,7 +108,7 @@ class MiTele(Canal.Canal):
              "videos"    :  [{ (dict)
                             "url_video" : [],   <-- Url de descarga de vídeo (list)
                             "url_img"   : "",   <-- Url de la miniatura del video (str/unicode)
-                            "titulo"    : [],   <-- Título de las partes (list)
+                            "filename"  : [],   <-- Nombre de las partes para guardar en disco (list)
                             "tipo"      : "",   <-- http, rtmp[e,..], mms, ... (str/unicode)
                             "partes"    : int,  <-- Número de partes que tiene el vídeo (int)
                             "rtmpd_cmd" : [],   <-- Comando rtmpdump (si tipo == rtmp) sino None (list)
@@ -194,7 +194,7 @@ class MiTele(Canal.Canal):
                 "videos":[{
                         "url_video" : [url],
                         "url_img"   : img if img is not None else None,
-                        "titulo"    : [name] if name is not None else None,
+                        "filename"  : [name] if name is not None else None,
                         "tipo"      : "http",
                         "partes"    : 1,
                         "rtmpd_cmd" : None,

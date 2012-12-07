@@ -58,7 +58,7 @@ class CRTVG(Canal.Canal):
              "videos"    :  [{
                             "url_video" : [],   <-- Url de descarga de vídeo
                             "url_img"   : "",   <-- Url de la miniatura del video
-                            "titulo"    : [],   <-- Título de las partes
+                            "filename"  : [],   <-- Nombre de las partes para guardar en disco
                             "tipo"      : "",   <-- http, rtmp[e,..], mms, ...
                             "partes"    : int,  <-- Número de partes que tiene el vídeo
                             "rtmpd_cmd" : [],   <-- Comando rtmpdump (si tipo == rtmp) sino None
@@ -112,7 +112,7 @@ class CRTVG(Canal.Canal):
                 "videos":[{
                         "url_video" : [url],
                         "url_img"   : img if img is not None else None,
-                        "titulo"    : [name] if name is not None else None,
+                        "filename"  : [name] if name is not None else None,
                         "tipo"      : "rtmp",
                         "partes"    : 1,
                         "rtmpd_cmd" : [rtmpd_cmd],
