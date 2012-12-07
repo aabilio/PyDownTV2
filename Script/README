@@ -7,7 +7,7 @@ los vídeos de las webs de las principales televisiones españolas.
 A el script programado en python se le pasa una url de un vídeo y muestra la
 url de localización final del vídeo y lo descarga.
 
-El script utiliza la librería "spaintvs" que de moemento soportara:
+El script utiliza la librería "spaintvs" que de moemento soporta:
 - Radio Televisión Española
 - Antena 3
 - Cuatro
