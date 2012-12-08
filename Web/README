@@ -1,0 +1,23 @@
+PYDOWNTV2 Web:
+=============
+
+Versión 2 de la web de PyDownTV, actualmente en construcción.
+
+La web desarrollada con:
+
+(Backend)
+- Python: http://www.python.org/
+- Flask: http://flask.pocoo.org/
+- Google App Engine: https://developers.google.com/appengine/?hl=es
+(Frontend)
+- HTML
+- CSS
+- Javascript
+
+Utilizando el esqueleto para adaptar Flask a Google App Engine con Python 2.7
+de kamalgill: https://github.com/kamalgill/flask-appengine-template
+
+Las licencias de módulos de terceros se puede encontrar en el directorio "Licenses".
+
+La licencia en lo que a spaintvs y pydowntv2 e refiere se puede encontrar en COPYING,
+y en sus respectivos módulos.
