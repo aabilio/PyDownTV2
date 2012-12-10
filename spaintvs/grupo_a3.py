@@ -293,7 +293,10 @@ class GrupoA3(Canal.Canal):
         try:
             desc = Utiles.recortar(streamHTML, "<meta property=\"og:description\" content=\"", "\"").strip()
         except:
-            desc = None
+            try:
+                desc = Utiles.recortar(streamHTML, "<meta name=\"description\" content=\"", "\" />").strip()
+            except:   
+                desc = None
         
         #if type(url2down) == list:
         #    for i in url2down:
