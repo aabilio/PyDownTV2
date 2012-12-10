@@ -51,6 +51,13 @@ def printt(*msg):
             print i, 
         print ""
         
+class html(unicode):
+    def recortar(self, str1, str2):
+        return self.split(str1)[1].split(str2)[0]
+    def qe(self):
+        return self.replace(" ", "")
+    
+    
 def recortar(orig, str1, str2):
     return orig.split(str1)[1].split(str2)[0]
 
