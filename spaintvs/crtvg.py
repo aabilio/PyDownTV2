@@ -85,6 +85,7 @@ class CRTVG(Canal.Canal):
         # Diferenciar entre vídeos "á carta" y vídeos de "agalegainfo":
         streamHTML = Descargar.get(self.url)
         tit_vid = streamHTML.split("title: \"")[1].split("\"")[0]
+        htmlBackup = streamHTML
         streamHTML = streamHTML.replace(" ", "").replace("\t", "").replace("\n", "")
         
         if self.url.find("a-carta") != -1:
@@ -105,7 +106,12 @@ class CRTVG(Canal.Canal):
         if name:
             name = Utiles.formatearNombre(name)
         rtmpd_cmd = "rtmpdump -r "+url+" -y "+y+" -s "+s+" -a "+a+" -o "+name
-                    
+        
+        desc = None        
+        try: #FIXME: Pillar más que solo el primer párrafo
+            desc = Utiles.recortar(htmlBackup, "<p style=\"text-align: justify;\">", "</p>").strip()
+        except:
+            desc = tit_vid if tit_vid is not None else None
         
         return {"exito" : True,
                 "num_videos" : 1,
@@ -123,7 +129,7 @@ class CRTVG(Canal.Canal):
                         "mensaje"   : None
                         }],
                 "titulos": [tit_vid] if tit_vid is not None else None,
-                "descs": None
+                "descs": [desc] if desc is not None else None
                 }
             
             
