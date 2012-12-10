@@ -151,7 +151,7 @@ class Cuatro(Canal.Canal):
                         "mensaje"   : None
                         }],
                 "titulos": [tit_vid] if tit_vid is not None else None,
-                "descs": None
+                "descs": tit_vid if tit_vid is not None else None
                 }
 
 
