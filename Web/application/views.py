@@ -148,7 +148,13 @@ def home():
 def api(url=None):
     opcs = _default_opcs
     try:
-        search = url if url is not None else request.args['url'] 
+        search = url if url is not None else request.args['url']
+        ## CASOS ESPECIALES URL NO ASCCII
+        #RTPA
+        try: search = search.split("video:")[0] + "video:_" + search.split("_")[1]
+        except: pass
+        #END - RTPA
+        ## END - CASOS ESPECIALES 
         if compURL(search):
             canal = qCanal(search, opcs)
             if canal == None:

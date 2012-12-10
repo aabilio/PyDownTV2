@@ -65,7 +65,7 @@ def qCanal(url, opcs):
     mod_tv = _mod_tv
     for canal in mod_tv.values():
         if isUrlEnCanal(url, canal["urls"]):
-            uiUtiles.printt(canal["comentario"])
+            uiUtiles.printt(canal["comentario"])              
             return canal["mod"](url, opcs)
     return None
         
@@ -145,7 +145,13 @@ if __name__ == "__main__":
         uiUtiles.salir(u"[!!!] Ninguna url válida")
     else:
         for url in vUrls:
-            uiUtiles.printt(u"\n[ URL ] %s" % url)
+            ## CASOS ESPECIALES URL NO ASCCII
+            #RTPA
+            try: url = url.split("video:")[0] + "video:_" + url.split("_")[1]
+            except: pass
+            #END - RTPA
+            ## END - CASOS ESPECIALES
+            uiUtiles.printt(u"\n[ URL ] %s" % unicode(url))
             canal = qCanal(url, opcs)
             if not canal:
                 uiUtiles.printt(u"ERROR: La URL \"%s\" no pertenece a ninguna Televisión soportada" % url)
