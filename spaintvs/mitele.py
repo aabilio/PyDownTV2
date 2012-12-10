@@ -135,9 +135,8 @@ class MiTele(Canal.Canal):
         tit_vid = None
         # Obtener HTML y XML:
         try:
-            streamHTML = Descargar.getHtml(self.url)
+            streamHTML = htmlBackup = Descargar.getHtml(self.url)
             tit_vid = streamHTML.split("<title>")[1].split("<")[0]
-            htmlBackup = streamHTML
             streamHTML = streamHTML.replace(" ", "")
             streamXML = Descargar.getHtml(streamHTML.split("{\"host\":\"")[1].split("\"")[0].replace("\/", "/"))
         except Exception, e:

@@ -82,15 +82,22 @@ class Canales(object):
         return False
 
     def isMitele(self):
-        '''return True si la URL pertenece al Grupo de Telecinco'''
+        '''return True si la URL pertenece al Grupo de Telecinco (MiTele)'''
         urls = ["mitele.es"]
         for url in urls:
             if self._url.find(url) != -1: return True
         return False
 
     def isCRTVG(self):
-        '''return True si la URL pertenece al Grupo de Telecinco'''
+        '''return True si la URL pertenece a Televisión de Galiza'''
         urls = ["crtvg.es"]
+        for url in urls:
+            if self._url.find(url) != -1: return True
+        return False
+    
+    def isRTPA(self):
+        '''return True si la URL pertenece a rtpa.es'''
+        urls = ["rtpa.es"]
         for url in urls:
             if self._url.find(url) != -1: return True
         return False
@@ -109,6 +116,7 @@ def qCanal(url, opcs):
     elif canal.isTelecinco(): return telecinco.Telecinco(url, opcs)
     elif canal.isMitele(): return miteleGAE.MiTele(url, opcs)
     elif canal.isCRTVG(): return crtvg.CRTVG(url, opcs)
+    elif canal.isRTPA(): return rtpa.RTPA(url, opcs)
     else: return None
 
 def compURL(url):

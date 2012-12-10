@@ -125,6 +125,7 @@ def formatearNombre(nombre):
     nombre = nombre.replace("ñ", "nh")
     nombre = nombre.replace("%F1", "nh")
     nombre = nombre.replace("\xc3\xb1", "nh") # Cambiar el caracter escapado (ñ) por (nh)
+    nombre = nombre.replace("\xf1o", "nh")
     nombre = nombre.replace("&#8220;","") # (parece que: &#8220; = ")
     nombre = nombre.replace("&#8221;","") # Lo mismo que lo anterior
     nombre = nombre.replace("&#8217;", "")
@@ -148,11 +149,20 @@ def formatearNombre(nombre):
     return nombre
 
 def descriptionFormat(Str):
+    Str = stringFormat(Str)
     Str = Str.replace("<!--more-->", "")
     Str = Str.replace("/r", "")
     Str = Str.replace("/n", "")
+    Str = Str.replace("\xf1", "nh") #ñ
+    
+    Str = Str.replace("\xf3", "")
+    Str = Str.replace("\xf3", "")
+    Str = Str.replace("\xed", "")
+    
     
     return Str
+
+tituloFormat = descriptionFormat
 
 def stringFormat(s):
     s = s.replace("\xc3\xa1", "á")

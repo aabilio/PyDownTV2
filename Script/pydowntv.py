@@ -37,7 +37,8 @@ _url_canales = {
                "cuatro": ["cuatro.com"],
                "telecinco": ["telecinco.es"],
                "mitele": ["mitele.es"],
-               "crtvg": ["crtvg.es"]
+               "crtvg": ["crtvg.es"],
+               "rtpa": ["rtpa.es"]
                }
 _mod_tv = {
            "rtve": {"mod":tve.TVE,"comentario":"[INFO] Radio Televión Española", "urls":_url_canales["rtve"]},
@@ -45,7 +46,8 @@ _mod_tv = {
            "cuatro": {"mod":cuatro.Cuatro,"comentario":"[INFO] Cuatro.com", "urls":_url_canales["cuatro"]},
            "telecinco": {"mod":telecinco.Telecinco,"comentario":"[INFO] Telecinco.es", "urls":_url_canales["telecinco"]},
            "mitele": {"mod":mitele.MiTele,"comentario":"[INFO] Mitele.es","urls":_url_canales["mitele"]},
-           "crtvg": {"mod":crtvg.CRTVG,"comentario":"[INFO] Televisión de Galiza","urls":_url_canales["crtvg"]}
+           "crtvg": {"mod":crtvg.CRTVG,"comentario":"[INFO] Televisión de Galiza","urls":_url_canales["crtvg"]},
+           "rtpa": {"mod":rtpa.RTPA,"comentario":"[INFO] Radio Televisión del Principado de Asturias","urls":_url_canales["rtpa"]}
            #"nombre" : {"mod":rutaAlaClase, "comentario":"infoParaImprimir", "urls":_url_canales["canal"]}
            }
 # Fin de edición
