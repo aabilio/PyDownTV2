@@ -174,6 +174,12 @@ class GrupoA3(Canal.Canal):
         streamVids = streamHTML.split("<ul class=\"a3_gp_visor_menu\">")[1].split("</ul>")[0].replace("\t", "")
         streamVids = streamVids.split("<li>")[1:]
         
+        desc = None        
+        try:
+            desc = Utiles.recortar(streamHTML, "<meta property=\"og:description\" content=\"", "\"").strip()
+        except:
+            desc = None
+        
         #self.debug(streamVids)
         ret =   {
                 "exito" : True,
@@ -181,7 +187,7 @@ class GrupoA3(Canal.Canal):
                 "mensaje"   : u"URLs obtenido correctamente",
                 "videos":[],
                 "titulos": [],
-                "descs": None
+                "descs": []
                 }
         
         v = -1
@@ -225,6 +231,7 @@ class GrupoA3(Canal.Canal):
             ret["titulos"].append(i.split(">")[1].split("<")[0].capitalize())
             ret["videos"].append(video)
             ret["num_videos"] += 1
+            ret["descs"].append(desc)
 
         return ret
 
@@ -282,6 +289,12 @@ class GrupoA3(Canal.Canal):
                 else: # Solo una parte
                     url2down, name = self.__modoNormalUnaParte(streamHTML)
         
+        desc = None        
+        try:
+            desc = Utiles.recortar(streamHTML, "<meta property=\"og:description\" content=\"", "\"").strip()
+        except:
+            desc = None
+        
         #if type(url2down) == list:
         #    for i in url2down:
         #        if i.find("geobloqueo") != -1:
@@ -320,6 +333,6 @@ class GrupoA3(Canal.Canal):
                         "mensaje"   : u"URL obtenida correctamente" if type(url2down) != list else u"URLs obtenida correctamente"
                         }],
                 "titulos": [tit_vid] if tit_vid is not None else None,
-                "descs": None
+                "descs": [desc] if desc is not None else None
                 }
 
