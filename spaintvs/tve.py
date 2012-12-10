@@ -115,6 +115,7 @@ class TVE(Canal.Canal):
         # -- Método 1 Octubre 2012:
         self.debug(u"Probando método de 1 de uno de Octubre de 2012")
         url = "http://www.rtve.es/ztnr/consumer/xl/video/alta/" + videoID + "_es_292525252525111"
+        self.debug(url)
         
         user_agent="Mozilla"
         opener = urllib2.build_opener(NoRedirectHandler())
@@ -129,13 +130,29 @@ class TVE(Canal.Canal):
         u.close()
         if urlVideo != "":
             url_video = urlVideo.replace("www.rtve.es", "media5.rtve.es")
-            titulo = sourceHTML.split("<title>")[1].split("</")[0] + ".mp4"
-            titulo = Utiles.formatearNombre(titulo)
+            titulo = sourceHTML.split("<title>")[1].split("</")[0]
+            filename = titulo + ".mp4"
+            filename = Utiles.formatearNombre(filename)
             #sourceHTML = sourceHTML.split("<div id=\"video")[1].split("flashvars")[0] # Me quedo solo con la parte del vídeo principal
             url_img = sourceHTML.split("\"thumbnail\" content=\"")[1].split("\"")[0]
         else:
             raise Error.GeneralPyspainTVsError("No se pudo encontrar el enlace de descarga")
         # -- Método 1 Octubre 2012 FIN
+        
+        desc = None
+        try: #obtener descripción del video
+            desc = Utiles.recortar(sourceHTML, "<meta itemprop=\"description\" content=\"", "\"").strip()
+        except:
+            try:
+                desc = Utiles.recortar(sourceHTML, "<meta property=\"og:description\" content=\"", "\"").strip()
+            except:
+                try:
+                    desc = Utiles.recortar(sourceHTML, "<meta name=\"description\" content=\"", "\"").strip()
+                except:
+                    desc = None
+                
+        
+            
         
         return {"exito" : True,
                 "num_videos" : 1,
@@ -143,7 +160,7 @@ class TVE(Canal.Canal):
                 "videos":[{
                         "url_video" : [url_video],
                         "url_img"   : url_img,
-                        "filename"    : [titulo],
+                        "filename"    : [filename],
                         "tipo"      : "http",
                         "partes"    : 1,
                         "rtmpd_cmd" : None,
@@ -152,8 +169,8 @@ class TVE(Canal.Canal):
                         "otros"     : None,
                         "mensaje"   : None
                         }],
-                "titulos": None,
-                "descs": None
+                "titulos": [titulo],
+                "descs": [desc] if desc is not None else None
                 }
 
 class NoRedirectHandler(urllib2.HTTPRedirectHandler):

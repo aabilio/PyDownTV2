@@ -50,6 +50,9 @@ def printt(*msg):
         for i in msg:
             print i, 
         print ""
+        
+def recortar(orig, str1, str2):
+    return orig.split(str1)[1].split(str2)[0]
 
 def formatearNombre(nombre):
     '''
