@@ -140,6 +140,13 @@ def formatearNombre(nombre):
 
     return nombre
 
+def descriptionFormat(Str):
+    Str = Str.replace("<!--more-->", "")
+    Str = Str.replace("/r", "")
+    Str = Str.replace("/n", "")
+    
+    return Str
+
 def stringFormat(s):
     s = s.replace("\xc3\xa1", "á")
     s = s.replace("\xc3\xa9", "é")

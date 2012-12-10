@@ -131,17 +131,18 @@ class Telecinco(Canal.Canal):
         else:
             Error.GeneralPyspainTVsError("Telecinco.es. No se encuentra contenido.")
         
-        desc = None        
-        try:
-            desc = Utiles.recortar(streamHTML, "<h3 class=\"subtitle\">", "<").strip()
-        except:
-            desc = tit_vid if tit_vid is not None else None
 
         tit_vid = None
         if name != None:
             name = name.replace("Ver vídeo online","")
             tit_vid = name.split(".")[0]
             name = Utiles.formatearNombre(name)
+        
+        desc = None        
+        try:
+            desc = Utiles.recortar(streamHTML, "<h3 class=\"subtitle\">", "<").strip()
+        except:
+            desc = tit_vid if tit_vid is not None else None
         
         return {"exito" : True,
                 "num_videos" : 1,

@@ -137,6 +137,7 @@ class MiTele(Canal.Canal):
         try:
             streamHTML = Descargar.getHtml(self.url)
             tit_vid = streamHTML.split("<title>")[1].split("<")[0]
+            htmlBackup = streamHTML
             streamHTML = streamHTML.replace(" ", "")
             streamXML = Descargar.getHtml(streamHTML.split("{\"host\":\"")[1].split("\"")[0].replace("\/", "/"))
         except Exception, e:
@@ -188,6 +189,13 @@ class MiTele(Canal.Canal):
         name = name.replace("VERSERIES", "").replace("Veronline", "")
         tit_vid = tit_vid.replace("VER PROGRAMAS", "").replace("Ver online", "")
         tit_vid = tit_vid.replace("VER SERIES", "").replace("Ver online", "")
+        
+       
+        desc = None        
+        try:
+            desc = Utiles.descriptionFormat(Utiles.recortar(htmlBackup, "\"post_content\":\"", "\"").strip())
+        except:
+            desc = tit_vid if tit_vid is not None else None
             
         return {"exito" : True,
                 "num_videos" : 1,
@@ -205,6 +213,6 @@ class MiTele(Canal.Canal):
                         "mensaje"   : None
                         }],
                 "titulos": [tit_vid] if tit_vid is not None else None,
-                "descs": None
+                "descs": [desc] if desc is not None else None
                 }
         
