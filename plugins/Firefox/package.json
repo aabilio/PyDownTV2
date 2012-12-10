@@ -1,0 +1,9 @@
+{
+    "name": "pydowntv", 
+    "license": "MPL 1.1/GPL 2.0/LGPL 2.1", 
+    "author": "aabilio@gmail.com", 
+    "version": "0.1", 
+    "fullName": "pydowntv", 
+    "id": "jid1-AMD7brMR99co6w", 
+    "description": "Descarga vídeos de las principales webs de TV españolas a través de pydowntv.com"
+}

@@ -18,6 +18,5 @@ Utilizando el esqueleto para adaptar Flask a Google App Engine con Python 2.7
 de kamalgill: https://github.com/kamalgill/flask-appengine-template
 
 Las licencias de módulos de terceros se puede encontrar en el directorio "Licenses".
-
 La licencia en lo que a spaintvs y pydowntv2 e refiere se puede encontrar en COPYING,
 y en sus respectivos módulos.

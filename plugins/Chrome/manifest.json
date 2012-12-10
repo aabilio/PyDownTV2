@@ -1,0 +1,12 @@
+{
+  "name": "PyDownTV",
+  "version": "2.0",
+  "description": "Descarga vídeos de las principales webs de TVs españolas",
+  "browser_action": {
+    "default_icon": "icon.png",
+    "popup": "popup.html"
+  },
+  "permissions": [
+    "http://web.pydowntv.com", "tabs"
+  ]
+}

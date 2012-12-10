@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title>PyDownTV</title>
+  	<style>
+      @import url('http://fonts.googleapis.com/css?family=Droid+Sans&v1');
+  		.pop p {
+  			color: #377BA8; 
+        font-family: 'Droid Sans', serif;
+  			text-align: center;
+  		 }
+  	</style>
+    <script>
+    function open_pydowntv(){
+      var focused = opera.extension.bgProcess.opera.extension.tabs.getFocused()
+      var tabUrl = focused.url;
+      if (tabUrl.search("rtpa.es") != -1)
+      {
+        tabUrl = escape(tabUrl);
+      }
+      var url_pydowntv = "http://web.pydowntv.com/?url="+tabUrl;
+      opera.extension.bgProcess.opera.extension.tabs.create(
+      {
+        url: url_pydowntv, 
+        focused: true
+      }); 
+    }
+  </script>
+  </head>
+  <body>
+    <div id="pop">
+    <p>Recarga y vuelve a presionar este icono para que funcione ;)</p>
+    <script type="text/javascript">
+      open_pydowntv();
+    </script>
+  </div>
+  </body>
+</html>

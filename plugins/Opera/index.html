@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+       window.addEventListener("load", function(){
+        var theButton;
+        var ToolbarUIItemProperties = {
+          title: "PyDownTV",
+          icon: "pydowntv-button.png",
+          popup: {
+            href: "popup.html",
+            width: 470,
+            height: 50,
+            color: "rgba(211, 0, 4, 1)",
+            backgroundColor: "rgba(211, 0, 4, 1)"
+          }
+        }
+        theButton = opera.contexts.toolbar.createItem(ToolbarUIItemProperties);
+        opera.contexts.toolbar.addItem(theButton);
+      }, false);
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

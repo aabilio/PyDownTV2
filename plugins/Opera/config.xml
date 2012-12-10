@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" id="http://www.example.org/helloworld">
+	<name>PyDownTV</name>
+	<description>Descarga vídeos de las principales webs de TV españolas a través de pydowntv.com</description>
+  	<author href="http://web.pydowntv.com" email="aabilio@gmail.com">aabilio</author>
+  	<icon src="icon.png"/>
+</widget>

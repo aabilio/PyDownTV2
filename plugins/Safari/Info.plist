@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Author</key>
+	<string>aabilio@gmail.com</string>
+	<key>Builder Version</key>
+	<string>7534.53.10</string>
+	<key>CFBundleDisplayName</key>
+	<string>pydowntv</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.aabilio.pydowntv</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>Chrome</key>
+	<dict>
+		<key>Global Page</key>
+		<string>global.html</string>
+		<key>Toolbar Items</key>
+		<array>
+			<dict>
+				<key>Command</key>
+				<string>open-pydowntv</string>
+				<key>Identifier</key>
+				<string>pydowntv</string>
+				<key>Image</key>
+				<string>vlc.png</string>
+				<key>Include By Default</key>
+				<true/>
+				<key>Label</key>
+				<string>Pydowntv</string>
+			</dict>
+		</array>
+	</dict>
+	<key>Content</key>
+	<dict>
+		<key>Scripts</key>
+		<dict/>
+	</dict>
+	<key>Description</key>
+	<string>Descarga vídeos de las principales webs de TVs españolas a través de pydowntv.com</string>
+	<key>ExtensionInfoDictionaryVersion</key>
+	<string>1.0</string>
+	<key>Permissions</key>
+	<dict>
+		<key>Website Access</key>
+		<dict>
+			<key>Level</key>
+			<string>All</string>
+		</dict>
+	</dict>
+	<key>Website</key>
+	<string>http://web.pydowntv.com</string>
+</dict>
+</plist>
