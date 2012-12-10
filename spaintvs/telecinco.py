@@ -130,6 +130,12 @@ class Telecinco(Canal.Canal):
             url_img = streamJSON.split("\"poster\":\"")[1].split("\"")[0].replace("\/", "/")
         else:
             Error.GeneralPyspainTVsError("Telecinco.es. No se encuentra contenido.")
+        
+        desc = None        
+        try:
+            desc = Utiles.recortar(streamHTML, "<h3 class=\"subtitle\">", "<").strip()
+        except:
+            desc = tit_vid if tit_vid is not None else None
 
         tit_vid = None
         if name != None:
@@ -153,7 +159,7 @@ class Telecinco(Canal.Canal):
                         "mensaje"   : None
                         }],
                 "titulos": [tit_vid] if tit_vid is not None else None,
-                "descs": None
+                "descs": [desc] if desc is not None else None
                 }
 
 

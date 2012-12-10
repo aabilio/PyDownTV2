@@ -129,6 +129,12 @@ class Cuatro(Canal.Canal):
         else:
             raise Error.GeneralPyspainTVsError("Cuatro.com: No se encuentra contenido")
         
+        desc = None        
+        try:
+            desc = Utiles.recortar(streamHTML, "<h3 class=\"subtitle\">", "<").strip()
+        except:
+            desc = tit_vid if tit_vid is not None else None
+        
         tit_vid = None
         if name:
             name = name.replace("Ver vídeo online","")
@@ -151,7 +157,7 @@ class Cuatro(Canal.Canal):
                         "mensaje"   : None
                         }],
                 "titulos": [tit_vid] if tit_vid is not None else None,
-                "descs": tit_vid if tit_vid is not None else None
+                "descs": [desc] if desc is not None else None
                 }
 
 
