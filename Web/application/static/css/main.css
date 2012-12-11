@@ -2,3 +2,48 @@
 /* Main stylesheet */
 
 /* Your customizations here */
+
+input[type="text"]
+{
+  border-right: #a9a9a9 1px solid;
+  padding-right: 4px;
+  border-top: #a9a9a9 1px solid;
+  padding-left: 4px;
+  padding-bottom: 4px;
+  border-left: #a9a9a9 1px solid;
+  padding-top: 4px;
+  border-bottom: #a9a9a9 1px solid;
+  width: 100%;
+}
+
+input[type="button"]
+{
+  border-right: #a9a9a9 2px solid;
+  padding-right: 2px;
+  border-top: #a9a9a9 2px solid;
+  padding-left: 2px;
+  padding-bottom: 2px;
+  border-left: #a9a9a9 2px solid;
+  padding-top: 2px;
+  border-bottom: #a9a9a9 2px solid;
+}
+
+#getURl input { 	border:none;
+			color:#222;
+			display:block;
+			font-size:95%;
+			font-weight:700;
+			line-height:150%;
+			padding:0 0 1px;
+			}
+
+#getUrl submit { 	border:none;
+			color:#222;
+			display:block;
+			font-size:95%;
+			font-weight:700;
+			line-height:150%;
+			padding:0 0 1px;
+			width: 30%;
+			float: left;
+			}

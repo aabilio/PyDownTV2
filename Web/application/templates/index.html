@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="es"> <!--<![endif]-->
+<head>
+
+	<!-- Basic Page Needs
+  ================================================== -->
+  
+	<title>PyDownTV WEB: Descarga vídeos de las webs de TV</title>
+
+	<meta name="title" content="PyDownTV: Descarga los vídeos de las Televisiones Españolas">
+	<meta name="author" content="aabilio">
+	<link rel="author" href="http://web.pydowntv.com/static/humans.txt" />
+	<meta name="copyright" content="Copyright (c) 2012 by aabilio">
+	<meta name="keywords" content="Descarga, videos, rtve, tv 1, tv 2, tve, mitele,clan, antena 3, cuatro, la sexta, Fórmula 1, televisiones, descubre, enlaces">
+	<meta name="description" content="Web que muestra los enlaces de descarga de los vídeos de las webs de las principales televiosiones españolas, incluídas autonómicas. Lo único que se tiene que hacer, es introducir en el campo de texto la URL perteneciente a donde se observa el vídeo de forma online en su propia web. PyDownTV buscará por su URL final para y si la encuentra te la mostrará">
+	<meta name="robots" content="index, follow">
+	<meta name="rating" content="general">
+	<meta name="google-site-verification" content="ejavY4el_TExdc8suqFo9yz9amL0KAeDNneXX2_r7Y4" />
+	
+	<!-- JavaScript import libs
+  ================================================== -->
+	<script type="text/javascript" src="/static/js/lib/jquery-1.3.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/lib/jquery.easing.1.3.js"></script>
+	<script type="text/javascript" src="/static/js/lib/jqvideobox.js" charset="utf-8"></script>
+
+	<!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- CSS
+  ================================================== -->
+	<link rel="stylesheet" href="/static/css/base.css">
+	<link rel="stylesheet" href="/static/css/skeleton.css">
+	<link rel="stylesheet" href="/static/css/layout.css">
+	<link rel="stylesheet" href="/static/css/videobox.css" type="text/css" media="screen" />
+
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- Favicons
+	================================================== -->
+	<link rel="shortcut icon" href="/static/img/favicon.ico">
+	<!--
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+	-->
+	
+	<!-- JavaScript Scripts
+	================================================== -->
+	<script>
+		$(document).ready(function() {
+	    	$(".vidbox").jqvideobox({'width' : 400, 'height': 300, 'getimage': true, 'navigation': false});
+	    	$(".vidbox2").jqvideobox({'width' : 700, 'height': 500, 'getimage': true, 'navigation': true});
+	  	});
+	</script>
+
+</head>
+<body>
+
+
+
+	<!-- Primary Page Layout
+	================================================== -->
+
+	<!-- Delete everything in this .container and get started on your own site! -->
+	
+	<div class="container">
+		<header id="site-header">
+			<div class="one-two columns">
+				<div class="logo">
+					<h1 id="logoText" align="left" style="margin-top: 20px"><span>pydowntv</span></h1>
+					
+				</div>
+			</div>
+			<div class="one-two columns">
+				<img src="/static/img/play.png" align="left">
+			</div>
+		</header>
+		<br/>
+		
+		<div class="sixteen columns">
+			<div id="searchContainer">
+			    <form action="#" method="post">
+			        <input id="field" name="field" type="text" value="Introduce AQUÍ la URL del vídeo a descargar..." onfocus="this.value=''"/>
+			        <input id="submit" name="submit" type="submit" value="Buscar" />
+			    </form>
+			</div>
+		</div>
+		<div class="sixteen columns">
+			<div class="carrousel">
+				<div>
+				<img src="/static/img/tve1.svg">
+				<img src="/static/img/tve2.svg">
+				<img src="/static/img/a3.png">
+				<img src="/static/img/cuatro.svg">
+				<img src="/static/img/tv5.png">
+				<img src="/static/img/laSexta.svg">
+				<img src="/static/img/mitele.png">
+				</div>
+			</div>
+		</div>
+		
+		<div class="one-third column">
+			<h3 id="infoText">¿Qué es pydowntv?</h3>
+			<p class="info">PyDownTV es una pequeña aplicación que te ayudará a descargar los vídeos de las principales webs de TVs Españolas.</p>
+		</div>
+		<div class="one-third column">
+			<h3 id="infoText">¿Cómo funciona?</h3>
+			<p class="info">Un vídeo vale más que mil palabras ;P</p>
+			<p><a title="Video de ejemplo" class="vidbox2" href="http://vimeo.com/37731925"></a></p>
+		</div>
+		<div class="one-third column">
+			<h3 id=infoText>Más información</h3>
+			<ul class="square">
+				<li><strong>Ayuda</strong>: Presiona <a href="#">aquí</a></li>
+				<li><strong><a href="https://chrome.google.com/webstore/detail/ljbpalaakngapgpfkidnohfokabnkiof">Extensión Google Chrome</strong></a></li>
+				<li><strong><a href="https://addons.mozilla.org/es-ES/firefox/addon/pydowntv/">Extensión Firefox</strong></a></li>
+				<li><strong><a href="http://web.pydowntv.com/static/pydowntv.oex">Extensión Opera</strong></a></li>
+				<li><strong><a href="http://web.pydowntv.com/static/pydowntv.safariextz">Extensión Safari</strong></a></li>
+				<li><strong><a href="http://code.google.com/p/pydowntv/wiki/Televisiones_Soportadas">Televisiones soportadas</strong></a></li>
+			</ul>
+		</div>
+		
+		<footer id="site-footer">
+			<div class="one-two column">
+				<p></p>
+			</div>
+			<div class="one-two column" style="float: right">
+				<p class="info">&copy; Copyleft 2011 by <a href=http://aabilio.tumblr.com/>aabilio</a> // Powered by <a href="http://flask.pocoo.org/">Flask</a> &amp; <a href="https://appengine.google.com/">GAE</a></p>
+			</div>
+		</footer>
+
+	</div><!-- container -->
+	
+
+
+<!-- End Document
+================================================== -->
+</body>
+</html>

@@ -140,6 +140,7 @@ def compURL(url):
 ## Vistas a partir de aquí:
 
 def home():
+    return render_template('index.html')
     return '''Web en Construcción<br \>
     Nueva API para el módulo spaintvs.<br \>
     Peticiones GET a: http://pydowntv2.appspot.com/api?url=<br \>
