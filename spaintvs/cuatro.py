@@ -93,7 +93,7 @@ class Cuatro(Canal.Canal):
             "url_video", "filename", "rtmp_cmd", "menco_cmd" (de "videos") deben ser listas de cadenas (si no son None)
         '''
         url_img = None
-        streamHTML = Descargar.getHtml(self.url)
+        streamHTML = Descargar.getHtml(self.url).decode('string-escape')
         if streamHTML.find("CUAVID") != -1:
             self.debug(u"CUAVID")
             ContentID = streamHTML.split("imageContentId: \'")[1].split("\'")[0]

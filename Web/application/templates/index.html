@@ -12,6 +12,8 @@
 
 	<meta name="title" content="PyDownTV: Descarga los vídeos de las Televisiones Españolas">
 	<meta name="author" content="aabilio">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Language" content="es" />
 	<link rel="author" href="http://web.pydowntv.com/static/humans.txt" />
 	<meta name="copyright" content="Copyright (c) 2012 by aabilio">
 	<meta name="keywords" content="Descarga, videos, rtve, tv 1, tv 2, tve, mitele,clan, antena 3, cuatro, la sexta, Fórmula 1, televisiones, descubre, enlaces">
@@ -105,15 +107,24 @@
 				</div>
 			</div>
 			<div class="two-thirds column" id="datosVideo">
-				<h4>{{ titulos[loop.index0].encode('utf8').decode('utf8') }}</h4>
-				<p>{{ descripciones[loop.index0].encode('utf8').decode('utf8') }}</p>
-				<p><strong>Partes: </strong>{{ vid['partes'] }}. <strong>Enlaces:</strong></p>
+				<h4>{{ titulos[loop.index0].decode('utf8')|safe }}</h4>
+				<p>{{ descripciones[loop.index0].decode('utf8')|safe }}</p>
+				<p><strong>Partes: </strong>{{ vid['partes'] }}. <strong>Enlaces: </strong>(Clic derecho: "Guardar enlace como...")</p>
 				<ul class="enlaces">
-					{% set tit = titulos[loop.index0].encode('utf8').decode('utf8') %}
+					{% set tit = titulos[loop.index0].decode('utf8')|safe %}
 					{% for parte in vid['url_video'] %}
 					<li>Parte {{ loop.index0+1 }}: <a href="{{ parte }}">{{ tit }}</a></li>
 					{% endfor %}
 				</ul>
+				
+				{% if vid['tipo'] == 'rtmp' %}
+				<p><strong>Comandos para rtmpdump:</strong></p>
+				<ul class="enlaces">
+					{% for cmd in vid['rtmpd_cmd'] %}
+					<li>Parte {{ loop.index0+1 }}: <span id="cmd">{{ cmd }}</span></li>
+					{% endfor %}
+				</ul>
+				{% endif %}
 			</div>
 		</div>
 		{% endfor %}

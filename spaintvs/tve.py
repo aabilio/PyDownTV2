@@ -99,7 +99,9 @@ class TVE(Canal.Canal):
         self.debug(u"ID del vídeo en url = " + videoID)
         
         # Añadido para vídeos nuevos (periodo de prueba):
-        sourceHTML = Descargar.getHtml(self.url)
+        sourceHTML = Descargar.getHtml(self.url).decode('string-escape')
+        #sourceHTML = self.toUtf(sourceHTML)
+        print type(sourceHTML)
         videoID_comp = None
         if sourceHTML.find("flashcontentId:\'videoplayer") != -1:
             videoID_comp = sourceHTML.split("flashcontentId:\'videoplayer")[1].split("\'")[0]
@@ -130,7 +132,7 @@ class TVE(Canal.Canal):
         u.close()
         if urlVideo != "":
             url_video = urlVideo.replace("www.rtve.es", "media5.rtve.es")
-            titulo = sourceHTML.split("<title>")[1].split("</")[0]
+            titulo = sourceHTML.split("<title>")[1].split("</")[0].replace("RTVE.es", "").replace("-", "").strip()
             filename = titulo + ".mp4"
             filename = Utiles.formatearNombre(filename)
             #sourceHTML = sourceHTML.split("<div id=\"video")[1].split("flashvars")[0] # Me quedo solo con la parte del vídeo principal

@@ -42,9 +42,10 @@ class ErrorDescarga(Exception):
     '''
         Manejar errores futuros del módulo Descargar
     '''
-    def __init__(self, text, msg = None, line = None):
-        self.__text = text
-        self.__msg = msg if msg is not None else None
+    def __init__(self, text = None, msg = None, line = None):
+        self.__text = text if text is not None else None
+        self.__msg = text
+        #self.__msg = msg if msg is not None else None
         self.__line = str(line) if line is not None else "Unknow line"
     def __str__(self):
         return self.__msg if self.__msg is not None else "Error general en el módulo de descarga"
@@ -90,7 +91,7 @@ def getHtmlUtf8(url): # Sobre todo para descargar VERSION
         stream = fh.read()
         return stream
     except Exception, e:
-        raise ErrorDescarga(e)
+        raise ErrorDescarga(e.__str__())
         #TODO: Error
     
 def getHtml_(url):
@@ -132,9 +133,9 @@ def getHtml(url, withHeader=False, utf8=False, header=std_headers):
             - Respuesta del GET
     '''
     if url.find("http://") == -1: url = "http://" + url
-    if withHeader: return getHtmlHeaders(url, header)
-    elif utf8: return getHtmlUtf8(url)
-    else: return getHtml_(url)
+    if withHeader: return getHtmlHeaders(url, header).decode('string-escape')
+    elif utf8: return getHtmlUtf8(url).decode('string-escape')
+    else: return getHtml_(url).decode('string-escape')
 
 get = getHtml
 

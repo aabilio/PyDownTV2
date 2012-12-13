@@ -20,6 +20,7 @@
 
 import Utiles
 import Error
+from dammit import UnicodeDammit
 
 _default_opcs = {
                 "log": True,
@@ -88,6 +89,14 @@ class Canal(object):
     def pprintDict(self, dicts):
         from pprint import pprint
         pprint(dicts)
+    
+    def detectCharset(self,html):
+        return UnicodeDammit(html).original_enconding
+    
+    def toUtf(self, html):
+        return UnicodeDammit(html).unicode_markup
+        
+        
     
     
         

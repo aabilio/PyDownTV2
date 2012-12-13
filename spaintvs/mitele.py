@@ -135,7 +135,8 @@ class MiTele(Canal.Canal):
         tit_vid = None
         # Obtener HTML y XML:
         try:
-            streamHTML = htmlBackup = Descargar.getHtml(self.url)
+            streamHTML = htmlBackup = Descargar.getHtml(self.url).decode('string-escape')
+            #streamHTML = htmlBackup = self.toUtf(streamHTML)
             tit_vid = streamHTML.split("<title>")[1].split("<")[0]
             streamHTML = streamHTML.replace(" ", "")
             streamXML = Descargar.getHtml(streamHTML.split("{\"host\":\"")[1].split("\"")[0].replace("\/", "/"))
@@ -184,15 +185,20 @@ class MiTele(Canal.Canal):
         if name:
             name = Utiles.formatearNombre(name)
         
-        name = name.replace("VERPROGRAMAS", "").replace("Veronline", "")
-        name = name.replace("VERSERIES", "").replace("Veronline", "")
-        tit_vid = tit_vid.replace("VER PROGRAMAS", "").replace("Ver online", "")
-        tit_vid = tit_vid.replace("VER SERIES", "").replace("Ver online", "")
+        try:
+            tit_vid = name = htmlBackup.split("<div class=\"Destacado-text\">")[1].split("<h2>")[1].split("</h2>")[0]
+            name = Utiles.formatearNombre(name + ".mp4")
+        except:   
+            name = name.replace("VERPROGRAMAS", "").replace("Veronline", "")
+            name = name.replace("VERSERIES", "").replace("Veronline", "")
+            tit_vid = tit_vid.replace("VER PROGRAMAS", "").replace("Ver online", "")
+            tit_vid = tit_vid.replace("VER SERIES", "").replace("Ver online", "").replace("|", "").strip()
         
        
         desc = None        
         try:
-            desc = Utiles.descriptionFormat(Utiles.recortar(htmlBackup, "\"post_content\":\"", "\"").strip())
+            desc = htmlBackup.split("<div class=\"Destacado-text\">")[1].split("<p class=\"text\">")[1].split("</p>")[0]
+            #desc = Utiles.descriptionFormat(Utiles.recortar(htmlBackup, "\"post_content\":\"", "\"").strip())
         except:
             desc = tit_vid if tit_vid is not None else None
             

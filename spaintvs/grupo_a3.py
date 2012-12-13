@@ -194,7 +194,7 @@ class GrupoA3(Canal.Canal):
         for i in streamVids: #todos los vídeos con todas sus partes
             video = {
                 "url_video" : [],
-                "url_img"   : None, #TODO: ibtener miniatura
+                "url_img"   : None,
                 "filename"  : [],
                 "tipo"      : "http",
                 "partes"    : 0,
@@ -215,7 +215,7 @@ class GrupoA3(Canal.Canal):
             listXMLurl = self.URL_DE_F1 + id_list + "_playlist.xml"
             self.debug(u"URL XML list: " + listXMLurl)
             listxml = Descargar.getHtml(listXMLurl)
-            video["url_image"] = listxml.split("<picture>")[1].split("<")[0]
+            video["url_img"] = listxml.split("<picture>")[1].split("</picture>")[0].strip()
             listxml = listxml.split("<video>")[1:]
             #print listxml
             for b in listxml:
@@ -228,10 +228,10 @@ class GrupoA3(Canal.Canal):
                 tit = Utiles.formatearNombre(tit)
                 video["filename"].append(tit)
                 
-            ret["titulos"].append(i.split(">")[1].split("<")[0].capitalize())
+            ret["titulos"].append(unicode(i.split(">")[1].split("<")[0].capitalize()).encode('utf8'))
             ret["videos"].append(video)
             ret["num_videos"] += 1
-            ret["descs"].append(desc)
+            ret["descs"].append(unicode(desc).encode('utf8'))
 
         return ret
 
@@ -312,12 +312,20 @@ class GrupoA3(Canal.Canal):
         #    if url2down.find("geobloqueo") != -1:
         #        raise Error.GeneralPyspainTVsError("Grupo Antena 3. Todo el contenido Geobloqueado.")
         if type(name) == list:
-            tit_vid = name[0].split(".")[0]
+            try:
+                tit_vid = name[0].split(".")[0]
+                tit_vid = tit_vid.replace("_" + tit_vid.split("_")[1], "")
+            except:
+                tit_vid = "Vídeo de Grupo Antena 3"
             for i in name:
                 b = Utiles.formatearNombre(i)
                 name[name.index(i)] = b
         else:
-            tit_vid = name.split(".")[0]
+            try:
+                tit_vid = name.split(".")[0].replace("_" + name.split("_")[1], "")
+                tit_vid = tit_vid.replace("_" + tit_vid.split("_")[1], "")
+            except:
+                tit_vid = "Vídeo de Grupo Antena 3"
             name = Utiles.formatearNombre(name)
         
         return {"exito" : True,
