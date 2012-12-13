@@ -140,11 +140,59 @@ def compURL(url):
 ## Vistas a partir de aquí:
 
 def home():
-    return render_template('index.html')
-    return '''Web en Construcción<br \>
-    Nueva API para el módulo spaintvs.<br \>
-    Peticiones GET a: http://pydowntv2.appspot.com/api?url=<br \>
-    spaintvs en GitHub <a href="https://github.com/aabilio/PyDownTV2/">aquí</a>'''
+    opcs = _default_opcs
+    if request.method == "GET": # La URL se pasa por parámetro http://web.pydowntv.com/?url=""
+        try:
+            urlOrig = request.args['url']
+        except:
+            return render_template('index.html')
+    else:
+        urlOrig = request.form['urlOrig']
+    
+    if urlOrig == u'' or urlOrig == u"Introduce AQUÍ la URL del vídeo a descargar...":
+        flash(u"No has introducido ninguna url.. oO")
+        return redirect(url_for('home'))
+    
+    ## CASOS ESPECIALES URL NO ASCCII
+    #RTPA
+    try: urlOrig = urlOrig.split("video:")[0] + "video:_" + urlOrig.split("_")[1]
+    except: pass
+    #END - RTPA
+    ## END - CASOS ESPECIALES 
+    if compURL(urlOrig):
+        canal = qCanal(urlOrig, opcs)
+        if canal == None:
+            flash(u"Este canal no está aún sportado por PyDownTV")
+            return redirect(url_for('home'))
+            #return render_template("index.html", msgs=TVnoSoportada)
+    else: #TODO: meter huevos de pascua aquí :P
+        flash(u"URL incorrecta: \'%s\'" % urlOrig)
+        return redirect(url_for('home'))
+        #return render_template("api.html", messages=URLmalFormada)
+
+    try:
+        info = canal.getInfo()
+    except Error.GeneralPyspainTVsError, e:
+        flash(u"ERROR al recuperar el vídeo: %s" % e.__srt__())
+        return redirect(url_for('home'))
+        #return render_template("api.html", messages=msg)
+    except:
+        flash(u"ERROR al recuperar el vídeo. ¿Es una URL válida?")
+        return redirect(url_for('home'))
+        #return render_template("api.html", messages=ErrorDesconocido)
+
+    return render_template("index.html", videos=info["videos"], titulos=info["titulos"], descripciones=info["descs"])
+
+    
+    
+#    
+#    return urlOrig
+#        
+#    return render_template('index.html')
+#    return '''Web en Construcción<br \>
+#    Nueva API para el módulo spaintvs.<br \>
+#    Peticiones GET a: http://pydowntv2.appspot.com/api?url=<br \>
+#    spaintvs en GitHub <a href="https://github.com/aabilio/PyDownTV2/">aquí</a>'''
 
 def api(url=None):
     opcs = _default_opcs

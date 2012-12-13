@@ -23,13 +23,22 @@
 
 /* # Importar Fuentes desde googleapis
 ================================================== */
-@import url(http://fonts.googleapis.com/css?family=Droid+Sans);
-@import url(http://fonts.googleapis.com/css?family=Arimo);
 @import url(http://fonts.googleapis.com/css?family=Londrina+Sketch);
-@import url(http://fonts.googleapis.com/css?family=Text+Me+One);
 @import url(http://fonts.googleapis.com/css?family=PT+Sans);
 
+/* # Importar Fuentes propias
+================================================== */
+@font-face
+{
+	font-family: 'logoEOT';
+	src: url(/static/fuentes/Sunflower_Harvest.eot);
+}
 
+@font-face
+{
+	font-family: 'logoTTF';
+	src: url(/static/fuentes/Sunflower_Harvest.ttf);
+}
 
 /* #Reset & Basics (Inspired by E. Meyers)
 ================================================== */
@@ -100,7 +109,7 @@
 
 	hr { border: solid #ddd; border-width: 1px 0 0; clear: both; margin: 10px 0 30px; height: 0; }
 	
-	#logoText {font-family: 'Londrina Sketch', cursive; font-weight: bold;}
+	#logoText {font-family: 'logoTTF', 'logoEOT', 'Londrina Sketch'; font-size:xx-large; color: #2d2d2d;}
 	#infoText {font-family: 'PT Sans'; font-weight: bold;}
 	#submit {font-family: 'PT Sans'; font-weight: bold; font-size: 21px;}
 
@@ -289,13 +298,129 @@
 /* PyDownTV especific
 ================================================== */
 
+#search {
+	
+}
+
+
+#search input[type="text"] {
+    background: url(/static/img/search-white.png) no-repeat 20px 12px #2d2d2d;
+    border: 0 none;
+    font-family: "PT Sans",  Helvetica, Arial, sans-serif;
+    color: #d2d2d2;
+    width:80%;
+    padding: 6px 15px 6px 35px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.3); 
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+    -webkit-transition: all 0.7s ease 0s;
+    -moz-transition: all 0.7s ease 0s;
+    -o-transition: all 0.7s ease 0s;
+    transition: all 0.7s ease 0s;
+    }
+
+#search input[type="text"]:focus {
+    background: url(/static/img/search-dark.png) no-repeat 20px 12px #2d2d2e;
+    color: #d2d2d5;
+    width: 90%;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(0, 0, 0, 0.9) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(0, 0, 0, 0.9) inset;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(0, 0, 0, 0.9) inset;
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    }
+
 html {
     /*background: url("../images/site/html.jpg") repeat scroll left top transparent;*/
 }
 
 
 body {
-	background: #2D2D2D url(/static/img/back.png) repeat scroll left top;
+	background-image: url(/static/img/bg_back.png);
+	/*background: url(/static/img/body_bg.gif) repeat-x top;
+	background: #2D2D2D url(/static/img/back.png) 100px 100px scroll repeat;*/
+}
+
+#bgTopDiv{
+	height: 20px;
+    background-image: url(/static/img/body_bg.gif);
+    background-repeat: repeat-x;
+}
+
+.logo img {
+	padding-top: 15px;
+	max-width: 300px;
+}
+
+
+#flashContainer .sixteen.columns {
+	padding-bottom: 2em;
+}
+
+.flash {
+	font-family: "PT Sans",  Helvetica, Arial, sans-serif;
+	text-align: center;
+	/*color: #FF6633;*/
+	background-color: #ff6633;
+	/*border: 1px solid #2d2d2d;*/
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	/*padding: 7px;*/
+	width: 70%;
+	margin-left: 14%;
+    font-size:100%;
+}
+
+.flash p {
+}
+
+#resultBox {
+	position: relative;
+	margin-bottom: 3em;
+	padding-bottom: 2em;
+	border: solid 3px;
+	border-color: #000;
+	background-image:url(/static/img/bg_result.jpg);
+	background-repeat:repeat;
+	background-color:#000000;
+	color:#fff;
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+}
+
+#resultBox p {
+	color:#f2f2f2;
+}
+
+.video_img {
+	padding-top: 1em;
+	max-width: 300px;
+	max-height: 200px;
+}
+
+img, img.video_img { outline: 0; max-width: 100%; height: auto; }
+
+#datosVideo {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    margin-top: 1em;
+}
+
+#divImgLogoText {
+	float:left;
+	border-right: -10px;
+	
+}
+
+#imgLogoText {
+	text-align:left;
+	padding-left: 0em;
 }
 
 .carrousel {
@@ -316,6 +441,8 @@ body {
     border-bottom: 1px solid #2D2D2D;
     height: 37px;
     padding-bottom: 2.063em;
+    margin-bottom: 22px;
+    width: 100%;
 }
 
 #site-footer {
@@ -324,24 +451,22 @@ body {
     padding-top: 2.063em;
 }
 
-.logo-img {
-	width: 100%;
-	/*max-width: 100%;*/
-	} 
-
-
 /* div container containing the form  */
 #searchContainer {
     /*margin:20px;*/ 
+    margin-left: 5%;
+    margin-right: 5%;
 }
  
 /* Style the search input field. */
 #field {
+	box-shadow: inset 0 1px 3px currentcolor;
     float:left; 
     /*width:300px; */
    	width: 88%;
     height:27px; 
     line-height:27px;
+    border: 1px solid #3079ED;
     /*text-indent:10px; 
     font-family:arial, sans-serif; 
     font-size:1em; 
@@ -381,7 +506,7 @@ body {
 #submit {
     /*width:70px; */
     height: 41px; 
-    /*border: 1px solid #3079ED; */
+    border: 1px solid #3079ED;
     -moz-border-radius: 2px; 
     -webkit-border-radius: 2px; 
 }

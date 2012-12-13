@@ -18,7 +18,7 @@ from application import views
 app.add_url_rule('/_ah/warmup', 'warmup', view_func=views.warmup)
 
 # Home page
-app.add_url_rule('/', 'home', view_func=views.home)
+app.add_url_rule('/', 'home', view_func=views.home, methods=['GET', 'POST'])
 
 # Spintvs API page
 app.add_url_rule('/api', 'api', view_func=views.api, methods=['GET', 'POST'])

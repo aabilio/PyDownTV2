@@ -63,48 +63,62 @@
 <body>
 
 
-
+	<div id="bgTopDiv"><!-- para fondo de arriba --></div> 
 	<!-- Primary Page Layout
 	================================================== -->
 
 	<!-- Delete everything in this .container and get started on your own site! -->
 	
 	<div class="container">
-		<header id="site-header">
-			<div class="one-two columns">
-				<div class="logo">
-					<h1 id="logoText" align="left" style="margin-top: 20px"><span>pydowntv</span></h1>
-					
-				</div>
-			</div>
-			<div class="one-two columns">
-				<img src="/static/img/play.png" align="left">
+		<header class="sixteen columns" id="site-header">
+			<div class="logo">
+				<!--<h1 id="logoText" align="left" style="margin-top: 10px"><span>pydowntv</span></h1>-->
+				<a href="{{ url_for('home') }}"><img src="/static/img/logo.png"></a>
 			</div>
 		</header>
-		<br/>
-		
-		<div class="sixteen columns">
+		<div class="sixteen columns" style="margin-top: 0em; margin-bottom: -1em;">
 			<div id="searchContainer">
-			    <form action="#" method="post">
-			        <input id="field" name="field" type="text" value="Introduce AQUÍ la URL del vídeo a descargar..." onfocus="this.value=''"/>
+			    <form action="{{ url_for('home') }}" method="post">
+			        <input id="field" name="urlOrig" type="text" value="Introduce AQUÍ la URL del vídeo a descargar..." onfocus="this.value=''"/>
 			        <input id="submit" name="submit" type="submit" value="Buscar" />
 			    </form>
 			</div>
 		</div>
-		<div class="sixteen columns">
-			<div class="carrousel">
-				<div>
-				<img src="/static/img/tve1.svg">
-				<img src="/static/img/tve2.svg">
-				<img src="/static/img/a3.png">
-				<img src="/static/img/cuatro.svg">
-				<img src="/static/img/tv5.png">
-				<img src="/static/img/laSexta.svg">
-				<img src="/static/img/mitele.png">
-				</div>
+		<!--DIV para los msg flash -->
+		{% if get_flashed_messages() %}
+		<div class="sixteen columns" style="padding-bottom: 2em;">
+			<div align="center" class="flash" style="min-height: 37px;">
+				{% for message in get_flashed_messages() %}
+				<h5 style="padding-top: 0.4em;">{{ message }}</h5>
+				{% endfor %}
 			</div>
 		</div>
-		
+		{% endif %}
+		<!--FIN FIV flash msg	-->
+		<!-- DIV para resltados de búsqueda -->
+		{% if videos %}
+		{% for vid in videos %}
+		<div class="sixteen columns" id="resultBox">
+			<div class="one-third column">
+				<div class="video_img">
+					<img src="{{ vid['url_img'] }}" alt="imagen del video">
+				</div>
+			</div>
+			<div class="two-thirds column" id="datosVideo">
+				<h4>{{ titulos[loop.index0].encode('utf8').decode('utf8') }}</h4>
+				<p>{{ descripciones[loop.index0].encode('utf8').decode('utf8') }}</p>
+				<p><strong>Partes: </strong>{{ vid['partes'] }}. <strong>Enlaces:</strong></p>
+				<ul class="enlaces">
+					{% set tit = titulos[loop.index0].encode('utf8').decode('utf8') %}
+					{% for parte in vid['url_video'] %}
+					<li>Parte {{ loop.index0+1 }}: <a href="{{ parte }}">{{ tit }}</a></li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+		{% endfor %}
+		{% endif %}
+		<!-- FIN DIV Resultados de búsqueda -->
 		<div class="one-third column">
 			<h3 id="infoText">¿Qué es pydowntv?</h3>
 			<p class="info">PyDownTV es una pequeña aplicación que te ayudará a descargar los vídeos de las principales webs de TVs Españolas.</p>
@@ -124,6 +138,19 @@
 				<li><strong><a href="http://web.pydowntv.com/static/pydowntv.safariextz">Extensión Safari</strong></a></li>
 				<li><strong><a href="http://code.google.com/p/pydowntv/wiki/Televisiones_Soportadas">Televisiones soportadas</strong></a></li>
 			</ul>
+		</div>
+		<div class="sixteen columns">
+			<div class="carrousel">
+				<div>
+				<img src="/static/img/logo_tvs/1.svg">
+				<img src="/static/img/logo_tvs/2.svg">
+				<img src="/static/img/logo_tvs/3.png">
+				<img src="/static/img/logo_tvs/4.svg">
+				<img src="/static/img/logo_tvs/5.png">
+				<img src="/static/img/logo_tvs/6.png">
+				<img src="/static/img/logo_tvs/mt.png">
+				</div>
+			</div>
 		</div>
 		
 		<footer id="site-footer">
