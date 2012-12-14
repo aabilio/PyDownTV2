@@ -155,8 +155,9 @@ def home():
     
     ## CASOS ESPECIALES URL NO ASCCII
     #RTPA
-    try: urlOrig = urlOrig.split("video:")[0] + "video:_" + urlOrig.split("_")[1]
-    except: pass
+    if urlOrig.find("rtpa.es") != -1:
+        try: urlOrig = urlOrig.split("video:")[0] + "video:_" + urlOrig.split("_")[1]
+        except: pass
     #END - RTPA
     ## END - CASOS ESPECIALES 
     if compURL(urlOrig):

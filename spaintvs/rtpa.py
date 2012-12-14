@@ -140,28 +140,40 @@ class RTPA(Canal.Canal):
                     else:
                         break
                     
+        #FIXME: Gran fixme aquí, arreglat todo esto de desc y de tit_vid
         try: #imagen del vídeo
             img = self.URL_RTPA + Utiles.recortar(htmlBackup, "\'image\': \'", "\'")
         except:
             img = None
         
-        desc = None 
+        desc = u""
         try: # Descripción del vídeo
-            desc = htmlBackup.split("<div class=\"overview\">")[1].split("<div>")[1].split("</div>")[0].strip()
+            d = htmlBackup.split("<div class=\"overview\">")[1].split("<div>")[1].split("</div>")[0].strip()
         except:
-            desc = u"Vídeo de la web de Radio Televisión del Principado de Asturias"
-        else:
-            if desc is not None and desc == "":
-                desc = u"Vídeo de la web de Radio Televisión del Principado de Asturias"
+            try:
+                d = htmlBackup.split("<div class=\"overview\">")[1].split("<p>")[1].split("</p>")[0].strip()
+            except:
+                pass
+        try: # desc coding
+            desc = unicode(d).encode("utf8")
+        except:
+            desc = u"Vídeo de la web de Radio Televisión del Principado de Asturias".encode("utf8")
+        if desc == u"": desc = u"Vídeo de la web de Radio Televisión del Principado de Asturias".encode("utf8")
         
-        tit_vid = None
+        tit_vid = u""
         try: #Título del vídeo
-            tit_vid = htmlBackup.split("<div id=\"sobreElVideo\">")[1].split("<h3>")[1].split("</h3>")[0]
+            tit = htmlBackup.split("<div id=\"sobreElVideo\">")[1].split("<h3>")[1].split("</h3>")[0].strip()
         except:
-            tit_vid = None
-        else:
-            if tit_vid is not None and tit_vid == "":
-                tit_vid = u"Vídeo de la web de Radio Televisión del Principado de Asturias"
+            try:
+                tit = htmlBackup.split("<div id=\"sobreElVideo\">")[1].split("<h4 class=\"")[1].split(">")[1].split("<")[0].strip()
+            except:
+                pass
+        try: #titulo coding
+            tit = Utiles.tituloFormat(tit)
+            tit_vid = unicode(tit).encode("utf8")
+        except:
+            tit_vid = u"Vídeo de la web de Radio Televisión del Principado de Asturias".encode("utf8")
+        if tit_vid == u"": tit_vid = u"Vídeo de la web de Radio Televisión del Principado de Asturias".encode("utf8")
         
         if type(name) == list:
             for i in name:

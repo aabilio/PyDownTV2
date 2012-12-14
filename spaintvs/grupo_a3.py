@@ -135,8 +135,19 @@ class GrupoA3(Canal.Canal):
     def __modoNormalConURL(self,  streamHTML):
         url2down = streamHTML.split(".seoURL='")[1].split("'")[0]
         url2down = url2down.replace("deslasexta", "desprogresiva")
-        name = Descargar.getHtml(self.URL_DE_ANTENA3 + streamHTML.split(".xml='")[1].split("'")[0]).split("<nombre><![CDATA[")[1].split("]]>")[0] + ".mp4"   
+        try: # Parece que a veces aunque en el código aparezca el html, este no existe..
+            name = Descargar.getHtml(self.URL_DE_ANTENA3 + streamHTML.split(".xml='")[1].split("'")[0]).split("<nombre><![CDATA[")[1].split("]]>")[0] + ".mp4"
+        except:
+            name = Utiles.recortar(streamHTML, "<title>", "</title>").replace("ANTENA 3 TV", "").replace("-", "").strip() + ".mp4" 
         return [url2down,  name]
+    
+    def __modoNormalUnaParte(self, streamHTML):
+        xmlURL = streamHTML.split("A3Player.swf?xml=")[1].split("\"")[0]
+        streamXML = Descargar.getHtml(xmlURL)
+        url2down =  self.URL_DE_DESCARGA + \
+        streamXML.split("<archivo><![CDATA[")[1].split("]]></archivo>")[0]
+        name = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0] + ".mp4"
+        return [url2down, name]
     
     def __modoNormalVariasPartes(self, streamHTML):
         url2down = []
@@ -146,24 +157,60 @@ class GrupoA3(Canal.Canal):
         partes = len(streamHTML.split("<img title="))-1
         streamPARTES = streamHTML.split("<img title=")[1:]
         self.log(u"[INFO] Número de partes:", str(partes))
-        #print streamPARTES
+        
+        ret =   {
+                "exito" : True,
+                "num_videos" : 0,
+                "mensaje"   : u"URLs obtenido correctamente",
+                "videos":[],
+                "titulos": [],
+                "descs": []
+                }
+        video = {
+                "url_video" : [],
+                "url_img"   : None,
+                "filename"  : [],
+                "tipo"      : "http",
+                "partes"    : 0,
+                "rtmpd_cmd" : None,
+                "menco_cmd" : None,
+                "url_publi" : None,
+                "otros"     : None,
+                "mensaje"   : u""
+                }
+        
         for i in streamPARTES:
+            video = {
+                "url_video" : [],
+                "url_img"   : None,
+                "filename"  : [],
+                "tipo"      : "http",
+                "partes"    : 0,
+                "rtmpd_cmd" : None,
+                "menco_cmd" : None,
+                "url_publi" : None,
+                "otros"     : None,
+                "mensaje"   : None
+                }
+            ret["num_videos"] += 1
+            ret["titulos"].append(i.split("\"")[1].split("\"")[0])
+            ret["descs"].append(i.split("\"")[1].split("\"")[0])
+            
             xmlURL = self.URL_DE_ANTENA3 + i.split("rel=\"/")[1].split("\"")[0]
+            print xmlURL
             streamXML = Descargar.getHtml(xmlURL)
-            url2down.append(self.URL_DE_DESCARGA + streamXML.split("<archivo><![CDATA[")[1].split("]")[0])
-            ext = streamXML.split("<archivo><![CDATA[")[1].split("]")[0].split('.')[-1]
-            name.append(i.split("\"")[1].split("\"")[0] + '.' + ext)   
-        #print "[INFO] URLs    :",  url2down
-        #print "[INFO] Nombres :",  name
-        return [url2down, name]
-    
-    def __modoNormalUnaParte(self, streamHTML):
-        xmlURL = streamHTML.split("A3Player.swf?xml=")[1].split("\"")[0]
-        streamXML = Descargar.getHtml(xmlURL)
-        url2down =  self.URL_DE_DESCARGA + \
-        streamXML.split("<archivo><![CDATA[")[1].split("]]></archivo>")[0]
-        name = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0] + ".mp4"
-        return [url2down, name]
+            
+            video["url_video"].append(self.URL_DE_DESCARGA + streamXML.split("<archivo><![CDATA[")[1].split("]")[0])
+            video["url_img"] = self.URL_DE_ANTENA3+"clipping"+streamXML.split("<archivo><![CDATA[clipping")[1].split("]")[0]
+            video["filename"].append(i.split("\"")[1].split("\"")[0] + '.mp4')
+            video["partes"] = 1
+            ret["videos"].append(video)
+            
+            #url2down.append(self.URL_DE_DESCARGA + streamXML.split("<archivo><![CDATA[")[1].split("]")[0])
+            #ext = streamXML.split("<archivo><![CDATA[")[1].split("]")[0].split('.')[-1]
+            #name.append(i.split("\"")[1].split("\"")[0] + '.' + ext)   
+        
+        return ret
     
     def __modoF1(self, streamHTML):#TODO: ¡¡¡Acabar esta función para devolver todos los videos y sus partes!!!
         '''
@@ -282,10 +329,11 @@ class GrupoA3(Canal.Canal):
                 url2down, name = self.__modoNormalConURL(streamHTML)
             elif streamHTML.find("a3_gp_visor_player") != -1:
                 self.log(u"[INFO] Vídeo de Fórmula 1")
-                return self.__modoF1(streamHTML) # return directamente aquí
+                return self.__modoF1(streamHTML) # return directamente aquí (varios videos)
             else: # No está la url en el hmtl (buscar por varias partes)
                 if streamHTML.find("<div class=\"visor\">") != -1: # Más de 1 parte # Quizas mejor "carrusel"?
-                    url2down, name = self.__modoNormalVariasPartes(streamHTML)
+                    return self.__modoNormalVariasPartes(streamHTML) # return directamente aquí (varios videos)
+                    #url2down, name = self.__modoNormalVariasPartes(streamHTML)
                 else: # Solo una parte
                     url2down, name = self.__modoNormalUnaParte(streamHTML)
         
@@ -316,7 +364,10 @@ class GrupoA3(Canal.Canal):
                 tit_vid = name[0].split(".")[0]
                 tit_vid = tit_vid.replace("_" + tit_vid.split("_")[1], "")
             except:
-                tit_vid = "Vídeo de Grupo Antena 3"
+                try:
+                    tit_vid = Utiles.recortar(streamHTML, "<title>", "</title>").replace("ANTENA 3 TV", "").replace("-", "").strip()
+                except:
+                    tit_vid = "Vídeo de Grupo Antena 3"
             for i in name:
                 b = Utiles.formatearNombre(i)
                 name[name.index(i)] = b
@@ -325,8 +376,17 @@ class GrupoA3(Canal.Canal):
                 tit_vid = name.split(".")[0].replace("_" + name.split("_")[1], "")
                 tit_vid = tit_vid.replace("_" + tit_vid.split("_")[1], "")
             except:
-                tit_vid = "Vídeo de Grupo Antena 3"
+                try:
+                    tit_vid = Utiles.recortar(streamHTML, "<title>", "</title>").replace("ANTENA 3 TV", "").replace("-", "").strip()
+                except:
+                    tit_vid = "Vídeo de Grupo Antena 3"
             name = Utiles.formatearNombre(name)
+        
+        #try:
+        #    tit_vid = Utiles.recortar(streamHTML, "<title>", "</title>").replace("ANTENA 3 TV", "").replace("-", "").strip()
+        #except:
+        #    tit_vid = "Vídeo de Grupo Antena 3"
+        tit_vid = tit_vid.replace("TV VIDEOS ONLINE", "").strip()
         
         return {"exito" : True,
                 "num_videos" : 1,

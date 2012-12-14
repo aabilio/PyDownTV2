@@ -384,14 +384,15 @@ body {
 	position: relative;
 	margin-bottom: 3em;
 	padding-bottom: 2em;
-	border: solid 1px;
 	border-color: #000;
 	background-image:url(/static/img/bg_result.jpg);
+	border: 6px solid #CCC;
+	/*background: #F3F3F3;*/
 	background-repeat:repeat;
 	background-color:#000000;
-	color:#fff;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
+	color:#FFFFFF;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
 }
 
 #cmd {
@@ -407,7 +408,14 @@ body {
 	max-height: 200px;
 }
 
-img, img.video_img { outline: 0; max-width: 100%; height: auto; }
+video_img.img { 
+	outline: 0;
+	max-width: 100%;
+	height: auto;
+	border: 1px solid #CCC;
+	background: #F3F3F3;
+	padding: 6px;
+}
 
 #datosVideo {
     top: 0;

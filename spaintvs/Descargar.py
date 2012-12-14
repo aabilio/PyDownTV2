@@ -74,7 +74,7 @@ def getHtmlHeaders(url, header=std_headers):
         f.close()
         return stream
     except Exception, e:
-        raise ErrorDescarga(e)
+        raise ErrorDescarga(e.__str__())
         #TODO: error
 
 def getHtmlUtf8(url): # Sobre todo para descargar VERSION
@@ -107,7 +107,7 @@ def getHtml_(url):
         f.close()
         return stream
     except Exception, e:
-        raise ErrorDescarga(e)
+        raise ErrorDescarga(e.__str__())
         #TODO:
         # - Imprimir error
         # - Salir??

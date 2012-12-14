@@ -147,8 +147,9 @@ if __name__ == "__main__":
         for url in vUrls:
             ## CASOS ESPECIALES URL NO ASCCII
             #RTPA
-            try: url = url.split("video:")[0] + "video:_" + url.split("_")[1]
-            except: pass
+            if url.find("rtpa.es") != -1:
+                try: url = url.split("video:")[0] + "video:_" + url.split("_")[1]
+                except: pass
             #END - RTPA
             ## END - CASOS ESPECIALES
             uiUtiles.printt(u"\n[ URL ] %s" % unicode(url))

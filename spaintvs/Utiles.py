@@ -152,12 +152,26 @@ def descriptionFormat(Str):
     Str = stringFormat(Str)
     Str = Str.replace("<!--more-->", "")
     Str = Str.replace("/r", "")
+    Str = Str.replace("//r", "")
     Str = Str.replace("/n", "")
+    Str = Str.replace("//n", "")
     Str = Str.replace("\xf1", "nh") #ñ
+    Str = Str.replace("ñ", "nh")
     
     Str = Str.replace("\xf3", "")
     Str = Str.replace("\xf3", "")
     Str = Str.replace("\xed", "")
+    
+    Str = Str.replace("á", "a")
+    Str = Str.replace("é", "e")
+    Str = Str.replace("í", "i")
+    Str = Str.replace("ó", "o")
+    Str = Str.replace("ú", "u")
+    Str = Str.replace("Á", "a")
+    Str = Str.replace("É", "e")
+    Str = Str.replace("Í", "i")
+    Str = Str.replace("Ó", "o")
+    Str = Str.replace("Ú", "u")
     
     
     return Str
