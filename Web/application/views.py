@@ -185,12 +185,7 @@ def home():
 
     return render_template("index.html", videos=info["videos"], titulos=info["titulos"], descripciones=info["descs"])
 
-    
-    
-#    
-#    return urlOrig
-#        
-#    return render_template('index.html')
+
 #    return '''Web en Construcción<br \>
 #    Nueva API para el módulo spaintvs.<br \>
 #    Peticiones GET a: http://pydowntv2.appspot.com/api?url=<br \>
@@ -198,8 +193,17 @@ def home():
 
 def api(url=None):
     opcs = _default_opcs
+    if request.method == "GET":
+        try:
+            urlOrig = request.args['url']
+        except:
+            return '''Web en Construcción<br \>
+                    Nueva API para el módulo spaintvs.<br \>
+                    Peticiones GET a: http://pydowntv2.appspot.com/api?url=<br \>
+                    spaintvs en GitHub <a href="https://github.com/aabilio/PyDownTV2/">aquí</a>'''     
     try:
-        search = url if url is not None else request.args['url']
+        search = urlOrig
+        #search = url if url is not None else request.args['url']
         ## CASOS ESPECIALES URL NO ASCCII
         #RTPA
         try: search = search.split("video:")[0] + "video:_" + search.split("_")[1]
