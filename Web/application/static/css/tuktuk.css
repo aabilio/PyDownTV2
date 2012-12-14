@@ -1062,17 +1062,24 @@ img.responsive.rounded {
   header {
     height: auto;
   }
+  
 }
 /* ==== Phone (landscape 420px) ==== */
 @media only screen and (min-width: 480px) and (max-width: 767px) {
   header {
     height: auto !important;
   }
+  #myLanding {
+	padding-top: 0px;
+  }
 }
 /* ==== Phone (portrait 300px) ==== */
 @media only screen and (max-width: 767px) {
   header {
     height: auto !important;
+  }
+  #myLanding {
+	padding-top: 0px;
   }
 }
 /* ==== Any phone ==== */
