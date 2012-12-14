@@ -101,7 +101,6 @@ class TVE(Canal.Canal):
         # Añadido para vídeos nuevos (periodo de prueba):
         sourceHTML = Descargar.getHtml(self.url).decode('string-escape')
         #sourceHTML = self.toUtf(sourceHTML)
-        print type(sourceHTML)
         videoID_comp = None
         if sourceHTML.find("flashcontentId:\'videoplayer") != -1:
             videoID_comp = sourceHTML.split("flashcontentId:\'videoplayer")[1].split("\'")[0]
@@ -151,18 +150,15 @@ class TVE(Canal.Canal):
                 try:
                     desc = Utiles.recortar(sourceHTML, "<meta name=\"description\" content=\"", "\"").strip()
                 except:
-                    desc = None
+                    desc = u"Vídeos de Televión Española"
                 
-        
-            
-        
         return {"exito" : True,
                 "num_videos" : 1,
                 "mensaje"   : u"URL obtenido correctamente",
                 "videos":[{
                         "url_video" : [url_video],
                         "url_img"   : url_img,
-                        "filename"    : [filename],
+                        "filename"  : [filename],
                         "tipo"      : "http",
                         "partes"    : 1,
                         "rtmpd_cmd" : None,

@@ -160,6 +160,7 @@ def home():
         except: pass
     #END - RTPA
     ## END - CASOS ESPECIALES 
+    if not urlOrig.startswith("http://"): urlOrig ="http://"+urlOrig
     if compURL(urlOrig):
         canal = qCanal(urlOrig, opcs)
         if canal == None:

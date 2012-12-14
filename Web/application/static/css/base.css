@@ -351,8 +351,11 @@ body {
 }
 
 .logo img {
-	padding-top: 15px;
-	max-width: 300px;
+	/*padding-top: 15px;
+	max-width: 300px;*/
+	outline: 0;
+	max-width: 100%;
+	height: auto;
 }
 
 
@@ -453,9 +456,9 @@ video_img.img {
 }
 
 #site-header {
-    border-bottom: 1px solid #2D2D2D;
-    height: 37px;
-    padding-bottom: 2.063em;
+    /*border-bottom: 1px solid #2D2D2D;*/
+    /*height: 37px;
+    padding-bottom: 2.063em;*/
     margin-bottom: 22px;
     width: 100%;
 }
