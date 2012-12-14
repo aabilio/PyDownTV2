@@ -1,121 +1,81 @@
-<!DOCTYPE html>
-<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
-<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
-<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!--><html lang="es"> <!--<![endif]-->
+<!doctype html>
+<html lang="en">
 <head>
-
-	<!-- Basic Page Needs
-  ================================================== -->
-  
-	<title>PyDownTV WEB: Descarga vídeos de las webs de TV</title>
-
-	<meta name="title" content="PyDownTV: Descarga los vídeos de las Televisiones Españolas">
-	<meta name="author" content="aabilio">
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta http-equiv="Content-Language" content="es" />
-	<link rel="author" href="http://web.pydowntv.com/static/humans.txt" />
-	<meta name="copyright" content="Copyright (c) 2012 by aabilio">
-	<meta name="keywords" content="Descarga, videos, rtve, tv 1, tv 2, tve, mitele,clan, antena 3, cuatro, la sexta, Fórmula 1, televisiones, descubre, enlaces">
-	<meta name="description" content="Web que muestra los enlaces de descarga de los vídeos de las webs de las principales televiosiones españolas, incluídas autonómicas. Lo único que se tiene que hacer, es introducir en el campo de texto la URL perteneciente a donde se observa el vídeo de forma online en su propia web. PyDownTV buscará por su URL final para y si la encuentra te la mostrará">
-	<meta name="robots" content="index, follow">
-	<meta name="rating" content="general">
-	<meta name="google-site-verification" content="ejavY4el_TExdc8suqFo9yz9amL0KAeDNneXX2_r7Y4" />
-	
-	<!-- JavaScript import libs
-  ================================================== -->
-	<script type="text/javascript" src="/static/js/lib/jquery-1.3.1.min.js"></script>
-	<script type="text/javascript" src="/static/js/lib/jquery.easing.1.3.js"></script>
-	<script type="text/javascript" src="/static/js/lib/jqvideobox.js" charset="utf-8"></script>
-
-	<!-- Mobile Specific Metas
-  ================================================== -->
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-	<!-- CSS
-  ================================================== -->
-	<link rel="stylesheet" href="/static/css/base.css">
-	<link rel="stylesheet" href="/static/css/skeleton.css">
-	<link rel="stylesheet" href="/static/css/layout.css">
-	<link rel="stylesheet" href="/static/css/videobox.css" type="text/css" media="screen" />
-
-	<!--[if lt IE 9]>
-		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-
-	<!-- Favicons
-	================================================== -->
-	<link rel="shortcut icon" href="/static/img/favicon.ico">
-	<!--
-	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-	-->
-	
-	<!-- JavaScript Scripts
-	================================================== -->
-	<script>
-		$(document).ready(function() {
-	    	$(".vidbox").jqvideobox({'width' : 400, 'height': 300, 'getimage': true, 'navigation': false});
-	    	$(".vidbox2").jqvideobox({'width' : 700, 'height': 500, 'getimage': true, 'navigation': true});
-	  	});
-	</script>
-
+    <meta charset="utf-8" />
+    <title>Tuktuk - The responsive web framework..!</title>
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <!-- TUKTUK -->
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/tuktuk.css">
+    <link rel="stylesheet" href="/static/css/tuktuk.theme.css">
+    <!-- TUKTUK.WIDGETS -->
+    <link rel="stylesheet" href="/static/widgets/tuktuk.widget.icon.css">
+    <link rel="stylesheet" href="/static/widgets/tuktuk.widget.modal.css">
+    
 </head>
+
 <body>
+    <!-- ========================== HEADER ========================== -->
+    <header class="bck darkest padding_top padding_bottom">
+        <div class="row text color white shadow">
+            <div class="column_4">
+                <a href="{{ url_for('home') }}" class="logo text normal color white">Py<span class="text book">DownTV</span> web</a>
+            </div>
+            <!--<nav class="column_7 offset_2 text right">
+                <button data-tuktuk-modal="default_modal"></span>Modal Example</button>
+            </nav>-->
+        </div>
+    </header>
 
-
-	<div id="bgTopDiv"><!-- para fondo de arriba --></div> 
-	<!-- Primary Page Layout
-	================================================== -->
-
-	<!-- Delete everything in this .container and get started on your own site! -->
-	
-	<div class="container">
-		<header class="sixteen columns" id="site-header">
-			<div class="logo">
-				<!--<h1 id="logoText" align="left" style="margin-top: 10px"><span>pydowntv</span></h1>-->
-				<a href="{{ url_for('home') }}"><img src="/static/img/logo.png"></a>
-			</div>
-		</header>
-		<div class="sixteen columns" style="margin-top: 0em; margin-bottom: -1em;">
-			<div id="searchContainer">
-			    <form action="{{ url_for('home') }}" method="post">
-			        <input id="field" name="urlOrig" type="text" value="Introduce AQUÍ la URL del vídeo a descargar..." onfocus="this.value=''"/>
-			        <input id="submit" name="submit" type="submit" value="Buscar" />
-			    </form>
-			</div>
-		</div>
-		<!--DIV para los msg flash -->
-		{% if get_flashed_messages() %}
-		<div class="sixteen columns" style="padding-bottom: 2em;">
-			<div align="center" class="flash" style="min-height: 37px;">
-				{% for message in get_flashed_messages() %}
-				<h5 style="padding-top: 0.4em;">{{ message }}</h5>
-				{% endfor %}
-			</div>
-		</div>
-		{% endif %}
-		<!--FIN FIV flash msg	-->
-		<!-- DIV para resltados de búsqueda -->
-		{% if videos %}
-		{% for vid in videos %}
-		<div class="sixteen columns" id="resultBox">
-			<div class="one-third column">
-				<div class="video_img">
+    <section class="bck darkest landing text center color white">
+        <div class="row">
+            <div class="column_8 offset_2">
+                <h2 class="text book ">Descarga vídeos de las webs de televisiones españolas</h2>
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="column_8 offset_2 form">
+            	<form action="{{ url_for('home') }}" method="post">
+	                <input name="urlOrig" type="text" id="sendRequestInput" class="large float left" placeholder="Introduce AQUÍ la URL del vídeo a descargar...">
+	                <button style="color: black;", id="sendRequestButton" name="submit" type="submit" class="button large float">Buscar!</button>
+            	</form>
+            </div>
+        </div>
+    </section>
+    
+    <!-- DIV para resltados de búsqueda -->
+	{% if videos %}
+	{% for vid in videos %}
+	<section class="bck darkest landing text center color white" style="padding: 25px 0;">
+		<div class="row text center margin_bottom">
+        <div class="column_8 offset_2">
+            <h4 class="text color theme">{{ urlOrig }}</h4>
+            <br />
+        </div>
+	    </div>
+	    <div class="row text justify book margin_top">
+	        <div class="column_4">
+	        	<div class="video_img">
 					<img src="{{ vid['url_img'] }}" alt="imagen del video" style="outline: 0;  max-width: 96%;  height: auto;  border: 1px solid #CCC;  background: #F3F3F3;  padding: 6px;"/>
 				</div>
-			</div>
-			<div class="two-thirds column" id="datosVideo">
-				<h4>{{ titulos[loop.index0].decode('utf8')|safe }}</h4>
-				<p>{{ descripciones[loop.index0].decode('utf8')|safe }}</p>
-				<p><strong>Partes: </strong>{{ vid['partes'] }}. <strong>Enlaces: </strong>(Clic derecho: "Guardar enlace como...")</p>
-				<ul class="enlaces">
+	            <!--<h1 class="icon search text color theme"></h1>
+	            <h5>1. Copia la URL</h5>
+	            <small>Solo tienes que copiar la URL de la página que contiene el vídeo. Sí, eso que pone: "http://www.anten..."</small>-->
+	        </div>
+	        <div class="column_8">
+	        	<h4 style="font-size: 1.6em;">{{ titulos[loop.index0].decode('utf8')|safe }}</h4>
+				<p style="color: #bfbfbf;">{{ descripciones[loop.index0].decode('utf8')|safe }}</p>
+				<br />
+				<p><strong style="color: #16a6b6;">Partes: </strong>{{ vid['partes'] }}. <strong style="color: #16a6b6;">Enlaces </strong>(Clic derecho: "Guardar enlace como...")<strong style="color: #16a6b6;">:</strong></p>
+				<br />
+				<ol class="square">
 					{% set tit = titulos[loop.index0].decode('utf8')|safe %}
 					{% for parte in vid['url_video'] %}
-					<li>Parte {{ loop.index0+1 }}: <a href="{{ parte }}">{{ tit }}</a></li>
+					<li style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a href="{{ parte }}">{{ tit }}</a></li>
 					{% endfor %}
-				</ul>
+				</ol>
 				
 				{% if vid['tipo'] == 'rtmp' %}
 				<p><strong>Comandos para rtmpdump:</strong></p>
@@ -125,33 +85,59 @@
 					{% endfor %}
 				</ul>
 				{% endif %}
-			</div>
-		</div>
-		{% endfor %}
-		{% endif %}
-		<!-- FIN DIV Resultados de búsqueda -->
-		<div class="one-third column">
-			<h3 id="infoText">¿Qué es pydowntv?</h3>
-			<p class="info">PyDownTV es una pequeña aplicación que te ayudará a descargar los vídeos de las principales webs de TVs Españolas.</p>
-		</div>
-		<div class="one-third column">
-			<h3 id="infoText">¿Cómo funciona?</h3>
-			<p class="info">Un vídeo vale más que mil palabras ;P</p>
-			<p><a title="Video de ejemplo" class="vidbox2" href="http://vimeo.com/37731925"></a></p>
-		</div>
-		<div class="one-third column">
-			<h3 id=infoText>Más información</h3>
-			<ul class="square">
-				<li><strong>Ayuda</strong>: Presiona <a href="#">aquí</a></li>
-				<li><strong><a href="https://chrome.google.com/webstore/detail/ljbpalaakngapgpfkidnohfokabnkiof">Extensión Google Chrome</strong></a></li>
-				<li><strong><a href="https://addons.mozilla.org/es-ES/firefox/addon/pydowntv/">Extensión Firefox</strong></a></li>
-				<li><strong><a href="http://web.pydowntv.com/static/pydowntv.oex">Extensión Opera</strong></a></li>
-				<li><strong><a href="http://web.pydowntv.com/static/pydowntv.safariextz">Extensión Safari</strong></a></li>
-				<li><strong><a href="http://code.google.com/p/pydowntv/wiki/Televisiones_Soportadas">Televisiones soportadas</strong></a></li>
-			</ul>
-		</div>
-		<div class="sixteen columns">
-			<div class="carrousel">
+	            <!--<h1 class="icon share text color theme"></h1>
+	            <h5>2. Pega la URL</h5>
+	            <small>Ahora, en esta página, pegas lo que copiaste en el cuadro de búsqueda que se encuentra arrriba y le das a Buscar!</small>-->
+	        </div>
+	    </div>
+	</section>
+	{% endfor %}
+	{% endif %}
+	<!-- FIN DIV Resultados de búsqueda -->
+
+    <!-- ========================== FEATURES ========================== -->
+    <section class="bck light features">
+        <div class="row text center margin_bottom">
+            <div class="column_8 offset_2">
+                <h1 class="text color theme">¿Cómo uso pydowntv web?</h1>
+                <br />
+            </div>
+        </div>
+        <div class="row text center book margin_top">
+            <div class="column_3">
+                <h1 class="icon search text color theme"></h1>
+                <h5>1. Copia la URL</h5>
+                <small>Solo tienes que copiar la URL de la página que contiene el vídeo. Sí, eso que pone: "http://www.anten..."</small>
+            </div>
+            <div class="column_3">
+                <h1 class="icon share text color theme"></h1>
+                <h5>2. Pega la URL</h5>
+                <small>Ahora, en esta página, pegas lo que copiaste en el cuadro de búsqueda que se encuentra arrriba y le das a Buscar!</small>
+            </div>
+            <div class="column_3">
+                <h1 class="icon download text color theme"></h1>
+                <h5>3. Descarga el Vídeo</h5>
+                <small>En el cuadro del vídeo, sobre las partes, haces clic con el botón derecho, y le das a "Guardar enlace como..."</small>
+            </div>
+            <div class="column_3">
+                <h1 class="icon accept text color theme"></h1>
+                <h5>o.. Utiliza un plugin</h5>
+                <small>También puedes utilizar directamente los plugins para los navegadores, y descargar los vídeos de manera más cómoda</small>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ========================== COLUMNS ========================== -->
+    <section class="bck lightest text center">
+        <div class="row ">
+            <div class="column_10 offset_1 margin_bottom">
+                <h1 class="text color theme">¿Qué canales soporta pydowntv web?</h1>
+                <h3 class="text thin">
+                	PyDownTV web soporta la mayoría de los canales nacionales y autómicos y algunos locales
+                </h3>
+             </div>
+             <div class="carrousel">
 				<div>
 				<img src="/static/img/logo_tvs/1.svg">
 				<img src="/static/img/logo_tvs/2.svg">
@@ -162,22 +148,42 @@
 				<img src="/static/img/logo_tvs/mt.png">
 				</div>
 			</div>
-		</div>
-		
-		<footer id="site-footer">
-			<div class="one-two column">
-				<p></p>
-			</div>
-			<div class="one-two column" style="float: right">
-				<p class="info">&copy; Copyleft 2011 by <a href=http://aabilio.tumblr.com/>aabilio</a> // Powered by <a href="http://flask.pocoo.org/">Flask</a> &amp; <a href="https://appengine.google.com/">GAE</a></p>
-			</div>
-		</footer>
+        </div>
+        
+    </section>
 
-	</div><!-- container -->
-	
+    <!-- ========================== FOOTER ========================== -->
+    <footer class="bck dark text color white">
+        <div class="row margin_top margin_bottom">
+            <!--<div class="column_8">
+                <p class="text bold">Made by...</p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea similique fugit debitis saepe dolorem
+            </div>-->
+            <div class="column_4 offset_8">
+                <!--<p class="text bold">Sobre..</p>-->
+                <small>
+                    &copy; Copyleft 2011 by <a href=http://aabilio.tumblr.com/>aabilio</a> // Powered by <a href="http://flask.pocoo.org/">Flask</a> &amp; <a href="https://appengine.google.com/">GAE</a> &amp; <a href="http://tuktuk.tapquo.com/">tuktuk</a>
+                </small>
+            </div>
+        </div>
+    </footer>
 
 
-<!-- End Document
-================================================== -->
+    <!-- ========================== MODALS ========================== -->
+    
+    <div id="small_modal" data-tuktuk="modal">
+        <h5 class="text bold">Se ha detectado error:</h5>
+        <hr/>
+		{% for message in get_flashed_messages() %}
+        <div class="margin_bottom">{{ message }}</div>
+        {% endfor %}
+        <button data-action="close" class="button">OK</button>
+    </div>
+    <!-- TUKTUK.WIDGETS -->
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="/static/widgets/tuktuk.widget.modal.js"></script>
+    {% if get_flashed_messages() %}
+    <script>TukTuk.Modal.show("small_modal");</script>
+    {% endif %}
 </body>
 </html>

@@ -183,7 +183,11 @@ def home():
         return redirect(url_for('home'))
         #return render_template("api.html", messages=ErrorDesconocido)
 
-    return render_template("index.html", videos=info["videos"], titulos=info["titulos"], descripciones=info["descs"])
+    return render_template("index.html",
+                           videos=info["videos"],
+                           titulos=info["titulos"],
+                           descripciones=info["descs"],
+                           urlOrig=urlOrig)
 
 
 #    return '''Web en Construcción<br \>
