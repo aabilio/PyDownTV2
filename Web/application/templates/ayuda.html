@@ -2,9 +2,9 @@
 <html lang="es">
 <head>
     <!--<meta charset="utf-8" />-->
-    <title>PyDownTV WEB: Descarga vídeos de las webs de TV</title>
+    <title>PyDownTV WEB: Ayuda</title>
 
-	<meta name="title" content="PyDownTV: Descarga los vídeos de las Televisiones Españolas">
+	<meta name="title" content="PyDownTV: Ayuda">
 	<meta name="author" content="aabilio">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="Content-Language" content="es" />
@@ -28,6 +28,17 @@
     
     <!--<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>-->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
+     <!-- Para el FAQ -->
+    <script>
+    	$(document).ready(function() {
+			$('.answer-wrapper').hide();
+		
+			$('.question').live('click', function() {
+				$(this).next().slideToggle();
+			});
+		});
+    </script>
+    
     
 </head>
 
@@ -71,8 +82,8 @@
     <section class="bck light underline navigation ">
         <div class="row text center">
             <nav class="group text bold">
-                <a href="{{ url_for('home') }}" class="active"><span class="icon download"></span>Descargar!</a>
-                <a href="{{ url_for('ayuda') }}"><span class="icon tag"></span>FAQ y Ayuda</a>
+                <a href="{{ url_for('home') }}"><span class="icon download"></span>Descargar!</a>
+                <a href="{{ url_for('ayuda') }}" class="active"><span class="icon tag"></span>FAQ y Ayuda</a>
                 <a href="#"><span class="icon cube"></span>Televisiones Soportadas</a>
                 <a href="#"><span class="icon cog"></span>Apps</a>
                 <a href="https://www.facebook.com/webpydowntv"><span class="icon facebook"></span>Facebook</a>
@@ -83,57 +94,53 @@
         </div>
     </section>
     
-    <!-- DIV para resltados de búsqueda -->
-	{% if videos %}
-	{% for vid in videos %}
-	<section class="bck darkest landing text center color white" style="padding: 25px 0;">
-		<div class="row text center margin_bottom">
-        <div class="column_8 offset_2">
-            <h4 class="text color theme"><a href="{{ urlOrig }}">{{ urlOrig }}</a></h4>
-            <br />
+    <section class="bck light text justify">
+        <div class="row text center book margin_top">
+        	<h1 class="text color theme">Preguntas Frecuentes</h1>
+        	<br />
+            <p class="question text">
+                ¿Qué es exactamente PyDownTV?
+            </p>
+            <div class="answer-wrapper">
+                <p class="answer">PyDownTV es un proyecto que se encuntra en desarrollo en <a href="https://github.com/aabilio/PyDownTV2"><span class="icon github">GitHub</span></a> que consta de una serie de Apps para ayudar a descargar los vídeos de las páginas web de las principales cadenas de televisión españolas. PyDownTV web (esta web) es una de ellas.</p>
+            </div>
+            <p class="question text">
+            	¿Cómo puede descargar un vídeo a través de esta web?
+            </p>
+            <div class="answer-wrapper">
+                <p class="answer">
+                	Muy fácil, solo tienes que sguir los pasos indicados más abajo, pero por si acaso, los detallo más a continuación.<br />
+                	Básicamente, si estás en una navegando por la web de una televisión de España, y estás justo en una página donde
+                	hay un vídeo, lo único que tienes que hacer es <a href="" style="cursor: text; background-color: black;">copiar</a> la URL (la dirección web, esa que empieza por "http://www...")
+                	que se encuentra en la barra de navegación. Después tendrás que entrar en esta web, y en el cuadro de búsqueda que se encuentra
+                	arriba de todo, tendrás que <a href="" style="cursor: text; background-color: black;">pegar</a> el enlace copiado antes.
+                	Una vez hecho esto, solo hay que dar a <a href="" style="cursor: text; background-color: black;">Buscar!</a> y esperar a que PyDownTV encuentre el vídeo.<br />
+                	Si PyDownTV encuentra el vídeo, entonces solo tendrás que dar sobre el enlace de las partes del mismo con clic
+                	derecho de ratón y darle a "Guardar enlace como" a cada una de las partes.
+                	Hay vídeos que no se pueden descargar con este procedimiento, para ello necesitaremos un programa especial.
+                </p>
+            </div>
+            <p class="question text">
+            	¿Y cómo se descargan los vídeos "rtmp"?
+            </p>
+            <div class="answer-wrapper">
+                <p class="answer">https://github.com/aabilio/PyDownTV2/tree/master/Escritorio
+                	Esos vídeos que aparecen como "rtmp", no se pueden descargar directamente haciendo clic con el botón derecho del ratón.
+                	Necesitarás un programa especial. En <a href=">https://github.com/aabilio/PyDownTV2/tree/master/Escritorio"><span class="icon github">GitHub</span></a>
+                	estamos desarrollando una versión de Escritorio sobre todo para ayudar en la descarga de estos vídeos.
+                	Pero mientras, lo mejor es utilizar un programa llamado <span style="background-color: black; color: white;">rtmpdump</span>.
+                	
+                	
+                </p>
+            </div>
+            <p class="question text">
+            </p>
+            <div class="answer-wrapper">
+                <p class="answer"></p>
+            </div>
         </div>
-	    </div>
-	    <div class="row text justify book margin_top">
-	        <div class="column_4">
-	        	<div class="video_img">
-					<img src="{{ vid['url_img'] }}" alt="imagen del video" style="outline: 0;  max-width: 96%;  height: auto;  border: 1px solid #CCC;  background: #F3F3F3;  padding: 6px;"/>
-				</div>
-	            <!--<h1 class="icon search text color theme"></h1>
-	            <h5>1. Copia la URL</h5>
-	            <small>Solo tienes que copiar la URL de la página que contiene el vídeo. Sí, eso que pone: "http://www.anten..."</small>-->
-	        </div>
-	        <div class="column_8">
-	        	<h4 style="font-size: 1.6em;">{{ titulos[loop.index0].decode('utf8')|safe }}</h4>
-				<p style="color: #bfbfbf;">{{ descripciones[loop.index0].decode('utf8')|safe }}</p>
-				<br />
-				<p><strong style="color: #16a6b6;">Partes: </strong>{{ vid['partes'] }}. <strong style="color: #16a6b6;">Enlaces </strong>(Clic derecho: "Guardar enlace como...")<strong style="color: #16a6b6;">:</strong></p>
-				<br />
-				<ol class="square">
-					{% set tit = titulos[loop.index0].decode('utf8')|safe %}
-					{% for parte in vid['url_video'] %}
-					<li style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a href="{{ parte }}" style="text-decoration: underline;">{{ tit }}</a></li>
-					{% endfor %}
-				</ol>
-				
-				{% if vid['tipo'] == 'rtmp' %}
-				<p><strong>Comandos para rtmpdump:</strong></p>
-				<ol class="square">
-					{% for cmd in vid['rtmpd_cmd'] %}
-					<li style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><span id="cmd">{{ cmd }}</span></li>
-					{% endfor %}
-				</ol>
-				{% endif %}
-	            <!--<h1 class="icon share text color theme"></h1>
-	            <h5>2. Pega la URL</h5>
-	            <small>Ahora, en esta página, pegas lo que copiaste en el cuadro de búsqueda que se encuentra arrriba y le das a Buscar!</small>-->
-	        </div>
-	    </div>	   
-	</section>
-	<div style="height: 5px; background-color: white;"><!--separación entre resultados de vídeos--></div>
-	{% endfor %}
-	{% endif %}
-	<!-- FIN DIV Resultados de búsqueda -->
-
+    </section>
+    
     <!-- ========================== FEATURES ========================== -->
     <section class="bck light features">
         <div class="row text center margin_bottom">
@@ -165,8 +172,7 @@
             </div>
         </div>
     </section>
-
-
+    
     <!-- ========================== COLUMNS ========================== -->
     <section class="bck lightest text center">
         <div class="row ">
@@ -188,8 +194,9 @@
 				</div>
 			</div>
         </div>
-        
     </section>
+    
+    
 
     <!-- ========================== FOOTER ========================== -->
     <footer class="bck dark text color white">
@@ -214,23 +221,6 @@
             </div>
         </div>
     </footer>
-
-
-    <!-- ========================== MODALS ========================== -->
-    
-    <div id="small_modal" data-tuktuk="modal">
-        <h5 class="text bold">Se ha detectado error:</h5>
-        <hr/>
-		{% for message in get_flashed_messages() %}
-        <div class="margin_bottom">{{ message }}</div>
-        {% endfor %}
-        <button data-action="close" class="button anchor cancel">OK</button>
-    </div>
-    <!-- TUKTUK.WIDGETS -->
-    <script src="/static/widgets/tuktuk.widget.modal.js"></script>
-    {% if get_flashed_messages() %}
-    <script>TukTuk.Modal.show("small_modal");</script>
-    {% endif %}
     
 </body>
 </html>

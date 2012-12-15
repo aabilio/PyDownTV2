@@ -180,7 +180,7 @@ def home():
     if compURL(urlOrig):
         canal = qCanal(urlOrig, opcs)
         if canal == None:
-            flash(u"Este canal no está aún sportado por PyDownTV")
+            flash(u"Lo que has introducido no corresponde con ningún canal soportado por PyDownTV")
             return redirect(url_for('home'))
             #return render_template("index.html", msgs=TVnoSoportada)
     else: #TODO: meter huevos de pascua aquí :P
@@ -277,6 +277,9 @@ def api(url=None):
         resp = Response(js, status=200, mimetype='application/json')
         return resp
         #return render_template("api.html", messages=ErrorDesconocido)
+
+def ayuda():
+    return render_template("ayuda.html")
 
 def say_hello(username):
     """Contrived example to demonstrate Flask's url routing capabilities"""
