@@ -16,8 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with spaintvs.  If not, see <http://www.gnu.org/licenses/>.
 
-# Módulo para descargar todos los vídeos de la web de rtve.es ("A la carta" o no)
-# Antes era el módulo de tvalacarta.py modificado para dar soporte a todos los vídeos
+# Módulo para descargar todos los vídeos de la web de Cuatro
 
 __author__="aabilio"
 __date__ ="$15-oct-2012 11:35:37$"

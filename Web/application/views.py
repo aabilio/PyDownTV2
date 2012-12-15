@@ -76,7 +76,7 @@ class Canales(object):
 
     def isTelecinco(self):
         '''return True si la URL pertenece al Grupo de Telecinco'''
-        urls = ["telecinco.es"]
+        urls = ["telecinco.es", "divinity.es"]
         for url in urls:
             if self._url.find(url) != -1: return True
         return False
@@ -102,6 +102,13 @@ class Canales(object):
             if self._url.find(url) != -1: return True
         return False
     
+    def isAragonTV(self):
+        '''return True si la URL pertenece a rtpa.es'''
+        urls = ["aragontelevision.es"]
+        for url in urls:
+            if self._url.find(url) != -1: return True
+        return False
+    
 def qCanal(url, opcs):
     '''
         Comprueba utlizando la clase Canales de que servicio ha recibido la url
@@ -117,6 +124,7 @@ def qCanal(url, opcs):
     elif canal.isMitele(): return miteleGAE.MiTele(url, opcs)
     elif canal.isCRTVG(): return crtvg.CRTVG(url, opcs)
     elif canal.isRTPA(): return rtpa.RTPA(url, opcs)
+    elif canal.isAragonTV(): return aragontv.AragonTV(url, opcs)
     else: return None
 
 def compURL(url):

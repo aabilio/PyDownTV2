@@ -26,7 +26,7 @@ import Utiles
 import Descargar
 import Error
 
-from base64 import b64decode as p
+from base64 import b64decode as p#simple ofus
 import aes
 
 url_validas = ["mitele.es"]

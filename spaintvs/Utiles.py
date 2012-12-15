@@ -137,6 +137,7 @@ def formatearNombre(nombre):
     nombre = nombre.replace("&quot;", "")
     nombre = nombre.replace("-SextaTv__laSexta", "")
     nombre = nombre.replace("!", "")
+    nombre = nombre.replace("\xc2\xa1", "") #!
     nombre = nombre.replace("..",  ".")
     nombre = nombre.replace("\xc3\xa1", "a")
     nombre = nombre.replace("\xc3\xa9", "e")

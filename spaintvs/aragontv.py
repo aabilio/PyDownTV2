@@ -16,24 +16,25 @@
 #    You should have received a copy of the GNU General Public License
 #    along with spaintvs.  If not, see <http://www.gnu.org/licenses/>.
 
-# Módulo para la descargar de vídeos desde crtvg.es
+# Módulo para descargar todos los vídeos de Aragon TV
 
 __author__="aabilio"
-__date__ ="$18-oct-2012 11:35:37$"
+__date__ ="$15-dic-2012 11:35:37$"
 
 import Canal
 import Utiles
 import Descargar
-#import Error
+import Error
 
-url_validas = ["crtvg.es"]
+url_validas = ["aragontelevision.es"]
 
-class CRTVG(Canal.Canal):
+class AragonTV(Canal.Canal):
     '''
-        Clase para manejar los vídeos de la Televisión de Galiza
+        Clase para manejar los vídeos de Aragón Televisión
     '''
     
-    URL_CRTVG = "http://www.crtvg.es/"
+    URL_ARAGONTV = "http://aragontelevision.es"
+    URL_ARAGONTV_ALACARTA = "http://alacarta.aragontelevision.es/"
     
     def __init__(self, url="", opcs=None):
         Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
@@ -46,7 +47,7 @@ class CRTVG(Canal.Canal):
     #    - log() para mostrar por pantalla (está disponible si self.opcs["log"] es True)
     #    - self.debug() mostrar información de debug (está disponible si self.opcs["debug"] es True)
     # Comunicación de errores con nivel de aplicación:
-    #    - lanzar la excepción: raise Errors.GeneralPyspainTVsError("mensaje")
+    #    - lanzar la excepción: raise Error.GeneralPyspainTVsError("mensaje")
 
     def getInfo(self):
         '''
@@ -81,43 +82,37 @@ class CRTVG(Canal.Canal):
             "videos", "mesajes" y "descs" deben ser listas de cadenas (si no son None)
             "url_video", "filename", "rtmp_cmd", "menco_cmd" (de "videos") deben ser listas de cadenas (si no son None)
         '''
-        
-        # Diferenciar entre vídeos "á carta" y vídeos de "agalegainfo":
-        streamHTML = Descargar.get(self.url).decode('string-escape')
-        tit_vid = streamHTML.split("title: \"")[1].split("\"")[0]
-        htmlBackup = streamHTML
-        streamHTML = streamHTML.replace(" ", "").replace("\t", "").replace("\n", "")
-        
-        if self.url.find("a-carta") != -1:
-            self.info(u"[INFO] Modo \"Á Carta\"")
-        else:
-            self.info(u"[INFO] Vídeo Normal (No \"Á Carta\")")
-        
-        rtmp = streamHTML.split("rtmp:{")[1]
-        s = rtmp.split("url:\"")[1].split("\"")[0]
-        r = rtmp.split("netConnectionUrl:\"")[1].split("\"")[0]
-        a = r.split("/")[-1]
-        video = rtmp.split("clip:{")[1]
-        y = video.split("url:\"")[1].split("\"")[0]
-        name = video.split("title:\"")[1].split("\"")[0] + "." + y.split(".")[-1]
-        img = streamHTML.split("backgroundImage:\"url(")[1].split(")")[0]
-        url = r
+    
+        html = Descargar.get(self.url)
+        try:
+            name = Utiles.recortar(html, "<title>", "</title>")
+            html2 = html.replace("%3A", ":").replace("%2F", "/").replace(" ", "").replace("\t", "")
+            clip = html2.split("clip:")[1].split("url:\'")[1].split("\'")[0].replace("mp4:", "")
+            server = html2.split("netConnectionUrl:\'")[1].split("\'")[0]
+            url = server + clip
+            name += "." + clip.split(".")[-1]
+            img = self.URL_ARAGONTV_ALACARTA + html.split("logo:")[1].split("url:")[1].split("\'")[1].split("\'")[0]
+            
+            try:
+                desc = Utiles.recortar(html, "<span class=\"title\">Resumen del vídeo</span>", "</div>").strip().decode('string-escape')
+            except:
+                desc = u"Vídeo de Aragón Televisión".encode("utf8")
+            else:
+                if desc == u"" or desc == "":desc = u"Vídeo de Aragón Televisión".encode("utf8")
                 
-        if name:
-            name = Utiles.formatearNombre(name)
-        rtmpd_cmd = "rtmpdump -r "+url+" -y "+y+" -s "+s+" -a "+a+" -o "+name
-        
-        desc = None        
-        try: #FIXME: Pillar más que solo el primer párrafo
-            desc = "".join(htmlBackup.split("<p style=\"text-align: justify;\">")[1:]).split("</div>")[0].strip().decode('string-escape')
-            #desc = Utiles.recortar(htmlBackup, "<p style=\"text-align: justify;\">", "</div>").strip().decode('string-escape')
+            try:
+                tit = Utiles.recortar(html, "<title>", "</title>")
+            except:
+                tit = u"Vídeo de Aragón Televisón".encode("utf8")
+                
+            if name: name = Utiles.formatearNombre(name)
+            rtmpd_cmd = "rtmpdump -r "+url+" -o "+name
         except:
-            desc = tit_vid if tit_vid is not None else None
-        if desc ==  None: desc = u"Vídeo de Televisión de Galicia".encode("utf8")
-        
+            raise Error.GeneralPyspainTVsError(u"Error al recuperar el vídeo de Aragon TV")
+    
         return {"exito" : True,
                 "num_videos" : 1,
-                "mensaje"   : u"URL obtenida correctamente",
+                "mensaje"   : u"URL obtenido correctamente",
                 "videos":[{
                         "url_video" : [url],
                         "url_img"   : img if img is not None else None,
@@ -130,12 +125,10 @@ class CRTVG(Canal.Canal):
                         "otros"     : None,
                         "mensaje"   : None
                         }],
-                "titulos": [tit_vid] if tit_vid is not None else None,
+                "titulos": [tit] if tit is not None else None,
                 "descs": [desc] if desc is not None else None
                 }
-            
-            
-            
-            
-            
-            
+
+
+
+

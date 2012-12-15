@@ -26,7 +26,7 @@ import Utiles
 import Descargar
 import Error
 
-url_validas = ["telecinco.es"]
+url_validas = ["telecinco.es", "divinity.es"]
 
 class Telecinco(Canal.Canal):
     '''
