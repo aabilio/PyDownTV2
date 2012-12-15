@@ -39,7 +39,8 @@ _url_canales = {
                "mitele": ["mitele.es"],
                "crtvg": ["crtvg.es"],
                "rtpa": ["rtpa.es"],
-               "aragontv": ["aragontelevision.es"]
+               "aragontv": ["aragontelevision.es"],
+               "canalsur": ["canalsur.es", "canalsuralacarta.es"]
                }
 _mod_tv = {
            "rtve": {"mod":tve.TVE,"comentario":"[INFO] Radio Televión Española", "urls":_url_canales["rtve"]},
@@ -49,7 +50,8 @@ _mod_tv = {
            "mitele": {"mod":mitele.MiTele,"comentario":"[INFO] Mitele.es","urls":_url_canales["mitele"]},
            "crtvg": {"mod":crtvg.CRTVG,"comentario":"[INFO] Televisión de Galiza","urls":_url_canales["crtvg"]},
            "rtpa": {"mod":rtpa.RTPA,"comentario":"[INFO] Radio Televisión del Principado de Asturias","urls":_url_canales["rtpa"]},
-           "aragontv": {"mod":aragontv.AragonTV,"comentario":"[INFO] Televisón de Aragón","urls":_url_canales["aragontv"]}
+           "aragontv": {"mod":aragontv.AragonTV,"comentario":"[INFO] Televisón de Aragón","urls":_url_canales["aragontv"]},
+           "canalsur": {"mod":canalsur.CanalSur,"comentario":"[INFO] Canal Sur","urls":_url_canales["canalsur"]}
            #"nombre" : {"mod":rutaAlaClase, "comentario":"infoParaImprimir", "urls":_url_canales["canal"]}
            }
 # Fin de edición

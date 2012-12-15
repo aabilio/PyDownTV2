@@ -103,8 +103,15 @@ class Canales(object):
         return False
     
     def isAragonTV(self):
-        '''return True si la URL pertenece a rtpa.es'''
+        '''return True si la URL pertenece a Aragon TV'''
         urls = ["aragontelevision.es"]
+        for url in urls:
+            if self._url.find(url) != -1: return True
+        return False
+    
+    def isCanalSur(self):
+        '''return True si la URL pertenece a Canal Sur'''
+        urls = ["canalsur.es", "canalsuralacarta.es"]
         for url in urls:
             if self._url.find(url) != -1: return True
         return False
@@ -125,6 +132,7 @@ def qCanal(url, opcs):
     elif canal.isCRTVG(): return crtvg.CRTVG(url, opcs)
     elif canal.isRTPA(): return rtpa.RTPA(url, opcs)
     elif canal.isAragonTV(): return aragontv.AragonTV(url, opcs)
+    elif canal.isCanalSur(): return canalsur.CanalSur(url, opcs)
     else: return None
 
 def compURL(url):
