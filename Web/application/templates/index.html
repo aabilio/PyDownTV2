@@ -26,6 +26,9 @@
     <link rel="stylesheet" href="/static/widgets/tuktuk.widget.icon.css">
     <link rel="stylesheet" href="/static/widgets/tuktuk.widget.modal.css">
     
+    <!--<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>-->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
+    
 </head>
 
 <body>
@@ -65,13 +68,28 @@
         </div>
     </section>
     
+    <section class="bck light underline navigation ">
+        <div class="row text center">
+            <nav class="group text bold">
+                <a href="{{ url_for('home') }}" class="active"><span class="icon download"></span>Descargar!</a>
+                <a href="#"><span class="icon tag"></span>FAQ y Ayuda</a>
+                <a href="#"><span class="icon cube"></span>Televisiones Soportadas</a>
+                <a href="#"><span class="icon cog"></span>Apps</a>
+                <a href="https://www.facebook.com/webpydowntv"><span class="icon facebook"></span>Facebook</a>
+                <a href="https://twitter.com/pydowntv"><span class="icon twitter"></span>Twitter</a>
+                <a href="https://github.com/aabilio/PyDownTV2"><span class="icon github"></span>El proyecto en Github</a>
+                
+            </nav>
+        </div>
+    </section>
+    
     <!-- DIV para resltados de búsqueda -->
 	{% if videos %}
 	{% for vid in videos %}
 	<section class="bck darkest landing text center color white" style="padding: 25px 0;">
 		<div class="row text center margin_bottom">
         <div class="column_8 offset_2">
-            <h4 class="text color theme">{{ urlOrig }}</h4>
+            <h4 class="text color theme"><a href="{{ urlOrig }}">{{ urlOrig }}</a></h4>
             <br />
         </div>
 	    </div>
@@ -93,24 +111,25 @@
 				<ol class="square">
 					{% set tit = titulos[loop.index0].decode('utf8')|safe %}
 					{% for parte in vid['url_video'] %}
-					<li style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a href="{{ parte }}">{{ tit }}</a></li>
+					<li style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a href="{{ parte }}" style="text-decoration: underline;">{{ tit }}</a></li>
 					{% endfor %}
 				</ol>
 				
 				{% if vid['tipo'] == 'rtmp' %}
 				<p><strong>Comandos para rtmpdump:</strong></p>
-				<ul class="enlaces">
+				<ol class="square">
 					{% for cmd in vid['rtmpd_cmd'] %}
-					<li>Parte {{ loop.index0+1 }}: <span id="cmd">{{ cmd }}</span></li>
+					<li style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><span id="cmd">{{ cmd }}</span></li>
 					{% endfor %}
-				</ul>
+				</ol>
 				{% endif %}
 	            <!--<h1 class="icon share text color theme"></h1>
 	            <h5>2. Pega la URL</h5>
 	            <small>Ahora, en esta página, pegas lo que copiaste en el cuadro de búsqueda que se encuentra arrriba y le das a Buscar!</small>-->
 	        </div>
-	    </div>
+	    </div>	   
 	</section>
+	<div style="height: 5px; background-color: white;"><!--separación entre resultados de vídeos--></div>
 	{% endfor %}
 	{% endif %}
 	<!-- FIN DIV Resultados de búsqueda -->
@@ -179,10 +198,18 @@
                 <p class="text bold">Made by...</p>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea similique fugit debitis saepe dolorem
             </div>-->
-            <div class="column_4 offset_8">
+            <div class="column_4">
+	            <small>
+	                &copy; Copyleft 2011 by <a href=http://aabilio.tumblr.com/>aabilio</a> // Powered by <a href="http://flask.pocoo.org/">Flask</a> &amp; <a href="https://appengine.google.com/">GAE</a> &amp; <a href="http://tuktuk.tapquo.com/">tuktuk</a>
+	            </small>
+            </div>
+            <div class="column_4 offset_4">
                 <!--<p class="text bold">Sobre..</p>-->
-                <small>
+                <!--<small>
                     &copy; Copyleft 2011 by <a href=http://aabilio.tumblr.com/>aabilio</a> // Powered by <a href="http://flask.pocoo.org/">Flask</a> &amp; <a href="https://appengine.google.com/">GAE</a> &amp; <a href="http://tuktuk.tapquo.com/">tuktuk</a>
+                </small>-->
+                <small>
+                	Importante: <a href="#">Aviso Legal</a>
                 </small>
             </div>
         </div>
@@ -197,13 +224,13 @@
 		{% for message in get_flashed_messages() %}
         <div class="margin_bottom">{{ message }}</div>
         {% endfor %}
-        <button data-action="close" class="button">OK</button>
+        <button data-action="close" class="button anchor cancel">OK</button>
     </div>
     <!-- TUKTUK.WIDGETS -->
-    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
     <script src="/static/widgets/tuktuk.widget.modal.js"></script>
     {% if get_flashed_messages() %}
     <script>TukTuk.Modal.show("small_modal");</script>
     {% endif %}
+    
 </body>
 </html>

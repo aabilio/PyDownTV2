@@ -15,3 +15,10 @@
 	max-width: 100px;
 	max-height: 100px;
 }
+
+#cmd {
+	font-family: "Andale Mono", "Courier New", Courier, "Nimbus Mono L", monospace;
+	font-size:smaller;
+	background-color:white;
+	color:black;
+}

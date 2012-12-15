@@ -26,6 +26,7 @@ import Utiles
 import Descargar
 import Error
 
+from base64 import b64decode as p
 import aes
 
 url_validas = ["mitele.es"]
@@ -38,7 +39,6 @@ class MiTele(Canal.Canal):
     #URL_TIME  = "http://www.mitele.es/media/clock.php"
     URL_TIME = "http://servicios.telecinco.es/tokenizer/clock.php"
     TOKENIZER = "/tokenizer/tk3.php"
-    PASSWD = "xo85kT+QHz3fRMcHMXp9cA"
     URL_POST = "servicios.mitele.es"
     
     def __init__(self, url="", opcs=None):
@@ -59,10 +59,9 @@ class MiTele(Canal.Canal):
         self.debug(u"Probando el que era el Método 3")
         AES = aes.AES() 
         tokenizer = self.TOKENIZER
-        passwd = self.PASSWD
         server_time = Descargar.get(self.URL_TIME).strip()
         toEncode = server_time+";"+ID+";"+startTime+";"+endTime
-        data = AES.encrypt(toEncode, passwd, 256)
+        data = AES.encrypt(toEncode, p('eG84NWtUK1FIejNmUk1jSE1YcDljQQ=='), 256)
         post_args = {
                     'hash' : data,
                     'id' : ID,

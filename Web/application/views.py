@@ -175,7 +175,7 @@ def home():
     try:
         info = canal.getInfo()
     except Error.GeneralPyspainTVsError, e:
-        flash(u"ERROR al recuperar el vídeo: %s" % e.__srt__())
+        flash(u"ERROR al recuperar el vídeo: %s" % e.__str__())
         return redirect(url_for('home'))
         #return render_template("api.html", messages=msg)
     except:
