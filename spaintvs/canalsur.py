@@ -137,8 +137,8 @@ class CanalSur(Canal.Canal):
             desc = html.split("<div class=\"bloqEntradillaEnNoticia\">")[1].split("<p>")[1].split("</p>")[0].strip().decode('string-escape')
         except:
             desc = u"Vídeo de Canal Sur".encode("utf8")
-        img = None
-        img = self.URL_CANALSUR + Utiles.recortar(html, "image=", "\"")
+        try: img = self.URL_CANALSUR + Utiles.recortar(html, "image=", "\"")
+        except: img = None
         return {"exito" : True,
                 "num_videos" : 1,
                 "mensaje"   : u"URL obtenido correctamente",

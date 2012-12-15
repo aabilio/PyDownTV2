@@ -23,20 +23,29 @@ app.add_url_rule('/', 'home', view_func=views.home, methods=['GET', 'POST'])
 # Help Page
 app.add_url_rule('/ayuda', 'ayuda', view_func=views.ayuda, methods=['GET', 'POST'])
 
+# Channels Page
+app.add_url_rule('/canales', 'canales', view_func=views.canales, methods=['GET', 'POST'])
+
 # Spintvs API page
 app.add_url_rule('/api', 'api', view_func=views.api, methods=['GET', 'POST'])
+
+# Apps page
+app.add_url_rule('/apps', 'apps', view_func=views.apps, methods=['GET', 'POST'])
+
+# Legal page
+app.add_url_rule('/legal', 'legal', view_func=views.legal, methods=['GET', 'POST'])
 
 # Say hello
 app.add_url_rule('/hello/<username>', 'say_hello', view_func=views.say_hello)
 
 # Examples list page
-app.add_url_rule('/examples', 'list_examples', view_func=views.list_examples, methods=['GET', 'POST'])
+#app.add_url_rule('/examples', 'list_examples', view_func=views.list_examples, methods=['GET', 'POST'])
 
 # Contrived admin-only view example
-app.add_url_rule('/admin_only', 'admin_only', view_func=views.admin_only)
+#app.add_url_rule('/admin_only', 'admin_only', view_func=views.admin_only)
 
 # Delete an example (post method only)
-app.add_url_rule('/examples/delete/<int:example_id>', view_func=views.delete_example, methods=['POST'])
+#app.add_url_rule('/examples/delete/<int:example_id>', view_func=views.delete_example, methods=['POST'])
 
 
 ## Error handlers

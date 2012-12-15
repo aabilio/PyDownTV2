@@ -1,4 +1,3 @@
-{{ messages }}
 <!doctype html>
 <html lang="es">
 <head>
@@ -59,7 +58,7 @@
                 <a href="{{ url_for('ayuda') }}"><span class="icon tag"></span>FAQ y Ayuda</a>
                 <a href="{{ url_for('canales') }}"><span class="icon cube"></span>Televisiones Soportadas</a>
                 <a href="{{ url_for('apps') }}"><span class="icon star"></span>Apps</a>
-                <a href="{{ url_for('api') }}" class="active"><span class="icon cog"></span>API</a>
+                <a href="{{ url_for('api') }}"><span class="icon cog"></span>API</a>
                 <a href="https://github.com/aabilio/PyDownTV2"><span class="icon github"></span>El proyecto en Github</a>
                 
             </nav>
@@ -67,7 +66,25 @@
     </section>
     
     <section class="bck lightest text justify">
-    	
+    	<div class="row ">
+    		<h1 class="text color theme">Información Importante</h1>
+    		<br />
+    		<p class="text book">
+    			La aplicación de PyDownTV intenta encontrar los vídeos "de la forma en la que lo haría un navegador" y es por eso que 
+    			<span class="text normal" style="background-color: black; color: white;">PyDownTV NO almacena en ningún momento ningún contenido audiovisial ni
+    			ninguna otra información de las cadenas de televisión que soporta.</span><br /><br />
+    			PyDownTV solo <span class="text normal" style="background-color: black; color: white;">busca</span> y 
+    			<span class="text normal" style="background-color: black; color: white;">proprorciona los enlaces a los vídeos</span>.<br /><br />
+    			Aún teniendo en cuenta lo anterior, debes saber, que los enlaces proporcionados por esta web, pertenecen a los servidores de las propias
+    			cadenas, y que los vídeos alojados allí, pueden estar protegidos con derechos de autor por las leyes de propiadad intelectual.<br /><br />
+    			Por eso <span class="text normal" style="background-color: black; color: white;">usted</span> como usuario de esta web, <span class="text normal" style="background-color: black; color: white;">debe conocer y aceptar las Condiciones del Servicio de las respectivas cadenas soportadas por esta web</span>
+    			así como de cumplir con las leyes de propiedad intelectual.<br /><br /><br />
+    			PyDownTV <span class="text normal" style="background-color: black; color: white;">no</span> conoce ni tiene relación directa ni indirecta alguna con las cadenas de TV que soporta.<br /><br />
+    			<span class="text normal" style="background-color: black; color: white;">PyDownTV no obtiene ningún beneficio</span>, ni directo, ni indirecto, proveniente del manteniemiento y publicaicón de esta web.<br /><br />
+    			<span class="text normal" style="background-color: black; color: white;">Ni PyDownTV ni ninguno de sus desarrolladores se hace responsable del mal uso que 
+    			por parte de los usuarios de esta web se pueda hacer de la aplicación (PyDownTV)</span>
+    		</p>
+    	</div>
     </section>
 
     <!-- ========================== FOOTER ========================== -->

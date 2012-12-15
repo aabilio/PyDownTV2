@@ -23,9 +23,9 @@
 	color:black;
 }
 
-
 .question {
-	font-weight: bold;
+	/*font-weight: bold;*/
+	font-size: 1.3em;
 	cursor: pointer;
 	margin: 0;
 	padding: 10px;

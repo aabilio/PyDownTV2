@@ -12,7 +12,7 @@ app = Flask('application')
 app.config.from_object('application.settings')
 
 # Enable profiler (enabled in non-production environ only)
-GAEMiniProfiler(app)
+#GAEMiniProfiler(app)
 
 # Pull in URL dispatch routes
 import urls
