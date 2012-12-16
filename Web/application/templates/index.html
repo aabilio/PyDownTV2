@@ -216,11 +216,11 @@
 		<div class="row text center book margin_top">
 			{% for l in last %}
             <div class="column_3">
-            	<div class="row">
+            	<div class="row" style="max-width: 267px;">
                 	<img src="{{ l.urlImg }}" alt="{{ l.vidName }}" style="outline: 0;  max-width: 210px; max-height: 124px; height: auto;  border: 1px solid #CCC;  background: #F3F3F3;  padding: 6px;"/>
 	                <br />
-	                <small class="text normal color theme">{{ l.vidTit }}</small><br />
-	                <small class="icon download text thin color theme"><a style="color: white;" href="{{ url_for('home', url=l.urlOrig)|safe }}">Obtener Enlace!</a></small>
+	                <small class="text normal color theme" style="max-width: 210px">{{ l.vidTit.decode('utf8')|safe }}</small><br />
+	                <small class="icon download text thin color theme"><a style="color: white;" href="{{ url_for('home', url=l.urlOrig)|safe }}"> Obtener Enlace!</a></small>
             	</div>
             </div>
             {% endfor %}
