@@ -31,7 +31,13 @@
      <!-- Para el FAQ -->
     <script>
     	$(document).ready(function() {
-			$('.answer-wrapper').hide();
+    		var url = window.location.href;
+    		if( url.indexOf( "#" ) != -1 ){
+    			$('.answer-wrapper').show();
+    		}
+    		else {
+    			$('.answer-wrapper').hide();
+    		}
 		
 			$('.question').live('click', function() {
 				$(this).next().slideToggle();
@@ -43,10 +49,7 @@
 	          		$('.answer-wrapper').slideToggle();
 	          }
 	        );
-		});
-		
-		
-        
+		});  
     </script>
     
     
@@ -57,7 +60,7 @@
     <header class="bck darkest padding_top padding_bottom">
         <div class="row text color white shadow">
             <div class="column_4">
-                <a href="{{ url_for('home') }}" class="logo text normal color white">Py<span class="text book">DownTV</span> web</a>
+                <a href="{{ url_for('home') }}" class="logo text normal color white">Py<span class="text book">DownTV</span> web<img src="/static/img/favicon.png"/></a>
             </div>
             <div class="column_6 offset_2 text right">
                 <span class="text bold">Síguenos en:</span>
@@ -130,10 +133,10 @@
                 </p>
             </div>
             <p class="question text bold">
-            	¿Y cómo se descargan los vídeos "rtmp"?
+            	<a style="color: black;" name="DescargarRtmp">¿Y cómo se descargan los vídeos "rtmp"?</a>
             </p>
             <div class="answer-wrapper">
-                <p class="answer">https://github.com/aabilio/PyDownTV2/tree/master/Escritorio
+                <p class="answer">
                 	Esos vídeos que aparecen como "rtmp", no se pueden descargar directamente haciendo clic con el botón derecho del ratón.
                 	Necesitarás un programa especial. En <a href=">https://github.com/aabilio/PyDownTV2/tree/master/Escritorio"><span class="icon github">GitHub</span></a>
                 	estamos desarrollando una versión de Escritorio sobre todo para ayudar en la descarga de estos vídeos.
@@ -208,6 +211,64 @@
                 </p>
             </div>
             <p class="question text bold">
+            	<a style="color: black;" name="ProblemaMiTele">Mi Tele descarga un archivo de poco tamaño en vez del vídeo</a>
+            </p>
+            <div class="answer-wrapper">
+                <p class="answer">
+                	No pasa nada, vas a poder descargarlos, pero <span style="background-color: black; color: white;">tienes que ser rápid@ ;)</span><br />
+                	Los vídeos de MiTele, al generarse el enlace para aser descargados desde el servidor de MiTele, <span style="background-color: black; color: white;">sino se accede a ellos
+                	en poco segundos caducan</span>, es por eso, que solo se descarga un archivo (.html) de poco tamaño.<br /><br />
+                	Para porder descargar los vídeos de MiTele hay que ser rápidos. Tan rápidos, que 
+                	<span style="background-color: black; color: white;">no da tiempo a hacer clic derecho con el ratón</span>
+                	para guardarlo y descargarlo.<br />
+                	Por eso propongo unas opciones:
+                	<ul class="normal">
+                		<li>
+                			<span style="background-color: black; color: cyan;">Usando Chrome:</span>
+                			tienes que hacer un simple <span style="background-color: black; color: white;">clic normal</span> 
+                			con el ratón, pero <span style="background-color: black; color: white;">mientras mantienes presionada la tecla "Alt"</span>
+                			del teclado.<br />
+                			La tecla "Alt" es una tecla que suele estar situada en la primera fila de los teclados, empezando por
+                			abajo. Suele estar tanto a la derecha como a la izquierda de la barra espaciadora, justo después de la tecla "Control" o "Ctrl".<br/>
+                			El vídeo se descargará autimaticamente, el único inconviente es que no se puede guardar con un nombre elegido
+                			pero una vez terminada las descarga le podrás cambiar el nombre.
+                		</li>
+                		<li>
+                			<span style="background-color: black; color: cyan;">Usando Firefox:</span>
+                			tienes que hacer un <span style="background-color: black; color: white;">clic con el botón derecho</span> 
+                			del ratón, pero <span style="background-color: black; color: white;">mientras mantienes presionada la tecla "Shift"</span>
+                			del teclado.<br />
+                			La tecla "Shift" es una tecla que suele estar situada en la segunda fila en los teclados, empezando por
+                			abajo. Suele estar tanto a la derecha como a la izquierda del todo de esta segunda línea.
+                			Es la tecla que se utiliza para poner una Mayúscula simple (por eso suele poner también "Mayus" y también
+                			suele estar representada por una flecha con sentido ascendente).<br/>
+                			El vídeo se descargará autimaticamente, el único inconviente es que no se puede guardar con un nombre elegido
+                			pero una vez terminada las descarga le podrás cambiar el nombre.
+                		</li>
+                		<li>
+                			<span style="background-color: black; color: cyan;">En otros navegadores:</span>
+                			En algunos navegadores como por ejemplo <span style="background-color: black; color: white;">Firefox</span> 
+                			permiten definir el comportamiento del mismo según que tipo de enlace intente abrir el usuario.
+                			Por ello podréis cambiar el funcionamiento del navegador para que cuando detecte un archivo MP4, en vez de
+                			intentar abrirlo con un plugin, lo descarge directamente, así solo se tendrá que realizar un clic normal rápido sobre
+                			el enlace.<br />
+                			En Firefox es fácil y se hace en opciones de contenido. Allí tendréis que asociar la apertura de los archivos .mp4
+                			(se puede hacer una búsqueda utilizando el cuadro para encontrarlo antes) su descarga directamente.
+                		</li>
+                		<li>
+                			<span style="background-color: black; color: cyan;">Para Internet Explorer y Opera:</span> no conozco 
+                			cómo se puede descargar un vídeo de manera más rápida que la normal (clic derecho y "guardar archivo como...")
+                			por lo que recomiendo para esos usuarios es, que utilicen, aunque sea solo para utilizar esta web, Google
+                			Chrome o Firefox. Y utilicen los métodos descritos más arriba.
+                		</li>
+                		<li>
+                			<span style="background-color: black; color: white;">De manera personal, recomiendo Google Chrome 
+                			para el uso de esta web</span>
+                		</li>
+                	</ul>
+                </p>
+            </div>
+            <p class="question text bold">
             	¿Qué hago si PyDownTV no soporta un canal del cual quiero descargar un vídeo?
             </p>
             <div class="answer-wrapper">
@@ -233,7 +294,7 @@
                 </p>
             </div>
              <p class="question text bold">
-            	Tengo una sugerencia, me gustaría que...
+            	Tengo una sugerencia: "Me gustaría que..."
             </p>
             <div class="answer-wrapper">
                 <p class="answer">
@@ -255,11 +316,11 @@
                 	</ol>
                 </p>
             </div>
-            <p class="question text bold">
+            <!--<p class="question text bold">
             </p>
             <div class="answer-wrapper">
                 <p class="answer"></p>
-            </div>
+            </div>-->
         </div>
     </section>
     
