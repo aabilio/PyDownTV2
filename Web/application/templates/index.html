@@ -94,7 +94,7 @@
 	    <div class="row text justify book margin_top">
 	        <div class="column_4">
 	        	<div class="video_img">
-					<img src="{{ vid['url_img'] }}" alt="imagen del video" style="outline: 0;  max-width: 96%;  height: auto;  border: 1px solid #CCC;  background: #F3F3F3;  padding: 6px;"/>
+					<img src="{{ vid['url_img'] }}" alt="{{ titulos[loop.index0].decode('utf8')|safe }}" style="outline: 0;  max-width: 96%;  height: auto;  border: 1px solid #CCC;  background: #F3F3F3;  padding: 6px;"/>
 				</div>
 	            <!--<h1 class="icon search text color theme"></h1>
 	            <h5>1. Copia la URL</h5>
@@ -203,6 +203,31 @@
         </div>
         
     </section>
+    
+    <!-- DIV para Últimos vídeos -->
+	{% if last %}
+	<section id="lastVids" class="bck darkest features">
+		<div class="row text center margin_bottom">
+            <div class="column_12">
+                <h1 class="text color theme">Últimos vídeos descargados</h1><!--<h5><a href="#">Ver más...</a></h5>-->
+                <br />
+            </div>
+        </div>
+		<div class="row text center book margin_top">
+			{% for l in last %}
+            <div class="column_3">
+            	<div class="row">
+                	<img src="{{ l.urlImg }}" alt="{{ l.vidName }}" style="outline: 0;  max-width: 210px; max-height: 124px; height: auto;  border: 1px solid #CCC;  background: #F3F3F3;  padding: 6px;"/>
+	                <br />
+	                <small class="text normal color theme">{{ l.vidTit }}</small><br />
+	                <small class="icon download text thin color theme"><a style="color: white;" href="{{ url_for('home', url=l.urlOrig)|safe }}">Obtener Enlace!</a></small>
+            	</div>
+            </div>
+            {% endfor %}
+        </div>	   
+	</section>
+	{% endif %}
+	<!-- FIN DIV Ultimos vídeos -->
 
     <!-- ========================== FOOTER ========================== -->
     <footer class="bck dark text color white">

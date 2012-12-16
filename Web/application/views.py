@@ -16,9 +16,11 @@ from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 
 from flask import render_template, flash, url_for, redirect, Response, json, request
 
-from models import ExampleModel
-from decorators import login_required, admin_required
-from forms import ExampleForm
+#from models import ExampleModel
+#from decorators import login_required, admin_required
+#from forms import ExampleForm
+
+from models import RegistroDescargas
 
 import re
 
@@ -155,15 +157,23 @@ def compURL(url):
 
 ## Vistas a partir de aquí:
 
-def home():
+def home(urlOrig=None):
     opcs = _default_opcs
-    if request.method == "GET": # La URL se pasa por parámetro http://web.pydowntv.com/?url=""
-        try:
-            urlOrig = request.args['url']
-        except:
-            return render_template('index.html')
-    else:
-        urlOrig = request.form['urlOrig']
+    
+    # Obtener los últimos vídeos descargados:
+    try:
+        last = RegistroDescargas.gql("order by date DESC LIMIT 4")
+    except:
+        last = None
+    
+    if urlOrig is None:
+        if request.method == "GET": # La URL se pasa por parámetro http://web.pydowntv.com/?url=""
+            try:
+                urlOrig = request.args['url']
+            except:
+                return render_template('index.html', last=last)
+        else:
+            urlOrig = request.form['urlOrig']
     
     if urlOrig == u'' or urlOrig == u"Introduce AQUÍ la URL del vídeo a descargar...":
         flash(u"No has introducido ninguna url.. oO")
@@ -180,7 +190,7 @@ def home():
     if compURL(urlOrig):
         canal = qCanal(urlOrig, opcs)
         if canal == None:
-            flash(u"Lo que has introducido no corresponde con ningún canal soportado por PyDownTV")
+            flash(u"Lo que has introducido no corresponde con ningún canal soportado por PyDownTV\n")
             return redirect(url_for('home'))
             #return render_template("index.html", msgs=TVnoSoportada)
     else: #TODO: meter huevos de pascua aquí :P
@@ -198,18 +208,28 @@ def home():
         flash(u"ERROR al recuperar el vídeo. ¿Es una URL válida?")
         return redirect(url_for('home'))
         #return render_template("api.html", messages=ErrorDesconocido)
+    
+    # Guardar Registro antes de renderizar: .decode('iso-8859-1').encode('utf8')
+    try: 
+        reg = RegistroDescargas(
+                                urlOrig = urlOrig,
+                                urlImg = info["videos"][0]["url_img"],
+                                vidTit = info["titulos"][0]#,
+                                #vidDesc = info["descs"][0]
+                                )
+        reg.put()
+    except: pass #TODO: Mejorar esto (codificación...)
 
-    return render_template("index.html",
+    return render_template(
+                           "index.html",
                            videos=info["videos"],
                            titulos=info["titulos"],
                            descripciones=info["descs"],
-                           urlOrig=urlOrig)
+                           urlOrig=urlOrig,
+                           last=last
+                           )
 
 
-#    return '''Web en Construcción<br \>
-#    Nueva API para el módulo spaintvs.<br \>
-#    Peticiones GET a: http://pydowntv2.appspot.com/api?url=<br \>
-#    spaintvs en GitHub <a href="https://github.com/aabilio/PyDownTV2/">aquí</a>'''
 
 def api(url=None):
     opcs = _default_opcs
