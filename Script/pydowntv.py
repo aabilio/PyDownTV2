@@ -42,7 +42,8 @@ _url_canales = {
                "aragontv": ["aragontelevision.es"],
                "canalsur": ["canalsur.es", "canalsuralacarta.es"],
                "canalextremadura": ["canalextremadura.es"],
-               "mtv": ["mtv.es", "mtv.com"]
+               "mtv": ["mtv.es", "mtv.com"],
+               "telemadrid": ["telemadrid.es"]
                }
 _mod_tv = {
            "rtve": {"mod":tve.TVE,"comentario":"[INFO] Radio Televión Española", "urls":_url_canales["rtve"]},
@@ -55,7 +56,8 @@ _mod_tv = {
            "aragontv": {"mod":aragontv.AragonTV,"comentario":"[INFO] Televisón de Aragón","urls":_url_canales["aragontv"]},
            "canalsur": {"mod":canalsur.CanalSur,"comentario":"[INFO] Canal Sur","urls":_url_canales["canalsur"]},
            "canalextremadura": {"mod":extremadura.CExtremadura,"comentario":"[INFO] Canal Extremadura","urls":_url_canales["canalextremadura"]},
-           "mtv": {"mod":mtv.MTV,"comentario":"[INFO] MTV","urls":_url_canales["mtv"]}
+           "mtv": {"mod":mtv.MTV,"comentario":"[INFO] MTV","urls":_url_canales["mtv"]},
+           "telemadrid": {"mod":telemadrid.Telemadrid,"comentario":"[INFO] Telemadrid","urls":_url_canales["telemadrid"]}
            #"nombre" : {"mod":rutaAlaClase, "comentario":"infoParaImprimir", "urls":_url_canales["canal"]}
            }
 # Fin de edición
