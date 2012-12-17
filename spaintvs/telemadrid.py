@@ -27,7 +27,7 @@ import Descargar
 import Error
 
 import httplib
-from libs.pyamf import remoting
+from pyamf import remoting
 
 url_validas = ["telemadrid.es"]
 
