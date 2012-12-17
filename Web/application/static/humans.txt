@@ -1,0 +1,11 @@
+/* TEAM */
+	Chef: Abilio Almeida Eiroa	
+	Contact: aabilio [at] gmail.com
+	Twitter: @aabilio
+	From: Vigo, Galcia, Spain
+
+/* SITE */
+	Last update: Always
+	Language: Castellano
+	Doctype: HTML
+	IDE: Aptana Studio 3

@@ -119,8 +119,15 @@ class Canales(object):
         return False
     
     def isCanalExtremadura(self):
-        '''return True si la URL pertenece a Canal Sur'''
+        '''return True si la URL pertenece a Canal Extremadura'''
         urls = ["canalextremadura.es"]
+        for url in urls:
+            if self._url.find(url) != -1: return True
+        return False
+    
+    def isMTV(self):
+        '''return True si la URL pertenece a MTV'''
+        urls = ["mtv.es", "mtv.com"]
         for url in urls:
             if self._url.find(url) != -1: return True
         return False
@@ -143,6 +150,7 @@ def qCanal(url, opcs):
     elif canal.isAragonTV(): return aragontv.AragonTV(url, opcs)
     elif canal.isCanalSur(): return canalsur.CanalSur(url, opcs)
     elif canal.isCanalExtremadura(): return extremadura.CExtremadura(url, opcs)
+    elif canal.isMTV(): return mtv.MTV(url, opcs)
     else: return None
 
 def compURL(url):

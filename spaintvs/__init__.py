@@ -19,7 +19,7 @@
 # Describir los módulos que pueden ser llamados desde fuera de la librería
 
 
-__all__ = ["crtvg", "cuatro", "Error", "grupo_a3", "mitele", "telecinco", "tve", "rtpa", "aragontv", "canalsur", "extremadura"] #Canal, Descargar u Utiles no deberían ser utilizadas fuera del paquete
+__all__ = ["crtvg", "cuatro", "Error", "grupo_a3", "mitele", "telecinco", "tve", "rtpa", "aragontv", "canalsur", "extremadura", "mtv"] #Canal, Descargar u Utiles no deberían ser utilizadas fuera del paquete
 __version__ = "0.0.1"
 __author__ = "aabilio <aabilio@gmail.com>"
 __date__ = "$10-oct-2012 11:01:48$"
