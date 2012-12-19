@@ -22,8 +22,7 @@
 __author__="aabilio"
 __date__ ="$10-oct-2012 11:35:37$"
 
-#import sys
-#import httplib
+
 import urllib
 import urllib2
 
@@ -39,6 +38,8 @@ class TVE(Canal.Canal):
         Clase para manejar los vídeos de la RTVE (todos).
     '''
     
+    URL_RTVE = "http://rtve.es"
+    
     def __init__(self, url="", opcs=None):
         Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
         
@@ -51,6 +52,45 @@ class TVE(Canal.Canal):
     #    - self.debug() mostrar información de debug (está disponible si self.opcs["debug"] es True)
     # Comunicación de errores con nivel de aplicación:
     #    - lanzar la excepción: raise Errors.GeneralPyspainTVsError("mensaje")
+    
+    def __ClanTV(self, html, ID):
+        self.info(u"[INFO] Vídeo de Clan")
+        #html = Descargar.get(self.url)
+        buscar = "/".join(self.url.split("/")[6:9])
+        if not buscar.startswith("videos/"):
+            serie = Utiles.recortar(self.url, "/videos/", "/todos/")
+            buscar = "/videos/"+serie+"/todos/"
+        buscar = str(buscar)
+        #Ir a la página de descripción de vídeos de Clan
+        dataURL = "http://rtve.es/infantil/components/"+html.split(buscar)[0].split("<a rel=\"")[-1].split("\"")[0]+"/videos.xml.inc"
+        self.debug(u"URL Clan data: "+dataURL)
+        data = Descargar.get(dataURL).split("<video id=\""+str(ID))[1].split("</video>")[0]
+        
+        url = self.URL_RTVE+Utiles.recortar(data, "url=\"", "\"")
+        img = Utiles.recortar(data, "url_image=\"", "\"")
+        tit = Utiles.recortar(data, "<title>", "</title>")
+        name = Utiles.recortar(data, "url_name=\"", "\"")+"."+url.split(".")[-1]
+        desc = Utiles.recortar(data, "<sinopsis>", "</sinopsis>").strip()
+         
+        return {"exito" : True,
+                "num_videos" : 1,
+                "mensaje"   : u"URL obtenido correctamente",
+                "videos":[{
+                        "url_video" : [url],
+                        "url_img"   : img,
+                        "filename"  : [name],
+                        "tipo"      : "http",
+                        "partes"    : 1,
+                        "rtmpd_cmd" : None,
+                        "menco_cmd" : None,
+                        "url_publi" : None,
+                        "otros"     : None,
+                        "mensaje"   : None
+                        }],
+                "titulos": [tit],
+                "descs": [desc] if desc is not None else None
+                }
+    
 
     def getInfo(self):
         '''
@@ -98,6 +138,8 @@ class TVE(Canal.Canal):
         
         self.debug(u"ID del vídeo en url = " + videoID)
         
+        #if self.url.find("rtve.es/infantil/") != -1: self.url = self.url.replace("/#","") # Vídeos de Clan a veces falla con el ancla
+        
         # Añadido para vídeos nuevos (periodo de prueba):
         sourceHTML = Descargar.getHtml(self.url).decode('string-escape')
         #sourceHTML = self.toUtf(sourceHTML)
@@ -107,11 +149,14 @@ class TVE(Canal.Canal):
             if videoID_comp != videoID: videoID = videoID_comp
         if sourceHTML.find("<div id=\"video") != -1:
             videoID_comp = sourceHTML.split("<div id=\"video")[1].split("\"")[0]
-            if videoID_comp != videoID: videoID = videoID_comp
+            if videoID_comp != videoID and videoID_comp.isdigit(): videoID = videoID_comp
         ########################################################
         
         self.debug(u"ID del vídeo en HTML = " + videoID_comp if videoID_comp else "No ID en HTML")
         self.log(u"[INFO] ID del Vídeo :", videoID)
+        
+        if self.url.find("rtve.es/infantil/") != -1:
+            return self.__ClanTV(sourceHTML, videoID)
 
         # -- Método 1 Octubre 2012:
         self.debug(u"Probando método de 1 de uno de Octubre de 2012")
