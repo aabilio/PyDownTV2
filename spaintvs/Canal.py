@@ -18,6 +18,7 @@
 
 # Clase abstracta con atributos y métodos comunes a todos los canales
 
+import Descargar
 import Utiles
 import Error
 from dammit import UnicodeDammit
@@ -95,7 +96,9 @@ class Canal(object):
     
     def toUtf(self, html):
         return UnicodeDammit(html).unicode_markup
-        
+    
+    def gethtml(self):
+        return Descargar.get(self.url)
         
     
     

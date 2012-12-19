@@ -146,6 +146,13 @@ class Canales(object):
             if self._url.find(url) != -1: return True
         return False
     
+    def isRTVCYL(self):
+        '''return True si la URL pertenece a Televisión de Castilla y León'''
+        urls = ["rtvcyl.es"]
+        for url in urls:
+            if self._url.find(url) != -1: return True
+        return False
+    
 def qCanal(url, opcs):
     '''
         Comprueba utlizando la clase Canales de que servicio ha recibido la url
@@ -167,6 +174,7 @@ def qCanal(url, opcs):
     elif canal.isMTV(): return mtv.MTV(url, opcs)
     elif canal.isTelemadrid(): return telemadrid.Telemadrid(url, opcs)
     elif canal.isEITB(): return eitb.EITB(url, opcs)
+    elif canal.isRTVCYL(): return rtvcyl.RTVCYL(url, opcs)
     else: return None
 
 def compURL(url):
