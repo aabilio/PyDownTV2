@@ -43,7 +43,8 @@ _url_canales = {
                "canalsur": ["canalsur.es", "canalsuralacarta.es"],
                "canalextremadura": ["canalextremadura.es"],
                "mtv": ["mtv.es", "mtv.com"],
-               "telemadrid": ["telemadrid.es"]
+               "telemadrid": ["telemadrid.es"],
+               "eitb": ["eitb.tv"]
                }
 _mod_tv = {
            "rtve": {"mod":tve.TVE,"comentario":"[INFO] Radio Televión Española", "urls":_url_canales["rtve"]},
@@ -57,7 +58,8 @@ _mod_tv = {
            "canalsur": {"mod":canalsur.CanalSur,"comentario":"[INFO] Canal Sur","urls":_url_canales["canalsur"]},
            "canalextremadura": {"mod":extremadura.CExtremadura,"comentario":"[INFO] Canal Extremadura","urls":_url_canales["canalextremadura"]},
            "mtv": {"mod":mtv.MTV,"comentario":"[INFO] MTV","urls":_url_canales["mtv"]},
-           "telemadrid": {"mod":telemadrid.Telemadrid,"comentario":"[INFO] Telemadrid","urls":_url_canales["telemadrid"]}
+           "telemadrid": {"mod":telemadrid.Telemadrid,"comentario":"[INFO] Telemadrid","urls":_url_canales["telemadrid"]},
+           "eitb": {"mod":eitb.EITB,"comentario":"[INFO] Euskal Irrati Telebista","urls":_url_canales["eitb"]}
            #"nombre" : {"mod":rutaAlaClase, "comentario":"infoParaImprimir", "urls":_url_canales["canal"]}
            }
 # Fin de edición
