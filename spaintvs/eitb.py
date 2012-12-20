@@ -136,8 +136,13 @@ class EITB(Canal.Canal):
                 publisherID = "102076681001"
                 videoID = self.url.split("/")[-1]
                 
-                rtmpdata = self.get_data(publisherID, playerID, const, videoID, playerKey)#['renditions']
-                videos_data = rtmpdata['renditions']
+                try:
+                    rtmpdata = self.get_data(publisherID, playerID, const, videoID, playerKey)#['renditions']
+                    videos_data = rtmpdata['renditions']
+                except:
+                    raise Error.GeneralPyspainTVsError(u"Parece que e vídeo no está disponible en la web")
+                
+                print rtmpdata
                 
                 
                 try: img = rtmpdata['videoStillURL']
@@ -161,7 +166,10 @@ class EITB(Canal.Canal):
                 else:
                     if tit == u"" or tit is None: tit = u"Vídeo de Euskal Irrati Telebista".encode('utf8')
                 
-                name = "VideoEITB.mp4" #TODO: mejorar el filename
+                try:
+                    name = Utiles.formatearNombre(str(rtmpdata['displayName'])+".mp4")
+                except:
+                    name = "VideoEITB.mp4" #TODO: mejorar el filename
 
                 # Devolver 3 vídeos, de las distintas calidades
                 videos = []
@@ -171,11 +179,20 @@ class EITB(Canal.Canal):
                     #montar comando
                     url = str(vid['defaultURL'])
                     #tcurl = url.replace("/&mp4:"+url.split("/&mp4:")[1].split(".mp4")[0]+".mp4", "")
-                    app = "ondemand?"+ url.split(".mp4?")[1]+"&videoId="+videoID+"&lineUpId=&pubId="+publisherID+"&playerId="+playerID
-                    swfurl = "http://admin.brightcove.com/viewer/us20121213.1025/federatedVideoUI/BrightcovePlayer.swf?uid=1355746343102"
-                    playpath = "mp4:"+url.split("mp4:")[1]+"&videoId="+videoID
                     pageurl = self.url
-                    rtmpd_cmd = "rtmpdump -r '"+url+"' app='"+app+"' swfUrl='"+swfurl+"' playpath='"+playpath+"' pageUrl='"+pageurl+"' -o '"+name+"'"
+                    if url.find("edgefcs.net") != -1: #NUEVO edgefcs de AKAMAI
+                        app = "ondemand?"+ url.split(".mp4?")[1]+"&videoId="+videoID+"&lineUpId=&pubId="+publisherID+"&playerId="+playerID
+                        playpath = "mp4:"+url.split("mp4:")[1]+"&videoId="+videoID
+                        swfurl = "http://admin.brightcove.com/viewer/us20121213.1025/federatedVideoUI/BrightcovePlayer.swf?uid=1355746343102"
+                        rtmpd_cmd = "rtmpdump --rtmp '"+url+"' --app='"+app+"' --swfUrl='"+swfurl+"' --playpath='"+playpath+"' --pageUrl='"+pageurl+"' -o '"+name+"'"
+                    else: #Antiguo: brightcove, hay más?
+                        app = url.split("/&")[0].split(".net/")[1]  +"?videoId="+videoID+"&lineUpId=&pubId="+publisherID+"&playerId="+playerID
+                        playpath = "mp4:"+url.split("mp4:")[1].split(".mp4")[0]+".mp4"+"?videoId="+videoID+"&lineUpId=&pubId="+publisherID+"&playerId="+playerID
+                        swfurl = "http://admin.brightcove.com/viewer/us20121218.1107/federatedVideoUI/BrightcovePlayer.swf?uid=1355158765470"
+                        C1 = "B:0"
+                        C2 = "S:" + "&".join(url.split("&")[1:])
+                        rtmpd_cmd = "rtmpdump --rtmp '"+url+"' --app='"+app+"' --swfUrl='"+swfurl+"' --playpath='"+playpath+"' --pageUrl='"+pageurl+"' -C '"+C1+"' -C '"+C2+"' -o '"+name+"'"
+                    
                     ##END: montar comando
                     size = str(vid['frameWidth'])+"x"+str(vid['frameHeight'])
                     
@@ -199,13 +216,13 @@ class EITB(Canal.Canal):
         
         if name:
             name = Utiles.formatearNombre(name)
-    
+            
         return {"exito" : True,
                 "num_videos" : num_videos,
                 "mensaje"   : u"URLs obtenidas correctamente",
                 "videos": videos,
-                "titulos": [tit] if tit is not None else None,
-                "descs": [desc] if desc is not None else None
+                "titulos": [tit]*num_videos if tit is not None else None,
+                "descs": [desc]*num_videos if desc is not None else None
                 }
 
 
