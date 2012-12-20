@@ -116,7 +116,8 @@
 	        	<h4 style="font-size: 1.6em;">{{ titulos[loop.index0].decode('utf8')|safe }}</h4>
 				<p style="color: #bfbfbf;">{{ descripciones[loop.index0].decode('utf8')|safe }}</p>
 				<br />
-				<p><strong class="text bold" style="color: #16a6b6;">Partes: </strong>{{ vid['partes'] }}. <strong class="text bold" style="color: #16a6b6;">Enlaces </strong>{% if vid['tipo'] == "http" %}<span class="text thin color secondary">(Clic derecho: "Guardar enlace como...")</span>{% endif %}<strong style="color: #16a6b6;">:</strong></p>
+				<p><strong class="text bold" style="color: #16a6b6;">Partes: </strong>{{ vid['partes'] }}. <strong class="text bold" style="color: #16a6b6;">Enlaces </strong>{% if vid['tipo'] == "http" %}<span class="text thin color secondary">(Clic derecho: "Guardar enlace como...")</span>{% elif vid['tipo'] == "rtmp" %}<span class="text thin color secondary">(RTMP: Utilizar comando proporcionado para rtmpdump)</span>{% endif %}<strong style="color: #16a6b6;">:</strong></p>
+				{% if vid['mensaje'] %}<p><strong class="text bold" style="color: #16a6b6;">Calidad: </strong><span class="text bold">{{ vid['mensaje'] }}</span></p>{% endif %}
 				<br />
 				<ol class="square">
 					{% set tit = titulos[loop.index0].decode('utf8')|safe %}

@@ -142,24 +142,26 @@ class EITB(Canal.Canal):
                 except:
                     raise Error.GeneralPyspainTVsError(u"Parece que e vídeo no está disponible en la web")
                 
-                print rtmpdata
-                
-                
                 try: img = rtmpdata['videoStillURL']
                 except: img = None
                 
                 desc = None
                 try: desc1 = rtmpdata['longDescription'].encode('utf8') if rtmpdata['longDescription'] is not None else None
-                except: pass
+                except: desc1=None
                 try: desc2 = rtmpdata['shortDescription'].encode('utf8') if rtmpdata['shortDescription'] is not None else None
-                except: pass
+                except: desc2=None
+                try: desc3 = rtmpdata['customFields']['longdescription_c'].encode('utf8') if rtmpdata['customFields']['longdescription_c'] is not None else None
+                except: desc3=None
+                try: desc4 = rtmpdata['customFields']['shortdescription_c'].encode('utf8') if rtmpdata['customFields']['shortdescription_c'] is not None else None
+                except: desc4=None
                 try:
-                    if desc1 is not None: desc = desc1
-                    else:
-                        if desc2 is not None: desc = desc2
+                    if desc1 is not None and desc1 != "" and desc1 != ".": desc = desc1
+                    elif desc2 is not None and desc2 != "" and desc2 != ".": desc = desc2
+                    elif desc3 is not None and desc3 != "" and desc3 != ".": desc = desc3
+                    elif desc4 is not None and desc4 != "" and desc4 != ".": desc = desc4
                 except: desc = u"Vídeo de Euskal Irrati Telebista".encode('utf8')
                 else:
-                    if desc is None or desc == u"": desc = u"Vídeo de Euskal Irrati Telebista".encode('utf8')
+                    if desc is None or desc == "": desc = u"Vídeo de Euskal Irrati Telebista".encode('utf8')
                     
                 try: tit = rtmpdata['displayName'].encode('utf8')
                 except: tit = u"Vídeo de Euskal Irrati Telebista".encode('utf8')
@@ -167,7 +169,7 @@ class EITB(Canal.Canal):
                     if tit == u"" or tit is None: tit = u"Vídeo de Euskal Irrati Telebista".encode('utf8')
                 
                 try:
-                    name = Utiles.formatearNombre(str(rtmpdata['displayName'])+".mp4")
+                    name = Utiles.formatearNombre(str(rtmpdata['displayName'].encode('utf8'))+".mp4")
                 except:
                     name = "VideoEITB.mp4" #TODO: mejorar el filename
 
