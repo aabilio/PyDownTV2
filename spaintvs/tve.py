@@ -53,14 +53,32 @@ class TVE(Canal.Canal):
     # Comunicación de errores con nivel de aplicación:
     #    - lanzar la excepción: raise Errors.GeneralPyspainTVsError("mensaje")
     
+    def __getSerieName(self, url):
+        url = url.split("#/")[1]
+        r=[n for n in url.split("/") 
+           if not n.isdigit() and 
+           n != "videos" and n!="todos"]
+        return r[0] if len(r)==1 else None
+    
     def __ClanTV(self, html, ID):
         self.info(u"[INFO] Vídeo de Clan")
-        #html = Descargar.get(self.url)
-        buscar = "/".join(self.url.split("/")[6:9])
-        if not buscar.startswith("videos/"):
-            serie = Utiles.recortar(self.url, "/videos/", "/todos/")
-            buscar = "/videos/"+serie+"/todos/"
-        buscar = str(buscar)
+        buscar = self.__getSerieName(self.url)
+        if buscar is None:
+            #html = Descargar.get(self.url)
+            buscar = "/".join(self.url.split("/")[6:9])
+            if not buscar.startswith("videos") and not buscar.endswith("todos"):
+                try:
+                    serie = Utiles.recortar(self.url, "/videos/", "/todos/")
+                except: #http://www.rtve.es/infantil/videos-juegos/#/videos/suckers/todos/suckers-ventosas/1605449 ó */
+                    Surl = self.url.split("/")
+                    if Surl[-1] == "": buscar = Surl[-3]
+                    if Surl[-1].isdigit(): buscar = Surl[-2]
+                    else:
+                        raise Error.GeneralPyspainTVsError(u"Error al encontrar la serie. Por favor reporta el error")
+                else:
+                    buscar = "/videos/"+serie+"/todos/"
+            buscar = str(buscar)
+        self.debug(u"Serie:", buscar)
         #Ir a la página de descripción de vídeos de Clan
         dataURL = "http://rtve.es/infantil/components/"+html.split(buscar)[0].split("<a rel=\"")[-1].split("\"")[0]+"/videos.xml.inc"
         self.debug(u"URL Clan data: "+dataURL)
@@ -71,6 +89,8 @@ class TVE(Canal.Canal):
         tit = Utiles.recortar(data, "<title>", "</title>")
         name = Utiles.recortar(data, "url_name=\"", "\"")+"."+url.split(".")[-1]
         desc = Utiles.recortar(data, "<sinopsis>", "</sinopsis>").strip()
+        if desc == "" or desc == " " or desc == ".":
+            desc = u"Vídeo de Clan TV: ".encode('utf8') +  Utiles.recortar(data, "url_name=\"", "\"")
          
         return {"exito" : True,
                 "num_videos" : 1,
