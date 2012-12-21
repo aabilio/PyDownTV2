@@ -207,8 +207,8 @@ class EITB(Canal.Canal):
                             "rtmpd_cmd" : [rtmpd_cmd],
                             "menco_cmd" : None,
                             "url_publi" : None,
-                            "otros"     : None,
-                            "mensaje"   : size
+                            "otros"     : size,
+                            "mensaje"   : None
                             }
                     videos.append(temp)
                     

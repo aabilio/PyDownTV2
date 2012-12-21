@@ -45,7 +45,8 @@ _url_canales = {
                "mtv": ["mtv.es", "mtv.com"],
                "telemadrid": ["telemadrid.es"],
                "eitb": ["eitb.tv"],
-               "rtvcyl": ["rtvcyl.es"]
+               "rtvcyl": ["rtvcyl.es"],
+               "rtvcm": ["rtvcm.es"]
                }
 _mod_tv = {
            "rtve": {"mod":tve.TVE,"comentario":"[INFO] Radio Televión Española", "urls":_url_canales["rtve"]},
@@ -61,7 +62,8 @@ _mod_tv = {
            "mtv": {"mod":mtv.MTV,"comentario":"[INFO] MTV","urls":_url_canales["mtv"]},
            "telemadrid": {"mod":telemadrid.Telemadrid,"comentario":"[INFO] Telemadrid","urls":_url_canales["telemadrid"]},
            "eitb": {"mod":eitb.EITB,"comentario":"[INFO] Euskal Irrati Telebista","urls":_url_canales["eitb"]},
-           "rtvcyl": {"mod":rtvcyl.RTVCYL,"comentario":"[INFO] Radio Televisión de Castilla y León","urls":_url_canales["rtvcyl"]}
+           "rtvcyl": {"mod":rtvcyl.RTVCYL,"comentario":"[INFO] Radio Televisión de Castilla y León","urls":_url_canales["rtvcyl"]},
+           "rtvcm": {"mod":rtvcm.RTVCM,"comentario":"[INFO] Radio Televisión de Castilla-La mancha","urls":_url_canales["rtvcm"]}
            #"nombre" : {"mod":rutaAlaClase, "comentario":"infoParaImprimir", "urls":_url_canales["canal"]}
            }
 # Fin de edición
