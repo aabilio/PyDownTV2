@@ -115,14 +115,15 @@ class EITB(Canal.Canal):
         html = Descargar.get(self.url)
         
         #TODO: Incluír este soporte para mp3
-#        if self.url.find("audios/") != -1 or self.url.find("audioak/") != -1:
-#            self.info(u"[INFO] Audio")
-#            name = html.split("<title>")[1].split("<")[0]
-#            streamMP3 = html.split("<a id=\"descargaMp3\"")[1].split(">")[0]
-#            url = self.URL_EITB + streamMP3.split("href=\"")[1].split("\"")[0]
-#            name += ".mp3"
+        if self.url.find("audios/") != -1 or self.url.find("audioak/") != -1:
+            raise Error.GeneralPyspainTVsError(u"Audios aún no soportados. Lo estarán dentro de poco ;)")
+            self.info(u"[INFO] Audio")
+            name = html.split("<title>")[1].split("<")[0]
+            streamMP3 = html.split("<a id=\"descargaMp3\"")[1].split(">")[0]
+            url = self.URL_EITB + streamMP3.split("href=\"")[1].split("\"")[0]
+            name += ".mp3"
             
-        if self.url.find("videos/") != -1 or self.url.find("bideoak/") != -1 or self.url.find("video/") != -1 :
+        elif self.url.find("videos/") != -1 or self.url.find("bideoak/") != -1 or self.url.find("video/") != -1 :
             if html.find("<a id=\"descargaMp4\"") != -1:
                 name = html.split("<title>")[1].split("<")[0]
                 streamMP4 = html.split("<a id=\"descargaMp4\"")[1].split(">")[0]

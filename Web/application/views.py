@@ -160,6 +160,13 @@ class Canales(object):
             if self._url.find(url) != -1: return True
         return False
     
+    def isTV3(self):
+        '''return True si la URL pertenece a Televisió de Catalunya'''
+        urls = ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat"]
+        for url in urls:
+            if self._url.find(url) != -1: return True
+        return False
+    
 def qCanal(url, opcs):
     '''
         Comprueba utlizando la clase Canales de que servicio ha recibido la url
@@ -183,6 +190,7 @@ def qCanal(url, opcs):
     elif canal.isEITB(): return eitb.EITB(url, opcs)
     elif canal.isRTVCYL(): return rtvcyl.RTVCYL(url, opcs)
     elif canal.isRTVCM(): return rtvcm.RTVCM(url, opcs)
+    elif canal.isTV3(): return tv3.TV3(url, opcs)
     else: return None
 
 def compURL(url):

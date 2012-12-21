@@ -102,7 +102,6 @@ class RTVCM(Canal.Canal):
             except: img = img_b if img_b is not None else None
             
             rVideos = []
-            print url
             for i in range(len(videos)):
                 c = "rtmpdump -r '"+urls[i]+"' -o '"+names[i]+"'"
                 temp = {
