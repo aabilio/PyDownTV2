@@ -260,7 +260,9 @@ def home(urlOrig=None):
         flash(u"ERROR al recuperar el vídeo: %s" % e.__str__())
         return redirect(url_for('home'))
         #return render_template("api.html", messages=msg)
-    except:
+    except Exception, e:
+        #flash(unicode(e.__str__()))
+        #return redirect(url_for('home'))
         flash(u"ERROR al recuperar el vídeo. ¿Es una URL válida?")
         return redirect(url_for('home'))
         #return render_template("api.html", messages=ErrorDesconocido)

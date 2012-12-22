@@ -1,9 +1,1 @@
-{
-    "name": "pydowntv", 
-    "license": "MPL 1.1/GPL 2.0/LGPL 2.1", 
-    "author": "aabilio@gmail.com", 
-    "version": "0.1", 
-    "fullName": "pydowntv", 
-    "id": "jid1-AMD7brMR99co6w", 
-    "description": "Descarga vídeos de las principales webs de TV españolas a través de pydowntv.com"
-}
+{"license": "", "description": "Descarga v\u00eddeos de las webs de las principales televisiones espa\u00f1olas", "contributors": [], "author": "aabilio", "url": "", "dependencies": ["api-utils", "addon-kit"], "version": "0.2.rev4", "lib": "lib", "fullName": "PyDownTV", "main": "main", "id": "jid1-AMD7brMR99co6w", "name": "pydowntv"}
