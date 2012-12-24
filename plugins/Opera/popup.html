@@ -14,11 +14,7 @@
     function open_pydowntv(){
       var focused = opera.extension.bgProcess.opera.extension.tabs.getFocused()
       var tabUrl = focused.url;
-      if (tabUrl.search("rtpa.es") != -1)
-      {
-        tabUrl = escape(tabUrl);
-      }
-      var url_pydowntv = "http://web.pydowntv.com/?url="+tabUrl;
+      var url_pydowntv = "http://web.pydowntv.com/?url="+escape(tabUrl);
       opera.extension.bgProcess.opera.extension.tabs.create(
       {
         url: url_pydowntv, 
@@ -29,7 +25,7 @@
   </head>
   <body>
     <div id="pop">
-    <p>Recarga y vuelve a presionar este icono para que funcione ;)</p>
+    <p>Cargando pydowntv...</p>
     <script type="text/javascript">
       open_pydowntv();
     </script>

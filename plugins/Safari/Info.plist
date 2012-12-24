@@ -5,7 +5,7 @@
 	<key>Author</key>
 	<string>aabilio@gmail.com</string>
 	<key>Builder Version</key>
-	<string>7534.53.10</string>
+	<string>7534.53.11</string>
 	<key>CFBundleDisplayName</key>
 	<string>pydowntv</string>
 	<key>CFBundleIdentifier</key>
@@ -14,8 +14,6 @@
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
-	<key>CFBundleVersion</key>
-	<string>1</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Global Page</key>

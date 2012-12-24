@@ -7,11 +7,7 @@ function performCommand(event) {
 	// Make sure event comes from the button
 	if (event.command == "open-pydowntv") {
 		var tabUrl = safari.application.activeBrowserWindow.activeTab.url;
-		if (tabUrl.search("rtpa.es") != -1)
-        {
-          tabUrl = escape(tabUrl);
-        }
-        var url = "http://web.pydowntv.com/?url="+tabUrl;
+        var url = "http://web.pydowntv.com/?url="+escape(tabUrl);
 		var newTab = safari.application.activeBrowserWindow.openTab(); // Open a new tab
 		newTab.url = url; // Set tab URL to nettuts
 	}

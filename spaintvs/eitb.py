@@ -183,11 +183,12 @@ class EITB(Canal.Canal):
                     url = str(vid['defaultURL'])
                     #tcurl = url.replace("/&mp4:"+url.split("/&mp4:")[1].split(".mp4")[0]+".mp4", "")
                     pageurl = self.url
-                    if url.find("edgefcs.net") != -1: #NUEVO edgefcs de AKAMAI
+                    if url.find("edgefcs.net") != -1: #NUEVO edgefcs de AKAMAI (thanks to http://blog.tvalacarta.info/)
                         app = "ondemand?"+ url.split(".mp4?")[1]+"&videoId="+videoID+"&lineUpId=&pubId="+publisherID+"&playerId="+playerID
                         playpath = "mp4:"+url.split("mp4:")[1]+"&videoId="+videoID
                         swfurl = "http://admin.brightcove.com/viewer/us20121213.1025/federatedVideoUI/BrightcovePlayer.swf?uid=1355746343102"
                         rtmpd_cmd = "rtmpdump --rtmp '"+url+"' --app='"+app+"' --swfUrl='"+swfurl+"' --playpath='"+playpath+"' --pageUrl='"+pageurl+"' -o '"+name+"'"
+                        msg = u"Nuevos comandos gracias a Jesús de <a href=\"http://blog.tvalacarta.info/\">TV a Carta</a>".encode('utf8')
                     else: #Antiguo: brightcove, hay más?
                         app = url.split("/&")[0].split(".net/")[1]  +"?videoId="+videoID+"&lineUpId=&pubId="+publisherID+"&playerId="+playerID
                         playpath = "mp4:"+url.split("mp4:")[1].split(".mp4")[0]+".mp4"+"?videoId="+videoID+"&lineUpId=&pubId="+publisherID+"&playerId="+playerID
@@ -195,7 +196,7 @@ class EITB(Canal.Canal):
                         C1 = "B:0"
                         C2 = "S:" + "&".join(url.split("&")[1:])
                         rtmpd_cmd = "rtmpdump --rtmp '"+url+"' --app='"+app+"' --swfUrl='"+swfurl+"' --playpath='"+playpath+"' --pageUrl='"+pageurl+"' -C '"+C1+"' -C '"+C2+"' -o '"+name+"'"
-                    
+                        msg = None
                     ##END: montar comando
                     size = str(vid['frameWidth'])+"x"+str(vid['frameHeight'])
                     
@@ -209,7 +210,7 @@ class EITB(Canal.Canal):
                             "menco_cmd" : None,
                             "url_publi" : None,
                             "otros"     : size,
-                            "mensaje"   : None
+                            "mensaje"   : msg
                             }
                     videos.append(temp)
                     

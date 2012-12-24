@@ -117,7 +117,7 @@
 				<p style="color: #bfbfbf;">{{ descripciones[loop.index0].decode('utf8')|safe }}</p>
 				<br />
 				<p><strong class="text bold" style="color: #16a6b6;">Partes: </strong>{{ vid['partes'] }}. <strong class="text bold" style="color: #16a6b6;">Enlaces </strong>{% if vid['tipo'] == "http" %}<span class="text thin color secondary">(Clic derecho: "Guardar enlace como...")</span>{% elif vid['tipo'] == "rtmp" %}<span class="text thin color secondary">(RTMP: Utilizar comando proporcionado para rtmpdump)</span>{% endif %}<strong style="color: #16a6b6;">:</strong></p>
-				{% if vid['mensaje'] %}<p><strong class="text bold" style="color: #16a6b6;">Más Info: </strong><span class="text bold">{{ vid['mensaje'].decode('utf8')|safe }}</span></p>{% endif %}
+				{% if vid['mensaje'] %}<p><strong class="text bold" style="color: #16a6b6;">Más Info: </strong><span class="text thin">{{ vid['mensaje'].decode('utf8')|safe }}</span></p>{% endif %}
 				{% if vid['otros'] %}<p><strong class="text bold" style="color: #16a6b6;">Calidad: </strong><span class="text bold">{{ vid['otros'].decode('utf8')|safe }}</span></p>{% endif %}
 				<br />
 				<ol class="square">
