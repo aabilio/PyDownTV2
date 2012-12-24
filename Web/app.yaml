@@ -27,7 +27,7 @@ handlers:
   upload: application/static/img/favicon.ico
 
 - url: /sitemap.xml
-  static_files: static/sitemap.xml
+  static_files: application/static/sitemap.xml
   upload: application/static/sitemap.xml
   
 - url: /robots.txt
@@ -35,7 +35,7 @@ handlers:
   upload: application/static/robots.txt
   
 - url: /humans.txt
-  static_files: static/humans.txt
+  static_files: application/static/humans.txt
   upload: application/static/humans.txt
 
 - url: /_gae_mini_profiler/static
