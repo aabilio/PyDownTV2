@@ -176,7 +176,7 @@ class GrupoA3(Canal.Canal):
                 "menco_cmd" : None,
                 "url_publi" : None,
                 "otros"     : None,
-                "mensaje"   : u""
+                "mensaje"   : None
                 }
         
         for i in streamPARTES:
@@ -249,7 +249,7 @@ class GrupoA3(Canal.Canal):
                 "menco_cmd" : None,
                 "url_publi" : None,
                 "otros"     : None,
-                "mensaje"   : u""
+                "mensaje"   : None
                 }
             v+=1
             streamVid = streamVids[v]
@@ -267,7 +267,7 @@ class GrupoA3(Canal.Canal):
             #print listxml
             for b in listxml:
                 video["partes"] += 1
-                video["mensaje"] = unicode(i.split(">")[1].split("<")[0].capitalize())
+                #video["mensaje"] = unicode(i.split(">")[1].split("<")[0].capitalize())
                 endurl = b.split("<url>")[1].split("<")[0]
                 video["url_video"].append(endurl.replace(endurl.split("mp_")[0],"http://desprogresiva.antena3.com/"))
                 ext = "." + video["url_video"][-1].split(".")[-1]
@@ -401,7 +401,7 @@ class GrupoA3(Canal.Canal):
                         "menco_cmd" : None,
                         "url_publi" : None,
                         "otros"     : None,
-                        "mensaje"   : u"URL obtenida correctamente" if type(url2down) != list else u"URLs obtenida correctamente"
+                        "mensaje"   : None
                         }],
                 "titulos": [tit_vid] if tit_vid is not None else None,
                 "descs": [desc] if desc is not None else None

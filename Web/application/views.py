@@ -366,16 +366,6 @@ def mitele(urlOrig=None):
             urlOrig = request.form['urlOrig']
             
     return redirect(miteleGAE.MiTele(urlOrig, opcs).getInfo()['videos'][0]['url_video'][0])
-    info = mitele.getInfo()['videos']
-    vid = info['url_video']
-    flash(str(vid))
-    return redirect(url_for('home'))
-    return info['videos']['url_video'][0]
-    
-    url = miteleGAE.MiTele(urlOrig, opcs)['videos']['url_video']
-    
-    flash(url)
-    return redirect(url_for('home'))
 
 def ayuda():
     return render_template("ayuda.html")

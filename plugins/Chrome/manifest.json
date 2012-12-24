@@ -1,12 +1,22 @@
 {
   "name": "PyDownTV",
-  "version": "2.1",
-  "description": "Descarga vídeos de las principales webs de TVs españolas",
+  "version": "3.0.0",
+  "manifest_version": 2,
+  "description": "Descarga los vídeos de las webs de televisiones españolas",
+  "homepage_url": "http://web.pydowntv.com",
+  "icons": {
+    "16": "icons/icon.png"
+  },
+  "background": {
+    "page": "src/bg/background.html",
+    "persistent": true
+  },
   "browser_action": {
-    "default_icon": "icon.png",
-    "popup": "popup.html"
+    "default_icon": "icons/icon.png",
+    "default_title": "PyDownTV"
   },
   "permissions": [
-    "http://web.pydowntv.com", "tabs"
+    "http://web.pydowntv.com/*",
+    "tabs"
   ]
 }

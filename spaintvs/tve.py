@@ -31,6 +31,8 @@ import Utiles
 import Descargar
 import Error
 
+import logging
+
 url_validas = ["rtve.es"]
 
 class TVE(Canal.Canal):
@@ -62,13 +64,17 @@ class TVE(Canal.Canal):
     
     def __ClanTV(self, html, ID):
         self.info(u"[INFO] Vídeo de Clan")
+        logging.error("entro en clan")
         buscar = self.__getSerieName(self.url)
+        logging.error(buscar)
         if buscar is None:
             #html = Descargar.get(self.url)
             buscar = "/".join(self.url.split("/")[6:9])
+            logging.error(buscar)
             if not buscar.startswith("videos") and not buscar.endswith("todos"):
                 try:
                     serie = Utiles.recortar(self.url, "/videos/", "/todos/")
+                    logging.error(serie)
                 except: #http://www.rtve.es/infantil/videos-juegos/#/videos/suckers/todos/suckers-ventosas/1605449 ó */
                     Surl = self.url.split("/")
                     if Surl[-1] == "": buscar = Surl[-3]
@@ -77,18 +83,29 @@ class TVE(Canal.Canal):
                         raise Error.GeneralPyspainTVsError(u"Error al encontrar la serie. Por favor reporta el error")
                 else:
                     buscar = "/videos/"+serie+"/todos/"
+                    logging.error(buscar)
             buscar = str(buscar)
         self.debug(u"Serie:", buscar)
+        logging.error("final: "+ buscar)
         #Ir a la página de descripción de vídeos de Clan
-        dataURL = "http://rtve.es/infantil/components/"+html.split(buscar)[0].split("<a rel=\"")[-1].split("\"")[0]+"/videos.xml.inc"
+        try:
+            dataURL = "http://www.rtve.es/infantil/components/"+html.split(buscar)[0].split("<a rel=\"")[-1].split("\"")[0]+"/videos.xml.inc"
+        except Exception, e:
+            logging.error(e.__str__())
         self.debug(u"URL Clan data: "+dataURL)
+        logging.error(dataURL)
         data = Descargar.get(dataURL).split("<video id=\""+str(ID))[1].split("</video>")[0]
-        
+        logging.error("tengo data")
         url = self.URL_RTVE+Utiles.recortar(data, "url=\"", "\"")
+        logging.error(url)
         img = Utiles.recortar(data, "url_image=\"", "\"")
+        logging.error(img)
         tit = Utiles.recortar(data, "<title>", "</title>")
+        logging.error(tit)
         name = Utiles.recortar(data, "url_name=\"", "\"")+"."+url.split(".")[-1]
+        logging.error(name)
         desc = Utiles.recortar(data, "<sinopsis>", "</sinopsis>").strip()
+        logging.error(desc)
         if desc == "" or desc == " " or desc == ".":
             desc = u"Vídeo de Clan TV: ".encode('utf8') +  Utiles.recortar(data, "url_name=\"", "\"")
          
@@ -149,6 +166,7 @@ class TVE(Canal.Canal):
         
         # Primero: nos quedamos con le id dependiendo si el user metio la url con
         # una barra (/) final o no y si tiene extensión (no es alacarta)
+        logging.error(self.url)
         videoID = self.url.split('/')[-1]
         if videoID == "":
             videoID = self.url.split('/')[-2]

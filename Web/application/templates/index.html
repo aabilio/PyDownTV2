@@ -153,7 +153,23 @@
 	            <h5>2. Pega la URL</h5>
 	            <small>Ahora, en esta página, pegas lo que copiaste en el cuadro de búsqueda que se encuentra arrriba y le das a Buscar!</small>-->
 	        </div>
-	    </div>	   
+	    </div>
+	    {% if loop.index0 == 0 %}
+	    <br /><br />
+	    <div class="row text book margin_top" id="social">
+	    	<div class="column_3 offset_6">
+                <h5 class="text color cancel"> ¿Problemas?</h5>
+                <br />
+                <a class="button accept" href="{{ url_for('home', url=urlOrig) }}">Volver a intentar</a>
+            </div>
+            <div class="column_3">
+                <h5 class="text color accept"> ¿Te gusta? Comparte ;)</h5>
+                <br />
+                <a class="icon facebook button secondary" target="_blank" href="http://www.facebook.com/sharer.php?u=http%3A%2F%2Fweb.pydowntv.com"> Facebook</a>
+            	<a class="icon twitter button secondary" href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fweb.pydowntv.com%2F&related=aabilio&text=PyDownTV%20WEB%3A%20Descarga%20v%C3%ADdeos%20de%20las%20webs%20de%20TV&tw_p=tweetbutton&url=http%3A%2F%2Fweb.pydowntv.com%2F&via=pydowntv"> Twitter </a>
+            </div>
+	    </div>   
+	    {% endif %}
 	</section>
 	<div style="height: 5px; background-color: white;"><!--separación entre resultados de vídeos--></div>
 	{% endfor %}

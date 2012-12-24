@@ -6,13 +6,8 @@ var widget = widgets.Widget({
   label: "Buscar en pydowntv",
   contentURL: "http://web.pydowntv.com/static/img/favicon_black.ico",
   onClick: function() {
-      tabUrl = tabs.activeTab.url;
-    if (tabUrl.search("rtpa.es") != -1)
-    {
-      tabUrl = escape(tabUrl);
-    }
-    var url = "http://web.pydowntv.com/?url="+tabUrl;
-    
+    tabUrl = tabs.activeTab.url;
+    var url = "http://web.pydowntv.com/?url="+escape(tabUrl);
     tabs.open(url);
   }
 });
