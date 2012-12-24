@@ -32,6 +32,9 @@ app.add_url_rule('/api', 'api', view_func=views.api, methods=['GET', 'POST'])
 # Apps page
 app.add_url_rule('/apps', 'apps', view_func=views.apps, methods=['GET', 'POST'])
 
+# MiTele special page
+app.add_url_rule('/mitele', 'mitele', view_func=views.mitele, methods=['GET', 'POST'])
+
 # Legal page
 app.add_url_rule('/legal', 'legal', view_func=views.legal, methods=['GET', 'POST'])
 

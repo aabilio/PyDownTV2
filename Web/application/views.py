@@ -261,8 +261,8 @@ def home(urlOrig=None):
         return redirect(url_for('home'))
         #return render_template("api.html", messages=msg)
     except Exception, e:
-        #flash(unicode(e.__str__()))
-        #return redirect(url_for('home'))
+        flash(unicode(e.__str__()))
+        return redirect(url_for('home'))
         flash(u"ERROR al recuperar el vídeo. ¿Es una URL válida?")
         return redirect(url_for('home'))
         #return render_template("api.html", messages=ErrorDesconocido)
@@ -352,6 +352,30 @@ def api(url=None):
         resp = Response(js, status=200, mimetype='application/json')
         return resp
         #return render_template("api.html", messages=ErrorDesconocido)
+        
+def mitele(urlOrig=None):
+    '''Función especial para mitele'''
+    opcs = _default_opcs
+    if urlOrig is None:
+        if request.method == "GET": # La URL se pasa por parámetro http://web.pydowntv.com/?url=""
+            try:
+                urlOrig = request.args['urlOrig']
+            except:
+                return render_template('ayuda.html')
+        else:
+            urlOrig = request.form['urlOrig']
+            
+    return redirect(miteleGAE.MiTele(urlOrig, opcs).getInfo()['videos'][0]['url_video'][0])
+    info = mitele.getInfo()['videos']
+    vid = info['url_video']
+    flash(str(vid))
+    return redirect(url_for('home'))
+    return info['videos']['url_video'][0]
+    
+    url = miteleGAE.MiTele(urlOrig, opcs)['videos']['url_video']
+    
+    flash(url)
+    return redirect(url_for('home'))
 
 def ayuda():
     return render_template("ayuda.html")
