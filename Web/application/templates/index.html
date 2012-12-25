@@ -102,7 +102,7 @@
 		$('#loading').hide();
 		$('#sendRequestButton').html('<div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" />Buscando...</div>Encontrado!');
 		setTimeout(function(){
-  			$(window).scroll(function() {
+  			$(window).one("scroll", function() {
   				$('#sendRequestButton').html('<div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" />Buscando...</div>Buscar!');
 			});
 		}, 2000);
@@ -118,9 +118,10 @@
             <br />
         </div>
 	    </div>
-	    <div class="row text justify book margin_top">
+	    <div class="row text justify book margin_top" id="divResults">
 	        <div class="column_4">
 	        	<div class="video_img">
+	        		<!--<div id="loading_img"><img src="/static/img/cargando2.gif" alt="" /></div>-->
 					<img src="{{ vid['url_img'] }}" alt="{{ titulos[loop.index0].decode('utf8')|safe }}" style="outline: 0;  max-width: 96%;  height: auto;  border: 1px solid #CCC;  background: #F3F3F3;  padding: 6px;"/>
 				</div>
 	            <!--<h1 class="icon search text color theme"></h1>
@@ -325,5 +326,6 @@
 	    $('html, body').animate({ scrollTop: posMenu.top},1000);	
     </script>
     {% endif %}
+    
 </body>
 </html>
