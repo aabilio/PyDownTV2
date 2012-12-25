@@ -81,18 +81,30 @@ class GiraldaTV(Canal.Canal):
             "videos", "mesajes" y "descs" deben ser listas de cadenas (si no son None)
             "url_video", "filename", "rtmp_cmd", "menco_cmd" (de "videos") deben ser listas de cadenas (si no son None)
         '''
+        try:
+            html = self.gethtml()#.replace(" ", "")
+        except Exception,e:
+            try: # Para Google App Engine
+                from google.appengine.api import urlfetch
+                result = urlfetch.fetch(self.url, headers=Descargar.std_headers, deadline=30)
+                html = result.content
+            except Exception, b:
+                try:
+                    raise Error.GeneralPyspainTVsError(b)
+                except:
+                    raise Error.GeneralPyspainTVsError(u"La solicitud contiene demasiados vídeos. Se está trabajando para arreglar esto.")
         
-        html = self.gethtml()#.replace(" ", "")
         if html.find("contentArray[") != -1:
-            self.info(u"[INFO] Se han detectado varios vídeos en la página:")
+            self.info(u"[INFO] Se han detectado varios vídeos en la página")
             try:
                 # Deleimitar los bloques de vídeos:
                 videos = [n.split("',")[1:] for n in html.split("contentArray[")[1:]]
                 
                 titulos = [v[0].replace("'","").strip() for v in videos]
                 urls = [v[2].replace("'","").strip() for v in videos]
-                ext = "."+urls[0].split(".")[-1]
-                names = [Utiles.formatearNombre(v[0].replace("'","").strip()+ext) for v in videos]
+                ext = "."+urls[0].split(".")[-1] 
+                try: names = [Utiles.formatearNombre(v[0].replace("'","").strip()+ext) for v in videos]
+                except: names = [u"VideoDeGiraldaTV.mov"]*len(urls)
                 descs = [v[1].replace("'","").strip() for v in videos]
                 imgs = [v[4].replace("'","").strip() for v in videos]
                 
@@ -112,14 +124,16 @@ class GiraldaTV(Canal.Canal):
                     }
                     rVideos.append(temp)
             except Exception, e:
-                raise Error.GeneralPyspainTVsError(u"No se han podido obtener información sobre los vídeos: %s" % e.__str__())
-                
-            return {"exito" : True,
-                    "num_videos" : len(titulos),
-                    "mensaje"   : u"URL obtenido correctamente",
-                    "videos": rVideos,
-                    "titulos": titulos if titulos is not None else None,
-                    "descs": descs if descs is not None else None
-                    }   
+                raise Error.GeneralPyspainTVsError(u"No se han podido obtener información sobre los vídeos.")
+        else:
+            raise Error.GeneralPyspainTVsError(u"No se han encontrado vídeos en la página.")
+             
+        return {"exito" : True,
+                "num_videos" : len(titulos),
+                "mensaje"   : u"URL obtenido correctamente",
+                "videos": rVideos,
+                "titulos": titulos if titulos is not None else None,
+                "descs": descs if descs is not None else None
+                }   
 
 
