@@ -62,16 +62,6 @@
 	        );
 		});  
     </script>
-    <script>
-		var html = "<img src=\"/static/img/load.gif\" /> Buscando...";
-		$(document).ready(function() {
-			$('#searchUrlOrig').submit(function() {
-				$('#sendRequestButton').empty().html(html);
-			});
-		});
-	</script>
-    
-    
 </head>
 
 <body>
@@ -105,7 +95,10 @@
             <div class="column_8 offset_2 form">
             	<form action="{{ url_for('home') }}" method="post" id="searchUrlOrig">
 	                <input name="urlOrig" type="text" id="sendRequestInput" class="large float left" placeholder="Introduce AQUÍ la URL del vídeo a descargar...">
-	                <button style="color: black;" id="sendRequestButton" name="submit" type="submit" class="button large float">Buscar!</button>
+            		<button style="color: black;" id="sendRequestButton" name="submit" onclick="$('#loading').show();" type="submit" class="button large float">
+	                	<div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" />Buscando...</div>
+	                	Buscar!
+	                </button>
             	</form>
             </div>
         </div>
