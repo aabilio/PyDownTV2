@@ -41,10 +41,10 @@
 	  })();
 	</script>
 	<script>
+		var html = "<img src=\"/static/img/load.gif\" /> Buscando...";
 		$(document).ready(function() {
 			$('#searchUrlOrig').submit(function() {
-				$('#sendRequestButton').text(" Buscando");
-				$('#sendRequestButton').prepend('<img src="/static/img/cargando3.gif"/>');
+				$('#sendRequestButton').empty().html(html);
 			});
 		});
 	</script>
