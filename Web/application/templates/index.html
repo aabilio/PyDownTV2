@@ -40,6 +40,14 @@
 	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	  })();
 	</script>
+	<script>
+		$(document).ready(function() {
+			$('#searchUrlOrig').submit(function() {
+				$('#sendRequestButton').text(" Buscando");
+				$('#sendRequestButton').prepend('<img src="/static/img/cargando3.gif"/>');
+			});
+		});
+	</script>
 </head>
 
 <body>
@@ -71,9 +79,9 @@
         </div>
         <div class="row">
             <div class="column_8 offset_2 form">
-            	<form action="{{ url_for('home') }}" method="post">
+            	<form action="{{ url_for('home') }}" method="post" id="searchUrlOrig">
 	                <input name="urlOrig" type="text" id="sendRequestInput" class="large float left" placeholder="Introduce AQUÍ la URL del vídeo a descargar...">
-	                <button style="color: black;", id="sendRequestButton" name="submit" type="submit" class="button large float">Buscar!</button>
+	                <button style="color: black;" id="sendRequestButton" name="submit" type="submit" class="button large float">Buscar!</button>
             	</form>
             </div>
         </div>
@@ -95,6 +103,17 @@
     
     <!-- DIV para resltados de búsqueda -->
 	{% if videos %}
+	<script>
+		$('#sendRequestButton').text(" Encontrado!");
+		setTimeout(function(){
+  			$(window).scroll(function() {
+  				$('#sendRequestButton').text("Buscar!");
+			});
+		}, 2000);
+		setTimeout(function(){
+  			$('#sendRequestButton').text("Buscar!");
+		}, 5000);
+	</script>
 	{% for vid in videos %}
 	<section id="resultados" class="bck darkest landing text center color white" style="padding: 25px 0;">
 		<div class="row text center margin_bottom">
