@@ -167,6 +167,13 @@ class Canales(object):
             if self._url.find(url) != -1: return True
         return False
     
+    def isGiraldaTV(self):
+        '''return True si la URL pertenece a Giralda Televisón'''
+        urls = ["giraldatv.es"]
+        for url in urls:
+            if self._url.find(url) != -1: return True
+        return False
+    
 def qCanal(url, opcs):
     '''
         Comprueba utlizando la clase Canales de que servicio ha recibido la url
@@ -191,6 +198,7 @@ def qCanal(url, opcs):
     elif canal.isRTVCYL(): return rtvcyl.RTVCYL(url, opcs)
     elif canal.isRTVCM(): return rtvcm.RTVCM(url, opcs)
     elif canal.isTV3(): return tv3.TV3(url, opcs)
+    elif canal.isGiraldaTV(): return giraldatv.GiraldaTV(url, opcs)
     else: return None
 
 def compURL(url):
@@ -261,8 +269,8 @@ def home(urlOrig=None):
         return redirect(url_for('home'))
         #return render_template("api.html", messages=msg)
     except Exception, e:
-        flash(unicode(e.__str__()))
-        return redirect(url_for('home'))
+        #flash(unicode(e.__str__()))
+        #return redirect(url_for('home'))
         flash(u"ERROR al recuperar el vídeo. ¿Es una URL válida?")
         return redirect(url_for('home'))
         #return render_template("api.html", messages=ErrorDesconocido)

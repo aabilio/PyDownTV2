@@ -47,7 +47,8 @@ _url_canales = {
                "eitb": ["eitb.tv"],
                "rtvcyl": ["rtvcyl.es"],
                "rtvcm": ["rtvcm.es"],
-               "tv3": ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat"]
+               "tv3": ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat"],
+               "giraldatv": ["giraldatv.es"]
                }
 _mod_tv = {
            "rtve": {"mod":tve.TVE,"comentario":"[INFO] Radio Televión Española", "urls":_url_canales["rtve"]},
@@ -65,7 +66,8 @@ _mod_tv = {
            "eitb": {"mod":eitb.EITB,"comentario":"[INFO] Euskal Irrati Telebista","urls":_url_canales["eitb"]},
            "rtvcyl": {"mod":rtvcyl.RTVCYL,"comentario":"[INFO] Radio Televisión de Castilla y León","urls":_url_canales["rtvcyl"]},
            "rtvcm": {"mod":rtvcm.RTVCM,"comentario":"[INFO] Radio Televisión de Castilla-La mancha","urls":_url_canales["rtvcm"]},
-           "tv3": {"mod":tv3.TV3,"comentario":"[INFO] Televisió de Catalunya","urls":_url_canales["tv3"]}
+           "tv3": {"mod":tv3.TV3,"comentario":"[INFO] Televisió de Catalunya","urls":_url_canales["tv3"]},
+           "giraldatv": {"mod":giraldatv.GiraldaTV,"comentario":"[INFO] Giralda Televisión","urls":_url_canales["giraldatv"]}
            #"nombre" : {"mod":rutaAlaClase, "comentario":"infoParaImprimir", "urls":_url_canales["canal"]}
            }
 # Fin de edición
