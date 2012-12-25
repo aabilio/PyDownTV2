@@ -36,7 +36,8 @@ __all__ = ["crtvg",
            "rtvcyl",
            "rtvcm",
            "tv3",
-           "giraldatv"] #Canal, Descargar u Utiles no deberían ser utilizadas fuera del paquete
+           "giraldatv",
+           "rtvv"] #Canal, Descargar u Utiles no deberían ser utilizadas fuera del paquete
 __version__ = "0.0.1"
 __author__ = "aabilio <aabilio@gmail.com>"
 __date__ = "$10-oct-2012 11:01:48$"
