@@ -49,7 +49,8 @@ _url_canales = {
                "rtvcm": ["rtvcm.es"],
                "tv3": ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat"],
                "giraldatv": ["giraldatv.es"],
-               "rtvv": ["rtvv.es"]
+               "rtvv": ["rtvv.es"],
+               "intereconomia": ["intereconomia.com"]
                }
 _mod_tv = {
            "rtve": {"mod":tve.TVE,"comentario":"[INFO] Radio Televión Española", "urls":_url_canales["rtve"]},
@@ -69,7 +70,8 @@ _mod_tv = {
            "rtvcm": {"mod":rtvcm.RTVCM,"comentario":"[INFO] Radio Televisión de Castilla-La mancha","urls":_url_canales["rtvcm"]},
            "tv3": {"mod":tv3.TV3,"comentario":"[INFO] Televisió de Catalunya","urls":_url_canales["tv3"]},
            "giraldatv": {"mod":giraldatv.GiraldaTV,"comentario":"[INFO] Giralda Televisión","urls":_url_canales["giraldatv"]},
-           "rtvv": {"mod":rtvv.RTVV,"comentario":"[INFO] Radiotelevisión Valenciana","urls":_url_canales["rtvv"]}
+           "rtvv": {"mod":rtvv.RTVV,"comentario":"[INFO] Radiotelevisión Valenciana","urls":_url_canales["rtvv"]},
+           "intereconomia": {"mod":intereconomia.Intereconomia,"comentario":"[INFO] Intereconomía","urls":_url_canales["intereconomia"]}
            #"nombre" : {"mod":rutaAlaClase, "comentario":"infoParaImprimir", "urls":_url_canales["canal"]}
            }
 # Fin de edición
