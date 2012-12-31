@@ -162,7 +162,7 @@ class Canales(object):
     
     def isTV3(self):
         '''return True si la URL pertenece a Televisió de Catalunya'''
-        urls = ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat"]
+        urls = ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat", "esport3.cat"]
         for url in urls:
             if self._url.find(url) != -1: return True
         return False
@@ -184,6 +184,13 @@ class Canales(object):
     def isIntereconomia(self):
         '''return True si la URL pertenece a Intereconomia'''
         urls = ["intereconomia.com"]
+        for url in urls:
+            if self._url.find(url) != -1: return True
+        return False
+    
+    def isHistoria(self):
+        '''return True si la URL pertenece a Canal Historia'''
+        urls = ["historia.adnstream.com"]
         for url in urls:
             if self._url.find(url) != -1: return True
         return False
@@ -215,6 +222,7 @@ def qCanal(url, opcs):
     elif canal.isGiraldaTV(): return giraldatv.GiraldaTV(url, opcs)
     elif canal.isRTVV(): return rtvv.RTVV(url, opcs)
     elif canal.isIntereconomia(): return intereconomia.Intereconomia(url, opcs)
+    elif canal.isHistoria(): return historia.Historia(url, opcs)
     else: return None
 
 def compURL(url):

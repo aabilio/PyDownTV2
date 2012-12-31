@@ -196,6 +196,10 @@ def stringFormat(s):
 def qe(s):
     return s.replace(" ", "")
 
+def ext(url): return "."+url.split(".")[-1]
+
+# URL Formatting
+
 def url_fix(s, charset='utf-8'): #Función de Werkzeug
     """Sometimes you get an URL by a user that just isn't a real
     URL because it contains unsafe characters like ' ' and so on.  This
@@ -214,3 +218,8 @@ def url_fix(s, charset='utf-8'): #Función de Werkzeug
     path = urllib.quote(path, '/%')
     qs = urllib.quote_plus(qs, ':&=')
     return urlparse.urlunsplit((scheme, netloc, path, qs, anchor))
+
+
+def unescape(s): return urllib.unquote(s)
+def escape(s): return urllib.quote(s)
+

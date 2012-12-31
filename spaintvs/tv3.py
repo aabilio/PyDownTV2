@@ -26,7 +26,7 @@ import Utiles
 import Descargar
 import Error
 
-url_validas = ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat"]
+url_validas = ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat", "esport3.cat"]
 
 class TV3(Canal.Canal):
     '''

@@ -47,10 +47,11 @@ _url_canales = {
                "eitb": ["eitb.tv"],
                "rtvcyl": ["rtvcyl.es"],
                "rtvcm": ["rtvcm.es"],
-               "tv3": ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat"],
+               "tv3": ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat", "esport3.cat"],
                "giraldatv": ["giraldatv.es"],
                "rtvv": ["rtvv.es"],
-               "intereconomia": ["intereconomia.com"]
+               "intereconomia": ["intereconomia.com"],
+               "historia": ["historia.adnstream.com"]
                }
 _mod_tv = {
            "rtve": {"mod":tve.TVE,"comentario":"[INFO] Radio Televión Española", "urls":_url_canales["rtve"]},
@@ -71,7 +72,8 @@ _mod_tv = {
            "tv3": {"mod":tv3.TV3,"comentario":"[INFO] Televisió de Catalunya","urls":_url_canales["tv3"]},
            "giraldatv": {"mod":giraldatv.GiraldaTV,"comentario":"[INFO] Giralda Televisión","urls":_url_canales["giraldatv"]},
            "rtvv": {"mod":rtvv.RTVV,"comentario":"[INFO] Radiotelevisión Valenciana","urls":_url_canales["rtvv"]},
-           "intereconomia": {"mod":intereconomia.Intereconomia,"comentario":"[INFO] Intereconomía","urls":_url_canales["intereconomia"]}
+           "intereconomia": {"mod":intereconomia.Intereconomia,"comentario":"[INFO] Intereconomía","urls":_url_canales["intereconomia"]},
+           "historia": {"mod":historia.Historia,"comentario":"[INFO] Canal Historia","urls":_url_canales["historia"]}
            #"nombre" : {"mod":rutaAlaClase, "comentario":"infoParaImprimir", "urls":_url_canales["canal"]}
            }
 # Fin de edición

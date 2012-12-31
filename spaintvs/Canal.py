@@ -22,6 +22,8 @@ import Descargar
 import Utiles
 import Error
 from dammit import UnicodeDammit
+try: from google.appengine.api import urlfetch
+except: pass
 
 _default_opcs = {
                 "log": True,
@@ -99,6 +101,17 @@ class Canal(object):
     
     def gethtml(self):
         return Descargar.get(self.url)
+    
+    def geturlfetch(self, url_=None):
+        url = self.url if url_ is None else url_
+        try:
+            if urlfetch:
+                result = urlfetch.fetch(url, headers=Descargar.std_headers, deadline=60)
+                return result.content
+            else:
+                return None
+        except: return Descargar.get(url)
+        
         
     
     
