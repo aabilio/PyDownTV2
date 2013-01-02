@@ -122,7 +122,11 @@
 	        <div class="column_4">
 	        	<div class="video_img">
 	        		<!--<div id="loading_img"><img src="/static/img/cargando2.gif" alt="" /></div>-->
-					<img src="{{ vid['url_img'] }}" alt="{{ titulos[loop.index0].decode('utf8')|safe }}" style="outline: 0;  max-width: 96%;  height: auto;  border: 1px solid #CCC;  background: #F3F3F3;  padding: 6px;"/>
+	        		{% if vid['url_img'] %}
+						<img src="{{ vid['url_img'] }}" alt="{{ titulos[loop.index0].decode('utf8')|safe }}" style="outline: 0;  max-width: 96%;  height: auto;  border: 1px solid #CCC;  background: #F3F3F3;  padding: 6px;"/>
+					{% else %}
+						<img src="/static/img/noImg.gif" alt="{{ titulos[loop.index0].decode('utf8')|safe }}" style="outline: 0;  max-width: 96%;  height: auto;  border: 1px solid #CCC;  background: #F3F3F3;  padding: 6px;"/>
+					{% endif %}
 				</div>
 	            <!--<h1 class="icon search text color theme"></h1>
 	            <h5>1. Copia la URL</h5>

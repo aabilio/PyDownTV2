@@ -197,7 +197,7 @@ class Canales(object):
     
     def isPlus(self):
         '''return True si la URL pertenece a Canal Plus'''
-        urls = ["canalplus.es"]
+        urls = ["canalplus.es", "plus.es"]
         for url in urls:
             if self._url.find(url) != -1: return True
         return False

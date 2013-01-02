@@ -29,7 +29,7 @@ import Error
 import httplib
 from pyamf import remoting
 
-url_validas = ["canalplus.es"]
+url_validas = ["canalplus.es", "plus.es"]
 
 class Plus(Canal.Canal):
     '''
@@ -37,6 +37,7 @@ class Plus(Canal.Canal):
     '''
     
     URL_PLUS = "http://canalplus.es"
+    URL_PLUSES = "http://plus.es"
     Publisher_ID = "1039301517001"
     Player_ID = "1133432061001"
     Const = "9f8617ac59091bcfd501ae5188e4762ffddb9925"
@@ -130,10 +131,14 @@ class Plus(Canal.Canal):
         
         # Parece que no pilla bien los datos a través de la api de brightcove,
         # utilizo entonces: /comunes/player/mm_nube_bc.php
+        plusEs = False
+        self.debug(u"URL Info: "+self.URL_PLUS + "/comunes/player/mm_nube_bc.php?xref=" + VideoPlayer)
         info = Descargar.get(self.URL_PLUS + "/comunes/player/mm_nube_bc.php?xref=" + VideoPlayer).decode('iso-8859-15').encode('utf8')
         
         try: img = self.URL_PLUS + info.split("<imagen>")[1].split("<![CDATA[")[1].split("]]>")[0].strip()
-        except: img = None
+        except:
+            img = None
+            plusEs = True
         
         try: tit = info.split("<titulo>")[1].split("<![CDATA[")[1].split("]]>")[0].strip()
         except: tit = u"Vídeo de Canal Plus".encode('utf8')
@@ -143,6 +148,26 @@ class Plus(Canal.Canal):
         
         try: desc = info.split("<descripcion>")[1].split("<![CDATA[")[1].split("]]>")[0].strip()
         except: desc = u"Vídeo de Canal Plus".encode('utf8')
+        
+        # Probar título y descripción de la página si es vídeo de plus.es
+        # La url del vídeo ya queda, aunque suele venir en el propio html de la página:
+        # <video id="vid1" src="AQUÍ EL VÍDEO" [...]>
+        html = html.decode('iso-8859-15').encode('utf8')
+        ttit = tdesc = None
+        if self.url.find("plus.es") != -1:
+            if plusEs:
+                try: ttit = html.split("<div class=\"news_type1\">")[1].split("<h3>")[1].split("</h3>")[0]
+                except: ttit = None
+            
+                try: tdesc = html.split("<div class=\"news_type1\">")[1].split("<p>")[1].split("</p>")[0]
+                except: tdesc = None
+                
+                try: img = self.URL_PLUSES+Utiles.recortar(html, "poster=\"", "\"")
+                except: img = None
+            
+            if ttit is not None: tit = ttit
+            if tdesc is not None: desc = tdesc
+        #################################################################
         
 #        try: img = info['videoStillURL']
 #        except: img = None

@@ -52,7 +52,7 @@ _url_canales = {
                "rtvv": ["rtvv.es"],
                "intereconomia": ["intereconomia.com"],
                "historia": ["historia.adnstream.com"],
-               "plus": ["canalplus.es"]
+               "plus": ["canalplus.es", "plus.es"]
                }
 _mod_tv = {
            "rtve": {"mod":tve.TVE,"comentario":"[INFO] Radio Televión Española", "urls":_url_canales["rtve"]},
