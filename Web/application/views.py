@@ -195,6 +195,13 @@ class Canales(object):
             if self._url.find(url) != -1: return True
         return False
     
+    def isPlus(self):
+        '''return True si la URL pertenece a Canal Plus'''
+        urls = ["canalplus.es"]
+        for url in urls:
+            if self._url.find(url) != -1: return True
+        return False
+    
 def qCanal(url, opcs):
     '''
         Comprueba utlizando la clase Canales de que servicio ha recibido la url
@@ -223,6 +230,7 @@ def qCanal(url, opcs):
     elif canal.isRTVV(): return rtvv.RTVV(url, opcs)
     elif canal.isIntereconomia(): return intereconomia.Intereconomia(url, opcs)
     elif canal.isHistoria(): return historia.Historia(url, opcs)
+    elif canal.isPlus(): return plus.Plus(url, opcs)
     else: return None
 
 def compURL(url):

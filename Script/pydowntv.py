@@ -51,7 +51,8 @@ _url_canales = {
                "giraldatv": ["giraldatv.es"],
                "rtvv": ["rtvv.es"],
                "intereconomia": ["intereconomia.com"],
-               "historia": ["historia.adnstream.com"]
+               "historia": ["historia.adnstream.com"],
+               "plus": ["canalplus.es"]
                }
 _mod_tv = {
            "rtve": {"mod":tve.TVE,"comentario":"[INFO] Radio Televión Española", "urls":_url_canales["rtve"]},
@@ -73,7 +74,8 @@ _mod_tv = {
            "giraldatv": {"mod":giraldatv.GiraldaTV,"comentario":"[INFO] Giralda Televisión","urls":_url_canales["giraldatv"]},
            "rtvv": {"mod":rtvv.RTVV,"comentario":"[INFO] Radiotelevisión Valenciana","urls":_url_canales["rtvv"]},
            "intereconomia": {"mod":intereconomia.Intereconomia,"comentario":"[INFO] Intereconomía","urls":_url_canales["intereconomia"]},
-           "historia": {"mod":historia.Historia,"comentario":"[INFO] Canal Historia","urls":_url_canales["historia"]}
+           "historia": {"mod":historia.Historia,"comentario":"[INFO] Canal Historia","urls":_url_canales["historia"]},
+           "plus": {"mod":plus.Plus,"comentario":"[INFO] Canal Plus","urls":_url_canales["plus"]}
            #"nombre" : {"mod":rutaAlaClase, "comentario":"infoParaImprimir", "urls":_url_canales["canal"]}
            }
 # Fin de edición

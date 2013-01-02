@@ -16,10 +16,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with spaintvs.  If not, see <http://www.gnu.org/licenses/>.
 
-# Módulo para descargar todos los vídeos de la web de Telemadrid
+# Módulo para descargar todos los vídeos de la web de Canal Plus
 
 __author__="aabilio"
-__date__ ="$17-dic-2012 11:35:37$"
+__date__ ="$01-ene-2013 11:35:37$"
 
 import Canal
 import Utiles
@@ -29,16 +29,16 @@ import Error
 import httplib
 from pyamf import remoting
 
-url_validas = ["telemadrid.es"]
+url_validas = ["canalplus.es"]
 
-class Telemadrid(Canal.Canal):
+class Plus(Canal.Canal):
     '''
-        Clase para manejar los vídeos de Telemadrid
+        Clase para manejar los vídeos de Canal Plus
     '''
     
-    URL_TELEMADRID = "http://telemadrid.es"
-    Publisher_ID = "104403117001"
-    Player_ID = "111787372001"
+    URL_PLUS = "http://canalplus.es"
+    Publisher_ID = "1039301517001"
+    Player_ID = "1133432061001"
     Const = "9f8617ac59091bcfd501ae5188e4762ffddb9925"
     
     def __init__(self, url="", opcs=None):
@@ -60,7 +60,7 @@ class Telemadrid(Canal.Canal):
             (
                 "/1", 
                 remoting.Request(
-                    target="com.brightcove.player.runtime.PlayerMediaFacade.findMediaById", 
+                    target="com.brightcove.player.runtime.PlayerMediaFacade.findMediaByReferenceId", 
                     body=[self.Const, self.Player_ID, videoPlayer, self.Publisher_ID],
                     envelope=env
                 )
@@ -73,7 +73,7 @@ class Telemadrid(Canal.Canal):
         envelope = self.__build_amf_request(videoPlayer)
         conn.request(
                      "POST", 
-                     "/services/messagebroker/amf?playerKey=AQ~~,AAAAF8Q-iyk~,FDoJSqZe3TSVeJrw8hVEauWQtrf-1uI7", 
+                     "/services/messagebroker/amf?playerKey=AQ~~,AAAA8fsynsk~,vg4OBGkC6pkaS2UYScgZRP6xQ_i8Eu7R", 
                      str(remoting.encode(envelope).read()),
                      {'content-type': 'application/x-amf'}
                      )
@@ -116,12 +116,10 @@ class Telemadrid(Canal.Canal):
         '''
         
         html = Descargar.get(self.url)
-        # NO BORRAR, ver FIXME abajo --> name = html.split("<meta name=\"dc.title\" content=\"")[1].split("\"")[0]
-        VideoPlayer = html.split("<param name=\"@videoPlayer\" value=\"")[1].split("\"")[0]
+        VideoPlayer = html.split("name=\"@videoPlayer\"  value=\"ref:")[1].split("\"")[0] #REFERER!!
+        
         info = self.__get_info(VideoPlayer)
         
-        
-        #TODO: Soltar todos los vídeos con las distintas calidades, ahora está solo la de mayor
         big = 0
         for video in info['renditions']:
             if video['encodingRate'] >= big:
@@ -129,31 +127,48 @@ class Telemadrid(Canal.Canal):
                 url = video['defaultURL']
         ext = "." + url.split(".")[-1]
         
-        try: img = info['videoStillURL']
+        
+        # Parece que no pilla bien los datos a través de la api de brightcove,
+        # utilizo entonces: /comunes/player/mm_nube_bc.php
+        info = Descargar.get(self.URL_PLUS + "/comunes/player/mm_nube_bc.php?xref=" + VideoPlayer).decode('iso-8859-15').encode('utf8')
+        
+        try: img = self.URL_PLUS + info.split("<imagen>")[1].split("<![CDATA[")[1].split("]]>")[0].strip()
         except: img = None
         
-        desc = None
-        try: desc1 = info['longDescription'].encode('utf8') if info['longDescription'] is not None else None
-        except: pass
-        try: desc2 = info['shortDescription'].encode('utf8') if info['shortDescription'] is not None else None
-        except: pass
-        try:
-            if desc1 is not None: desc = desc1
-            else:
-                if desc2 is not None: desc = desc2
-        except: desc = u"Vídeo de Telemadrid".encode('utf8')
-        else:
-            if desc is None or desc == u"": desc = u"Vídeo de Telemadrid".encode('utf8')
-            
-        try: tit = info['displayName'].encode('utf8')
-        except: tit = u"Vídeo de Telemadrid".encode('utf8')
-        else:
-            if tit == u"" or tit is None: tit = u"Vídeo de Telemadrid".encode('utf8')
+        try: tit = info.split("<titulo>")[1].split("<![CDATA[")[1].split("]]>")[0].strip()
+        except: tit = u"Vídeo de Canal Plus".encode('utf8')
         
-        #FIXME: Ver qué pasa aquí!! --> name = Utiles.formatearNombre(tit + ext)
-        name = "VideoTelemadrid"+ext
+        try: name = Utiles.formatearNombre(tit+ext)
+        except: name = "VideoCanalPlus"+ext
         
-        url = "/".join(img.split("/")[:3])+"/"+"/".join(url.split("/")[3:])
+        try: desc = info.split("<descripcion>")[1].split("<![CDATA[")[1].split("]]>")[0].strip()
+        except: desc = u"Vídeo de Canal Plus".encode('utf8')
+        
+#        try: img = info['videoStillURL']
+#        except: img = None
+#        
+#        desc = None
+#        try: desc1 = info['longDescription'].encode('utf8') if info['longDescription'] is not None else None
+#        except: pass
+#        try: desc2 = info['shortDescription'].encode('utf8') if info['shortDescription'] is not None else None
+#        except: pass
+#        try:
+#            if desc1 is not None: desc = desc1
+#            else:
+#                if desc2 is not None: desc = desc2
+#        except: desc = u"Vídeo de Canal Plus".encode('utf8')
+#        else:
+#            if desc is None or desc == u"": desc = u"Vídeo de Canal Plus".encode('utf8')
+#            
+#        try: tit = info['displayName'].encode('utf8')
+#        except: tit = u"Vídeo de Canal Plus".encode('utf8')
+#        else:
+#            if tit == u"" or tit is None: tit = u"Vídeo de Canal Plus".encode('utf8')
+#        
+#        #FIXME: Ver qué pasa aquí!! --> name = Utiles.formatearNombre(tit + ext)
+#        name = "VideoCanalPlus"+ext
+#        
+#        url = "/".join(img.split("/")[:3])+"/"+"/".join(url.split("/")[3:])
         
         return {"exito" : True,
                 "num_videos" : 1,
