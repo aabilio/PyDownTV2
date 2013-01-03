@@ -307,12 +307,12 @@ def home(urlOrig=None):
         return redirect(url_for('home'))
         #return render_template("api.html", messages=ErrorDesconocido)
     
-    # Guardar Registro antes de renderizar: .decode('iso-8859-1').encode('utf8')
+    # Guardar Registro antes de renderizar: ##.decode('iso-8859-1').encode('utf8')
     try: 
         reg = RegistroDescargas(
                                 urlOrig = urlOrig,
                                 urlImg = info["videos"][0]["url_img"],
-                                vidTit = info["titulos"][0]#,
+                                vidTit = info["titulos"][0].decode('utf8')#,
                                 #vidDesc = info["descs"][0]
                                 )
         reg.put()
