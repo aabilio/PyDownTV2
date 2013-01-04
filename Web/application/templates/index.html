@@ -213,15 +213,18 @@
 		                <br />
 		                <a class="button accept" href="{{ url_for('home', url=urlOrig) }}">Volver a intentar</a>
 		            </div>
-		            <div class="column_3 hide-phone hide-tablet">
-		                <h5 class="text color accept"> Agragar enlaces a...</h5>
-		                <br />
-		                <FORM ACTION="http://127.0.0.1:9666/flash/add" target="hidden" METHOD="POST"> 
+		            <div class="column_3 hide-tablet">
+		            	<!-- Me reparto el hide phone y hide tablet entre los elementos por que
+		            		parece que no funcionan bien los dos juntos.
+		            		Aunque en phone deje un pequeñísimo espacio por el div -->
+		                <h5 class="text color accept hide-phone"> Agragar enlaces a...</h5>
+		                <br class="hide-phone"/>
+		                <FORM ACTION="http://127.0.0.1:9666/flash/add" target="hidden" METHOD="POST" class="hide-phone"> 
 						  	<INPUT TYPE="hidden" NAME="source" VALUE="http://web.pydowntv.com">     
 						   	<INPUT TYPE="hidden" NAME="urls" VALUE="{{ jdownloader }}">
 						   	<INPUT TYPE="SUBMIT"  class="button secondary"  id="jdownloaderSubmit" NAME="submit" onclick="return comprobarJdownloader();" VALUE="JDownloader">
 						</FORM>
-						<p class="text thin color cancel" id="comprobarJdownloader"><!--AQUÍ info sobre JDOWNLOADER--></p>
+						<p class="text thin color cancel hide-phone" id="comprobarJdownloader"><!--AQUÍ info sobre JDOWNLOADER--></p>
 		            </div>
 		            <div class="column_3">
 		                <h5 class="text color accept"> ¿Te gusta? Comparte ;)</h5>

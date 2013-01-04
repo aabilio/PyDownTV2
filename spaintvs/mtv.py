@@ -37,6 +37,7 @@ class MTV(Canal.Canal):
     # Url de xml:
     XML_URL = "http://www.mtv.es/services/scenic/feeds/get/mrss/"
     PROXY_LINFOX = "http://linfox.es/p/browse.php?u="
+    PROXY_AABILIO = "http://aabilio.hl161.dinaserver.com/p/browse.php?u="
     
     def __init__(self, url="", opcs=None):
         Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
@@ -94,13 +95,21 @@ class MTV(Canal.Canal):
         name = name.replace("!", "").replace("|","") + ".mp4"
         name = Utiles.formatearNombre(name)
         
-        #xmlURL = self.PROXY_LINFOX + streamXML.split("<media:content")[1].split("url=\"")[1].split("\"")[0]
-        #Sin Proxy en modo local:
+        
+        import logging
+        
         xmlURL = xml.split("<media:content")[1].split("url=\"")[1].split("\"")[0]
         self.debug(u"URL XML Archivos: %s" % xmlURL)
         xml2 = Descargar.get(xmlURL)
         #ulr = streamXML2.split("</rendition>")[-2].split("<src>")[1].split("</src>")[0]
         url = "rtmp" + xml2.split("<src>rtmp")[-1].split("</src>")[0]
+        if url.find("copyright_error.") != -1: # GEO bloqueado!
+            logging.debug("GEO Bloqueado")
+            logging.debug(self.PROXY_AABILIO+xml.split("<media:content")[1].split("url=\"")[1].split("\"")[0])
+            xmlURL = self.PROXY_AABILIO+xml.split("<media:content")[1].split("url=\"")[1].split("\"")[0]
+            xml2 = Descargar.get(xmlURL)
+            logging.debug(xml2)
+            url = "rtmp" + xml2.split("<src>rtmp")[-1].split("</src>")[0]
         rtmpd_cmd = "rtmpdump -r \'"+url+"\' -o \'"+name+"\'"
 
         try: img = Utiles.recortar(xml, "<image url=\"", "\"")

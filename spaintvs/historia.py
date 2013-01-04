@@ -37,6 +37,7 @@ class Historia(Canal.Canal):
     URL_GET_XML = "http://historia.adnstream.com/get_playlist.php?lista=video&c=721&ux=0&param="
     URL_LINFOX_PROXY= "http://linfox.es/p/browse.php?b=0&f=norefer&u="
     URL_ANONIM_PROXY= "http://proxyanonimo.es/browse.php?b=12&f=norefer&u="
+    PROXY_AABILIO = "http://aabilio.hl161.dinaserver.com/p/browse.php?u="
     
     def __init__(self, url="", opcs=None):
         Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
@@ -102,7 +103,7 @@ class Historia(Canal.Canal):
             if xml.find("vohWwiQliW") != -1:
                 logging.debug("GEO2")
                 try:
-                    xml = Descargar.get(self.URL_ANONIM_PROXY+Utiles.escape(urlXML))
+                    xml = Descargar.get(self.PROXY_AABILIO+Utiles.escape(urlXML))
                 except Exception, e:
                     raise Error.GeneralPyspainTVsError(e.__str__())
         logging.debug(xml)

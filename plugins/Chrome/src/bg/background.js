@@ -14,7 +14,7 @@ chrome.extension.onMessage.addListener(
   });
 
 chrome.browserAction.onClicked.addListener(function (tab) {
-	chrome.tabs.query({"active": true}, function(tab){
+	chrome.tabs.query({"active": true, 'windowId': chrome.windows.WINDOW_ID_CURRENT}, function(tab){
     	//alert(tab[0].url);  //selected tab
     	var url = "http://web.pydowntv.com/?url="+escape(tab[0].url)
     	var ventana = window.open(url);
