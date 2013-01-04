@@ -40,6 +40,21 @@
 	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	  })();
 	</script>
+	<script language="javascript">
+		var jdownloader=false;
+	</script>
+	<script language="javascript" src="http://127.0.0.1:9666/jdcheck.js"></script>
+	<script language="javascript">
+		function comprobarJdownloader() {
+			if(jdownloader){
+				$('#comprobarJdownloader').html('Agregando a JDownloader');
+				return true;
+   			}else{
+   				$('#comprobarJdownloader').html('¡JDownloader tiene que estar ejecutándose!');
+   				return false;
+   			}
+    	}
+	</script>
 </head>
 
 <body>
@@ -175,20 +190,47 @@
 	        </div>
 	    </div>
 	    {% if loop.index0 == 0 %}
-	    <br /><br />
-	    <div class="row text book margin_top" id="social">
-	    	<div class="column_3 offset_6">
-                <h5 class="text color cancel"> ¿Problemas?</h5>
-                <br />
-                <a class="button accept" href="{{ url_for('home', url=urlOrig) }}">Volver a intentar</a>
-            </div>
-            <div class="column_3">
-                <h5 class="text color accept"> ¿Te gusta? Comparte ;)</h5>
-                <br />
-                <a class="icon facebook button secondary" target="_blank" href="http://www.facebook.com/sharer.php?u=http%3A%2F%2Fweb.pydowntv.com"> Facebook</a>
-            	<a class="icon twitter button secondary" href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fweb.pydowntv.com%2F&related=aabilio&text=PyDownTV%20WEB%3A%20Descarga%20v%C3%ADdeos%20de%20las%20webs%20de%20TV&tw_p=tweetbutton&url=http%3A%2F%2Fweb.pydowntv.com%2F&via=pydowntv"> Twitter </a>
-            </div>
-	    </div>   
+	    	{% if vid['tipo'] == "rtmp" or urlOrig.find("mitele.es") != -1 %}
+			    <br /><br />
+			    <div class="row text book margin_top" id="social">
+			    	<div class="column_3 offset_6">
+		                <h5 class="text color cancel"> ¿Problemas?</h5>
+		                <br />
+		                <a class="button accept" href="{{ url_for('home', url=urlOrig) }}">Volver a intentar</a>
+		            </div>
+		            <div class="column_3">
+		                <h5 class="text color accept"> ¿Te gusta? Comparte ;)</h5>
+		                <br />
+		                <a class="icon facebook button secondary" target="_blank" href="http://www.facebook.com/sharer.php?u=http%3A%2F%2Fweb.pydowntv.com"> Facebook</a>
+		            	<a class="icon twitter button secondary" href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fweb.pydowntv.com%2F&related=aabilio&text=PyDownTV%20WEB%3A%20Descarga%20v%C3%ADdeos%20de%20las%20webs%20de%20TV&tw_p=tweetbutton&url=http%3A%2F%2Fweb.pydowntv.com%2F&via=pydowntv"> Twitter </a>
+		            </div>
+			    </div>
+	    	{% else %}
+	    		<br /><br />
+			    <div class="row text book margin_top" id="social">
+			    	<div class="column_3 offset_3">
+		                <h5 class="text color cancel"> ¿Problemas?</h5>
+		                <br />
+		                <a class="button accept" href="{{ url_for('home', url=urlOrig) }}">Volver a intentar</a>
+		            </div>
+		            <div class="column_3 hide-phone hide-tablet">
+		                <h5 class="text color accept"> Agragar enlaces a...</h5>
+		                <br />
+		                <FORM ACTION="http://127.0.0.1:9666/flash/add" target="hidden" METHOD="POST"> 
+						  	<INPUT TYPE="hidden" NAME="source" VALUE="http://web.pydowntv.com">     
+						   	<INPUT TYPE="hidden" NAME="urls" VALUE="{{ jdownloader }}">
+						   	<INPUT TYPE="SUBMIT"  class="button secondary"  id="jdownloaderSubmit" NAME="submit" onclick="return comprobarJdownloader();" VALUE="JDownloader">
+						</FORM>
+						<p class="text thin color cancel" id="comprobarJdownloader"><!--AQUÍ info sobre JDOWNLOADER--></p>
+		            </div>
+		            <div class="column_3">
+		                <h5 class="text color accept"> ¿Te gusta? Comparte ;)</h5>
+		                <br />
+		                <a class="icon facebook button secondary" target="_blank" href="http://www.facebook.com/sharer.php?u=http%3A%2F%2Fweb.pydowntv.com"> Facebook</a>
+		            	<a class="icon twitter button secondary" href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fweb.pydowntv.com%2F&related=aabilio&text=PyDownTV%20WEB%3A%20Descarga%20v%C3%ADdeos%20de%20las%20webs%20de%20TV&tw_p=tweetbutton&url=http%3A%2F%2Fweb.pydowntv.com%2F&via=pydowntv"> Twitter </a>
+		            </div>
+			    </div>
+	    	{% endif %} 
 	    {% endif %}
 	</section>
 	<div style="height: 5px; background-color: white;"><!--separación entre resultados de vídeos--></div>
@@ -272,9 +314,9 @@
             <div class="column_3">
             	<div class="row" style="max-width: 267px;">
             		{% if l.urlImg %}
-            			<img src="{{ l.urlImg }}" alt="{{ l.vidName }}" style="outline: 0;  max-width: 210px; max-height: 124px; height: auto;  border: 1px solid #CCC;  background: #F3F3F3;  padding: 6px;"/>
+            			<a href="{{ url_for('home', url=l.urlOrig)|safe }}"><img src="{{ l.urlImg }}" alt="Obtener enlace: {{ l.vidName }}" style="outline: 0;  max-width: 210px; max-height: 124px; height: auto;  border: 1px solid #CCC;  background: #F3F3F3;  padding: 6px;"/></a>
 					{% else %}
-						<img src="/static/img/noImg.gif" alt="{{ l.vidName }}" style="outline: 0;  max-width: 210px; max-height: 124px; height: auto;  border: 1px solid #CCC;  background: #F3F3F3;  padding: 6px;"/>
+						<a href="{{ url_for('home', url=l.urlOrig)|safe }}"><img src="/static/img/noImg.gif" alt="Obtener enlace: {{ l.vidName }}" style="outline: 0;  max-width: 210px; max-height: 124px; height: auto;  border: 1px solid #CCC;  background: #F3F3F3;  padding: 6px;"/></a>
 					{% endif %}
 	                <br />
 	                <small class="text normal color theme" style="max-width: 210px">{{ l.vidTit|safe }}</small><br />

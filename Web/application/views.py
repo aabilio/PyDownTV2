@@ -317,6 +317,16 @@ def home(urlOrig=None):
                                 )
         reg.put()
     except: pass #TODO: Mejorar esto (codificación...)
+    
+    ####################### url2downloader:
+    jdownloader = ""
+    if urlOrig.find('mitele') != -1: #Hasta ahora los vídeos Mitele solo son de un enlace
+        jdownloader += "http://web.pydowntv.com/mitele?urlOrig="+urlOrig+"\r\n"
+    else:
+        for vid in info['videos']:
+            for url in vid['url_video']:
+                jdownloader += url+"\r\n"
+    #################################################
 
     return render_template(
                            "index.html",
@@ -324,6 +334,7 @@ def home(urlOrig=None):
                            titulos=info["titulos"],
                            descripciones=info["descs"],
                            urlOrig=urlOrig,
+                           jdownloader=jdownloader,
                            last=last
                            )
 
