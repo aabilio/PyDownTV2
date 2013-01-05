@@ -337,6 +337,111 @@ def home(urlOrig=None):
                            jdownloader=jdownloader,
                            last=last
                            )
+    
+
+def agranel(urlOrig=None): #TODO: Hacer HILOS!!! 
+    opcs = _default_opcs
+    
+    # Obtener los últimos vídeos descargados:
+    try:
+        last = RegistroDescargas.gql("order by date DESC LIMIT 4")
+    except:
+        last = None
+    
+    if urlOrig is None:
+        if request.method == "GET": # La URL se pasa por parámetro http://web.pydowntv.com/?url=""
+            try:
+                urlOrig = request.args['url']
+            except:
+                return render_template('agranel.html', last=last)
+        else:
+            urlOrig = request.form['urlOrig']
+    
+    if urlOrig == u'' or urlOrig == u"Introduce AQUÍ la URL del vídeo a descargar...":
+        flash(u"No has introducido ninguna url.. oO")
+        return redirect(url_for('agranel')) 
+    
+    # Ahora hay que cambiar todo
+    urlsOrig = urlOrig.split()
+    vids=[]
+    tits=[]
+    descs=[]
+    urlsO = []
+    errors=[]
+    jdownloader = ""
+    for i in range(len(urlsOrig)):
+        ## CASOS ESPECIALES URL NO ASCCII
+        #RTPA
+        if urlsOrig[i].find("rtpa.es") != -1:
+            try: urlsOrig[i] = urlsOrig[i].split("video:")[0] + "video:_" + urlsOrig[i].split("_")[1]
+            except: pass
+        #END - RTPA
+        ## END - CASOS ESPECIALES
+        if not urlsOrig[i].startswith("http://"): urlsOrig[i] ="http://"+urlOrig[i]
+        
+        #TODO: NO SALIR, quedarme con las ur buenas PARA TODO LO QUE VIENE A CONTINUACIÓN ;)
+        if compURL(urlsOrig[i]): 
+            canal = qCanal(urlsOrig[i], opcs)
+            if canal == None:
+                errors.append(u"La URL: %s no corresponde con ningún canal soportado por PyDownTV" % urlsOrig[i])
+                continue
+                #flash(u"Lo que has introducido no corresponde con ningún canal soportado por PyDownTV\n")
+                #return redirect(url_for('agranel'))
+        else: #TODO: meter huevos de pascua aquí :P
+            errors.append(u"URL incorrecta: \'%s\'" % urlsOrig[i])
+            continue
+            #flash(u"URL incorrecta: \'%s\'" % urlOrig)
+            #return redirect(url_for('agranel'))
+
+        try:
+            info = canal.getInfo()
+        except Error.GeneralPyspainTVsError, e:
+            errors.append(u"ERROR al recuperar el vídeo: %s" % e.__str__())
+            continue
+            #flash(u"ERROR al recuperar el vídeo: %s" % e.__str__())
+            #return redirect(url_for('agranel'))
+        except Exception, e:
+            errors.append(u"No se ha podido recuperar el vídeo de la URL: %s. ¿Es una URL correcta?" % urlsOrig[i])
+            continue
+            #flash(u"ERROR al recuperar el vídeo. ¿Es una URL válida?")
+            #return redirect(url_for('agranel'))
+        
+        # Guardar Registro antes de renderizar: ##.decode('iso-8859-1').encode('utf8')
+        try: 
+            reg = RegistroDescargas(
+                                    urlOrig = urlsOrig[i],
+                                    urlImg = info["videos"][0]["url_img"],
+                                    vidTit = info["titulos"][0].decode('utf8')#,
+                                    #vidDesc = info["descs"][0]
+                                    )
+            reg.put()
+        except: pass #TODO: Mejorar esto (codificación...)
+        
+        for vid in info['videos']: vids.append(vid)
+        for tit in info['titulos']: tits.append(tit)
+        for desc in info['descs']: descs.append(desc)
+        for a in range(len(info['videos'])): urlsO.append(urlsOrig[i])        
+    
+        ####################### url2downloader:
+        
+        if urlOrig.find('mitele') != -1: #Hasta ahora los vídeos Mitele solo son de un enlace
+            jdownloader += "http://web.pydowntv.com/mitele?urlOrig="+urlOrig+"\r\n"
+        else:
+            for vid in info['videos']:
+                for url in vid['url_video']:
+                    jdownloader += url+"\r\n"
+        #################################################
+    
+    return render_template(
+                           "agranel.html",
+                           videos=vids,
+                           titulos=tits,
+                           descripciones=descs,
+                           urlsOrig=urlsO,
+                           jdownloader=jdownloader,
+                           errors=errors if errors else None,
+                           last=last
+                           )
 
 
 

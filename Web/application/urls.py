@@ -20,6 +20,9 @@ app.add_url_rule('/_ah/warmup', 'warmup', view_func=views.warmup)
 # Home page
 app.add_url_rule('/', 'home', view_func=views.home, methods=['GET', 'POST'])
 
+# A Granel page
+app.add_url_rule('/agranel', 'agranel', view_func=views.agranel, methods=['GET', 'POST'])
+
 # Help Page
 app.add_url_rule('/ayuda', 'ayuda', view_func=views.ayuda, methods=['GET', 'POST'])
 

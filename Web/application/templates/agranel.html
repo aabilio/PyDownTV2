@@ -80,14 +80,18 @@
     <section class="bck darkest landing text center color white" id="myLanding">
         <div class="row">
             <div class="column_8 offset_2">
-                <h2 class="text book ">Descarga vídeos de las webs de televisiones españolas</h2>
+                <h1 class="logo text normal">A<span class="text thin">Granel</span></h1>
+                <h3 class="text thin">Descarga varios vídeos al mismo tiempo</h3>
                 <br />
             </div>
         </div>
         <div class="row">
             <div class="column_8 offset_2 form">
-            	<form action="{{ url_for('home') }}" method="post" id="searchUrlOrig">
-	                <input name="urlOrig" type="text" id="sendRequestInput" class="large float left" placeholder="Introduce AQUÍ la URL del vídeo a descargar...">
+            	<form action="{{ url_for('agranel') }}" method="post" id="searchUrlOrig">
+	                <!--<input name="urlOrig" type="text" id="sendRequestInput" class="large float left" placeholder="Introduce AQUÍ la URL del vídeo a descargar...">-->
+	                <fieldset class="margin_bottom">	
+	                	<textarea style="min-height: 100px; min-width: 100%;" name="urlOrig" type="text" id="sendRequestInput" class="large float left" placeholder="Introduce AQUÍ las URLs de los vídeos a descargar...(en fase Beta, por favor, no abusar del servicio)"></textarea>
+	                </fieldset>
 	                <button style="color: black;" id="sendRequestButton" name="submit" onclick="$('#loading').show();" type="submit" class="button large float">
 	                	<div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" />Buscando...</div>
 	                	Buscar!
@@ -100,8 +104,8 @@
     <section class="bck light underline navigation ">
         <div class="row text center">
             <nav class="group text bold">
-                <a href="{{ url_for('home') }}" class="active"><span class="icon download"></span>Descargar!</a>
-                <a href="{{ url_for('agranel') }}"><span class="icon download"></span><span class="logo text normal">A</span>Granel</a>
+                <a href="{{ url_for('home') }}"><span class="icon download"></span>Descargar!</a>
+                <a href="{{ url_for('agranel') }}" class="active"><span class="icon download"></span><span class="logo text normal">A</span>Granel</a>
                 <a href="{{ url_for('ayuda') }}"><span class="icon tag"></span>FAQ y Ayuda</a>
                 <a href="{{ url_for('canales') }}"><span class="icon cube"></span>Televisiones Soportadas</a>
                 <a href="{{ url_for('apps') }}"><span class="icon star"></span>Apps</a>
@@ -127,10 +131,11 @@
 		}, 5000);
 	</script>
 	{% for vid in videos %}
+	{% set urlOringTmp = urlsOrig[loop.index0] %}
 	<section id="resultados" class="bck darkest landing text center color white" style="padding: 25px 0;">
 		<div class="row text center margin_bottom">
         <div class="column_8 offset_2">
-            <h4 class="text color theme"><a href="{{ urlOrig }}">{{ urlOrig }}</a></h4>
+            <h4 class="text color theme"><a href="{{ urlOringTmp }}">{{ urlOringTmp }}</a></h4>
             <br />
         </div>
 	    </div>
@@ -159,14 +164,14 @@
 				<ol class="square">
 					{% set tit = titulos[loop.index0].decode('utf8')|safe %}
 					{% for parte in vid['url_video'] %}
-						{% if urlOrig.find("mitele.es") != -1 %}
-							<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a href="{{ url_for('mitele', urlOrig=urlOrig) }}" style="text-decoration: underline;"><h5>{{ tit }}</h5></a></li>
+						{% if urlOringTmp.find("mitele.es") != -1 %}
+							<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a href="{{ url_for('mitele', urlOrig=urlOringTmp) }}" style="text-decoration: underline;"><h5>{{ tit }}</h5></a></li>
 						{% else %}
 							<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a href="{{ parte }}" style="text-decoration: underline;"><h5>{{ tit }}</h5></a></li>
 						{% endif %}
 					{% endfor %}
 				</ol>
-				{% if urlOrig.find("mitele.es") != -1 %}
+				{% if urlOringTmp.find("mitele.es") != -1 %}
 				<p class="text normal color cancel">
 					<a class="text normal color cancel" href="{{ url_for('ayuda')+'#ProblemaMiTele' }}">Si tienes problemas para descargar los vídeos de MiTele echa un
 					vistazo a esto</a>
@@ -191,13 +196,13 @@
 	        </div>
 	    </div>
 	    {% if loop.index0 == 0 %}
-	    	{% if vid['tipo'] == "rtmp" or urlOrig.find("mitele.es") != -1 %}
+	    	{% if vid['tipo'] == "rtmp" %}
 			    <br /><br />
 			    <div class="row text book margin_top" id="social">
 			    	<div class="column_3 offset_6">
 		                <h5 class="text color cancel"> ¿Problemas?</h5>
 		                <br />
-		                <a class="button accept" href="{{ url_for('home', url=urlOrig) }}">Volver a intentar</a>
+		                <a class="button accept" href="{{ url_for('home', url=urlOringTmp) }}">Volver a intentar</a>
 		            </div>
 		            <div class="column_3">
 		                <h5 class="text color accept"> ¿Te gusta? Comparte ;)</h5>
@@ -212,7 +217,7 @@
 			    	<div class="column_3 offset_3">
 		                <h5 class="text color cancel"> ¿Problemas?</h5>
 		                <br />
-		                <a class="button accept" href="{{ url_for('home', url=urlOrig) }}">Volver a intentar</a>
+		                <a class="button accept" href="{{ url_for('home', url=urlOringTmp) }}">Volver a intentar</a>
 		            </div>
 		            <div class="column_3 hide-tablet">
 		            	<!-- Me reparto el hide phone y hide tablet entre los elementos por que
@@ -235,6 +240,19 @@
 		            </div>
 			    </div>
 	    	{% endif %} 
+	    {% endif %}
+	    {% if loop.index == videos|length %} <!-- Después del último vídeo -->
+	    	{% if errors %}
+	    		<br /><br />
+	    		<div style="height: 5px; background-color: white;"><!--separación errores --></div>
+	    		<div class="text center">
+		    		<br /><br />
+				    <p class="text bold color cancel">Se han producido los siguientes errores:</p><br />
+			    	{% for e in errors %}
+			    		<span style="text-align: center;" class="text book center color cancel">- {{ e }}</span><br />
+			    	{% endfor %}
+			    </div>
+			{% endif %}
 	    {% endif %}
 	</section>
 	<div style="height: 5px; background-color: white;"><!--separación entre resultados de vídeos--></div>
