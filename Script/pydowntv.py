@@ -99,9 +99,11 @@ def qCanal(url, opcs):
         
 def argsparse():
     #TODO: Ver 15.5.2.6.1 en http://docs.python.org/library/optparse.html
-    rVersion = uiUtiles.PdtVersion().PDT_VERSION_WIN if sys.platform == "win32" else uiUtiles.PdtVersion().PDT_VERSION_NIX
+    #rVersion = uiUtiles.PdtVersion().PDT_VERSION_WIN if sys.platform == "win32" else uiUtiles.PdtVersion().PDT_VERSION_NIX
+    #parser = OptionParser(usage="%prog [-n --no-check-version] [-s --show] <\"url1\" \"url2\" ...>", 
+    #                      version="PyDownTV "+rVersion)
     parser = OptionParser(usage="%prog [-n --no-check-version] [-s --show] <\"url1\" \"url2\" ...>", 
-                          version="PyDownTV "+rVersion)
+                          version="PyDownTV "+__version__)
     parser.add_option("-n", "--no-check-version", dest="check_version", action="store_true", 
                       help="No comprobar si existen actualizaciones")
     parser.add_option("-s", "--show", dest="show", action="store_true", 
@@ -221,7 +223,18 @@ if __name__ == "__main__":
                                                           )
                                 d.descargarVideo()
                     else:
-                        pass # TODO: Decidir qué hacer con los vídeo aquí (descargar, preguntar cuál,...) y luego las partes de cada uno
+                        # TODO: Decidir qué hacer con los vídeo aquí (descargar, preguntar cuál,...) y luego las partes de cada uno
+                        # De momento descargar todos:
+                        for video in info["videos"]:
+                            for indice_parte in range(video["partes"]):
+                                d = uiDescargar.Descargar(
+                                                          video["url_video"][indice_parte],
+                                                          video["filename"][indice_parte],
+                                                          video["tipo"],
+                                                          video["rtmpd_cmd"][indice_parte] if video["rtmpd_cmd"] is not None else None,
+                                                          video["menco_cmd"][indice_parte] if video["menco_cmd"] is not None else None,
+                                                          )
+                                d.descargarVideo()
             else: ## NO éxito
                 uiUtiles.salir(u"[ERROR] No se ha encontrado el vídeo buscado")
 
