@@ -272,7 +272,7 @@ def home(urlOrig=None):
             urlOrig = request.form['urlOrig']
     
     if urlOrig == u'' or urlOrig == u"Introduce AQUÍ la URL del vídeo a descargar...":
-        flash(u"No has introducido ninguna url.. oO")
+        flash(u"Parece que no has introducido ninguna url")
         return redirect(url_for('home'))
     
     ## CASOS ESPECIALES URL NO ASCCII
