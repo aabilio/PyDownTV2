@@ -149,6 +149,8 @@ def formatearNombre(nombre):
     nombre = nombre.replace("\xc3\xba", "u")
     
     nombre = nombre.replace("\xc3\x89", "E")
+    
+    nombre = nombre.replace("\xc2", "") #"a" de segunda
 
     return nombre
 
@@ -175,8 +177,7 @@ def descriptionFormat(Str):
     Str = Str.replace("É", "e")
     Str = Str.replace("Í", "i")
     Str = Str.replace("Ó", "o")
-    Str = Str.replace("Ú", "u")
-    
+    Str = Str.replace("Ú", "u")        
     
     return Str
 
@@ -190,6 +191,8 @@ def stringFormat(s):
     s = s.replace("\xc3\xba", "ú")
     
     s = s.replace("\xc3\x89", "E")
+    
+    s = s.replace("\xc2", "") #"a" de segunda
     
     return s
 

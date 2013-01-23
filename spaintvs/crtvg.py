@@ -84,7 +84,7 @@ class CRTVG(Canal.Canal):
         
         # Diferenciar entre vídeos "á carta" y vídeos de "agalegainfo":
         streamHTML = Descargar.get(self.url).decode('string-escape')
-        tit_vid = streamHTML.split("title: \"")[1].split("\"")[0]
+        tit_vid = Utiles.descriptionFormat(streamHTML.split("title: \"")[1].split("\"")[0])
         htmlBackup = streamHTML
         streamHTML = streamHTML.replace(" ", "").replace("\t", "").replace("\n", "")
         
