@@ -151,6 +151,8 @@ def formatearNombre(nombre):
     nombre = nombre.replace("\xc3\x89", "E")
     
     nombre = nombre.replace("\xc2", "") #"a" de segunda
+    
+    nombre = nombre.replace("&apos;", "")
 
     return nombre
 

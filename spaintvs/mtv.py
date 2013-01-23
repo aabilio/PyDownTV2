@@ -36,6 +36,7 @@ class MTV(Canal.Canal):
     URL_MTV = "http://mtv.es"
     # Url de xml:
     XML_URL = "http://www.mtv.es/services/scenic/feeds/get/mrss/"
+    XML_URL_COM = "http://www.mtv.com/player/embed/AS3/rss/?uri="
     PROXY_LINFOX = "http://linfox.es/p/browse.php?u="
     PROXY_AABILIO = "http://aabilio.hl161.dinaserver.com/p/browse.php?u="
     
@@ -88,10 +89,33 @@ class MTV(Canal.Canal):
         
         html = Descargar.get(self.url)
         html = html.replace("\n", "").replace("\t", "")
-        uri = html.split("var uri = \"")[1].split("\"")[0]
-        self.debug(u"URL XML Info: %s" % self.XML_URL + uri)
-        xml = Descargar.get(self.XML_URL + uri)
-        name = xml.split("<title>")[1].split("<![CDATA[")[1].split("]]>")[0]
+        try: #ES
+            uri = html.split("var uri = \"")[1].split("\"")[0]
+        except: #COM
+            uri = html.split(".videoUri = \"")[1].split("\"")[0]
+        
+        #Spain or .com?
+        xmlUrl = self.XML_URL + uri if self.url.find(".es") != -1 else self.XML_URL_COM + uri
+        self.debug(u"URL XML Info: %s" % xmlUrl)
+        xml = Descargar.get(xmlUrl)
+        
+        name = None
+        tit = None
+        desc = None
+        try: #ES
+            name = xml.split("<title>")[1].split("<![CDATA[")[1].split("]]>")[0]
+        except: #COM
+            xml = xml.decode('iso-8859-1').encode('utf8')
+            if xml.find("<item>") != -1:
+                name = xml.split("<item>")[1].split("<title>")[1].split("<")[0]
+                tit = name
+                try: desc = xml.split("<item>")[1].split("<description>")[1].split("<")[0].strip()
+                except: desc = u"Vídeo de MTV".encode('utf8')
+            else:
+                name = xml.split("<title>")[1].split("<")[0]
+                tit = name
+                try: desc = xml.split("<description>")[1].split("<")[0].strip()
+                except: desc = u"Vídeo de MTV".encode('utf8')
         name = name.replace("!", "").replace("|","") + ".mp4"
         name = Utiles.formatearNombre(name)
         
@@ -114,9 +138,9 @@ class MTV(Canal.Canal):
 
         try: img = Utiles.recortar(xml, "<image url=\"", "\"")
         except: img = None
-        try: tit = xml.split("<title>")[1].split("<![CDATA[")[1].split("]")[0].strip()
+        try: tit = xml.split("<title>")[1].split("<![CDATA[")[1].split("]")[0].strip() if not tit else tit
         except: tit = u"Vídeo de MTV".encode('utf8')
-        try: desc = xml.split("<description>")[1].split("<![CDATA[")[1].split("]")[0].strip()
+        try: desc = xml.split("<description>")[1].split("<![CDATA[")[1].split("]")[0].strip() if not desc else desc
         except: desc = u"Vídeo de MTV".encode('utf8')
     
         return {"exito" : True,
@@ -137,7 +161,4 @@ class MTV(Canal.Canal):
                 "titulos": [tit] if tit is not None else None,
                 "descs": [desc] if desc is not None else None
                 }
-
-
-
 
