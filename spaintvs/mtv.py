@@ -87,11 +87,14 @@ class MTV(Canal.Canal):
             "url_video", "filename", "rtmp_cmd", "menco_cmd" (de "videos") deben ser listas de cadenas (si no son None)
         '''
         
+        com = False
+        
         html = Descargar.get(self.url)
         html = html.replace("\n", "").replace("\t", "")
         try: #ES
             uri = html.split("var uri = \"")[1].split("\"")[0]
         except: #COM
+            com = True
             uri = html.split(".videoUri = \"")[1].split("\"")[0]
         
         #Spain or .com?
@@ -134,7 +137,11 @@ class MTV(Canal.Canal):
             xml2 = Descargar.get(xmlURL)
             logging.debug(xml2)
             url = "rtmp" + xml2.split("<src>rtmp")[-1].split("</src>")[0]
-        rtmpd_cmd = "rtmpdump -r \'"+url+"\' -o \'"+name+"\'"
+        
+        if com:
+            rtmpd_cmd = "rtmpdump -r \'"+url+"\' -o \'"+name+"\' -W \'http://media.mtvnservices.com/player/prime/mediaplayerprime.2.3.6.swf\'"
+        else:
+            rtmpd_cmd = "rtmpdump -r \'"+url+"\' -o \'"+name+"\'"
 
         try: img = Utiles.recortar(xml, "<image url=\"", "\"")
         except: img = None
