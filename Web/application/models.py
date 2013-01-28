@@ -25,3 +25,11 @@ class RegistroDescargas(db.Model):
     vidTit = db.StringProperty(required=True)
     vidDesc = db.TextProperty()
     
+class RegistroDescargasAPI(db.Model):
+    '''Model para guardar el registro de vídeos descargados en la web'''
+    date = db.DateTimeProperty(auto_now_add=True)
+    urlOrig = db.StringProperty(required=True)
+    urlImg = db.StringProperty(required=True)
+    vidTit = db.StringProperty(required=True)
+    vidDesc = db.TextProperty()
+    

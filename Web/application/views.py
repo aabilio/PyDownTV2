@@ -20,7 +20,7 @@ from flask import render_template, flash, url_for, redirect, Response, json, req
 #from decorators import login_required, admin_required
 #from forms import ExampleForm
 
-from models import RegistroDescargas
+from models import RegistroDescargas, RegistroDescargasAPI
 
 import re
 
@@ -445,56 +445,52 @@ def agranel(urlOrig=None): #TODO: Hacer HILOS!!!
 
 
 
-def api(url=None):
+def api(urlOrig=None):
     opcs = _default_opcs
-    if request.method == "GET":
-        try:
-            urlOrig = request.args['url']
-        except:
-            return render_template("api.html")     
-    try:
-        search = urlOrig
-        #search = url if url is not None else request.args['url']
-        ## CASOS ESPECIALES URL NO ASCCII
-        #RTPA
-        try: search = search.split("video:")[0] + "video:_" + search.split("_")[1]
-        except: pass
-        #END - RTPA
-        ## END - CASOS ESPECIALES 
-        if compURL(search):
-            canal = qCanal(search, opcs)
-            if canal == None:
-                js = json.dumps(TVnoSoportada)
-                resp = Response(js, status=200, mimetype='application/json')
-                return resp
-                #return render_template("api.html", messages=TVnoSoportada)
+        
+    if urlOrig is None:
+        if request.method == "GET": # La URL se pasa por parámetro http://web.pydowntv.com/?url=""
+            try:
+                urlOrig = request.args['url']
+            except:
+                return render_template("api.html")
         else:
-            js = json.dumps(URLmalFormada)
+            urlOrig = request.form['urlOrig']
+    
+    ## CASOS ESPECIALES URL NO ASCCII
+    #RTPA
+    if urlOrig.find("rtpa.es") != -1:
+        try: urlOrig = urlOrig.split("video:")[0] + "video:_" + urlOrig.split("_")[1]
+        except: pass
+    #END - RTPA
+    ## END - CASOS ESPECIALES 
+    
+    
+    
+    #opcs = _default_opcs
+    #if request.method == "GET":
+        #try:
+        #    urlOrig = request.args['url']
+        #except:
+        #    return render_template("api.html")     
+    #try:
+    if not urlOrig.startswith("http://"): urlOrig ="http://"+urlOrig
+    if compURL(urlOrig):
+        canal = qCanal(urlOrig, opcs)
+        if canal == None:
+            js = json.dumps(TVnoSoportada)
             resp = Response(js, status=200, mimetype='application/json')
             return resp
-            #return render_template("api.html", messages=URLmalFormada)
-
-
-        try:
-            info = canal.getInfo()
-        except Error.GeneralPyspainTVsError, e:
-            msg = {
-                "exito": False,
-                "mensaje": e
-                }
-            js = json.dumps(msg)
-            resp = Response(js, status=200, mimetype='application/json')
-            return resp
-            #return render_template("api.html", messages=msg)
-        except:
-            js = json.dumps(ErrorDesconocido)
-            resp = Response(js, status=200, mimetype='application/json')
-            return resp
-            #return render_template("api.html", messages=ErrorDesconocido)
-        js = json.dumps(info)
+            #return render_template("api.html", messages=TVnoSoportada)
+    else:
+        js = json.dumps(URLmalFormada)
         resp = Response(js, status=200, mimetype='application/json')
         return resp
-        #return render_template("api.html", messages=info)
+        #return render_template("api.html", messages=URLmalFormada)
+
+
+    try:
+        info = canal.getInfo()
     except Error.GeneralPyspainTVsError, e:
         msg = {
             "exito": False,
@@ -503,11 +499,41 @@ def api(url=None):
         js = json.dumps(msg)
         resp = Response(js, status=200, mimetype='application/json')
         return resp
+        #return render_template("api.html", messages=msg)
     except Exception, e:
+        return e.__str__()
         js = json.dumps(ErrorDesconocido)
         resp = Response(js, status=200, mimetype='application/json')
         return resp
         #return render_template("api.html", messages=ErrorDesconocido)
+        
+    # Guardar Registro antes de renderizar: ##.decode('iso-8859-1').encode('utf8')
+    try: 
+        reg = RegistroDescargasAPI(
+                                urlOrig = urlOrig,
+                                urlImg = info["videos"][0]["url_img"],
+                                vidTit = info["titulos"][0].decode('utf8')#,
+                                #vidDesc = info["descs"][0]
+                                )
+        reg.put()
+    except: pass #TODO: Mejorar esto (codificación...)
+    js = json.dumps(info)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
+    #return render_template("api.html", messages=info)
+    #except Error.GeneralPyspainTVsError, e:
+    #    msg = {
+    #        "exito": False,
+    #        "mensaje": e
+    #        }
+    #    js = json.dumps(msg)
+    #    resp = Response(js, status=200, mimetype='application/json')
+    #    return resp
+    #except Exception, e:
+    #    js = json.dumps(ErrorDesconocido)
+    #    resp = Response(js, status=200, mimetype='application/json')
+    #    return resp
+    #    #return render_template("api.html", messages=ErrorDesconocido)
         
 def mitele(urlOrig=None):
     '''Función especial para mitele'''

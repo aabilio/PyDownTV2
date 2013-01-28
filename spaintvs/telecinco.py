@@ -113,8 +113,10 @@ class Telecinco(Canal.Canal):
             name = streamXML.split("<![CDATA[")[1].split("]")[0] + ".mp4"
         elif streamHTML.find("MDS.embedObj(video") != -1:
             contentID = streamHTML.split("MDS.embedObj(video, \"")[1].split("\"")[0]
-            clippingID = streamHTML.split("imageClippingId: \'")[1].split("\'")[0]
-            imageContentID = streamHTML.split("imageContentId: \'")[1].split("\'")[0]
+            try: clippingID = streamHTML.split("imageClippingId: \'")[1].split("\'")[0] # try por que en la API no funcionaba oO
+            except: clippingID = "3.jpg"
+            try: imageContentID = streamHTML.split("imageContentId: \'")[1].split("\'")[0] # try por problemas com la API oO
+            except: imageContentID = streamHTML.split("MDS.embedObj(video, \"")[1].split("\"")[0]
             self.debug(u"URL JSON: " + self.URL_JSON + "contentId=" + contentID + "&clippingId=" + clippingID + "&imageContentId=" + imageContentID)
             streamJSON = Descargar.getHtml(self.URL_JSON +
                                          "contentId=" + contentID +
