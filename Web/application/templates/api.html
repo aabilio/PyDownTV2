@@ -54,7 +54,7 @@
     <header class="bck darkest padding_top padding_bottom" style="height: 100%;">
         <div class="row text color white shadow">
             <div class="column_4">
-                <a href="{{ url_for('home') }}" class="logo text normal color white">Py<span class="text book">DownTV</span> web<img src="/static/img/favicon.png"/></a>
+                <a href="{{ url_for('home') }}" class="logo text normal color white">Py<span class="text book">DownTV</span> web<img src="/static/img/favicon.png"/> {dev}</a>
             </div>
             <div class="column_6 offset_2 text right">
                 <span class="text bold">Síguenos en:</span>
@@ -73,6 +73,7 @@
         <div class="row text center">
             <nav class="group text bold">
                 <a href="{{ url_for('home') }}"><span class="icon download"></span>Descargar!</a>
+                <a href="{{ url_for('agranel') }}"><span class="icon download"></span><span class="logo text normal">A</span>Granel</a>
                 <a href="{{ url_for('ayuda') }}"><span class="icon tag"></span>FAQ y Ayuda</a>
                 <a href="{{ url_for('canales') }}"><span class="icon cube"></span>Televisiones Soportadas</a>
                 <a href="{{ url_for('apps') }}"><span class="icon star"></span>Apps</a>
@@ -88,7 +89,7 @@
     		<h1 class="icon cog text center color theme">
     			API de spaintvs
     		</h1>
-    		<h4 class="text center">Para crear tu fron-end</h4>
+    		<h4 class="text center">Para crear tu front-end</h4>
     		<br />
     		<p class="text justify color thin">
     			PyDownTV web, utiliza la biblioteca Python de <a class="icon github" href="https://github.com/aabilio/PyDownTV2/tree/master/spaintvs">spaintvs</a> para obtener los enlaces
