@@ -53,7 +53,8 @@ _url_canales = {
                "intereconomia": ["intereconomia.com"],
                "historia": ["historia.adnstream.com"],
                "plus": ["canalplus.es", "plus.es"],
-               "vtelevision": ["vtelevision.es"]
+               "vtelevision": ["vtelevision.es"],
+               "riasbaixas": ["canalriasbaixas.com"]
                }
 _mod_tv = {
            "rtve": {"mod":tve.TVE,"comentario":"[INFO] Radio Televión Española", "urls":_url_canales["rtve"]},
@@ -77,7 +78,8 @@ _mod_tv = {
            "intereconomia": {"mod":intereconomia.Intereconomia,"comentario":"[INFO] Intereconomía","urls":_url_canales["intereconomia"]},
            "historia": {"mod":historia.Historia,"comentario":"[INFO] Canal Historia","urls":_url_canales["historia"]},
            "plus": {"mod":plus.Plus,"comentario":"[INFO] Canal Plus","urls":_url_canales["plus"]},
-           "vtelevision": {"mod":vtelevision.V,"comentario":"[INFO] V Televisión","urls":_url_canales["vtelevision"]}
+           "vtelevision": {"mod":vtelevision.V,"comentario":"[INFO] V Televisión","urls":_url_canales["vtelevision"]},
+           "riasbaixas": {"mod":riasbaixas.RiasBaixas,"comentario":"[INFO] Rias Baixas TV","urls":_url_canales["riasbaixas"]}
            #"nombre" : {"mod":rutaAlaClase, "comentario":"infoParaImprimir", "urls":_url_canales["canal"]}
            }
 # Fin de edición

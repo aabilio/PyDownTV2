@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with spaintvs.  If not, see <http://www.gnu.org/licenses/>.
 
-# Módulo para descargar todos los vídeos de la web de V Televisión
+# Módulo para descargar todos los vídeos de la web de canalriasbaixas.com
 
 __author__="aabilio"
 __date__ ="$29-ene-2013 11:35:37$"
@@ -26,14 +26,14 @@ import Utiles
 import Descargar
 import Error
 
-url_validas = ["vtelevision.es"]
+url_validas = ["canalriasbaixas.com"]
 
-class V(Canal.Canal):
+class RiasBaixas(Canal.Canal):
     '''
-        Clase para manejar los vídeos de V televisión.
+        Clase para manejar los vídeos de canalriasbaixas.com.
     '''
     
-    URL_VTV = "http://www.vtelevision.es"
+    URL_RB = "http://canalriasbaixas.com"
     
     def __init__(self, url="", opcs=None):
         Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
@@ -84,23 +84,44 @@ class V(Canal.Canal):
         
         html = Descargar.get(self.url)
         
-        try: url = self.URL_VTV + html.split("showPlayer(")[1].split(",")[1].split(",")[0].replace("\"", "").strip() 
+        rtmp = False
+        try: url = html.split("<param name=\"movie\"")[1].split("file=")[1].split("&")[0]
         except:
             try:
-                url = Utiles.recortar(html, "<meta property=\"og:video\" content=\"", "\"").replace("media.", "")
-            except:
+                url = Utiles.unescape(Utiles.recortar(html, "value=\"src=", "&"))
+                rtmp = True
+            except: #TODO: Añadir vídeos de listas
                 raise Error.GeneralPyspainTVsError("No se pudo obtener la url de descarga")
         
-        try: tit = Utiles.recortar(html, "<meta name=\"title\" content=\"", "\"").decode('iso-8859-1').encode('utf8')
-        except: tit = u"Vídeo de V Televisión".encode('utf8')
-        try: desc = Utiles.recortar(html, "<meta name=\"description\" content=\"", "\"").decode('iso-8859-1').encode('utf8')
-        except: desc = tit
-        try: img = Utiles.recortar(html, "<meta property=\"og:image\" content=\"", "\"")
+        try: tit = html.split("<td class=\"contentheading\"")[1].split(">")[1].split("<")[0].decode('iso-8859-1').encode('utf8')
+        except:
+            try:
+                tit = Utiles.recortar(html, "<meta name=\"title\" content=\"", "\"").decode('iso-8859-1').encode('utf8')
+            except:
+                tit = u"Vídeo de Rias Baixas Televisión".encode('utf8')
+        try:
+            desc = html.split("<table class=\"contentpaneopen\">")[1].split("</strong>")[1].split("</table>")[0].decode('iso-8859-1').encode('utf8')
+            #desc = desc.replace(desc.find("<!-- JW AllVideos"), new)
+        except:
+            desc = tit
+        try:
+            if rtmp:
+                imgs = html.split("MM_preloadImages('")[1]
+                for i in imgs.split("<a href="):
+                    if i.find(self.url) != -1:
+                        img = self.URL_RB + "/" + i.split("MM_swapImage(")[1].split(",")[2].replace("\'", "").strip()
+                        break
+                    else: img = None
+            else:
+                img = html.split("<param name=\"movie\"")[1].split("image=")[1].split("&")[0]
+                if Descargar.isReachable(img): pass
+                else: img = None
         except: img = None
-        try: name = Utiles.formatearNombre(tit) + ".mp4"
-        except: name = "Video_V_Television.mp4"
-            
+        try: name = Utiles.formatearNombre(tit) + ".flv"
+        except: name = "Video_RiasBaixas.mp4"
     
+        if rtmp: rtmpd_cmd = "rtmpdump -r \'"+url+"\' -o \'"+name+"\'"
+        
         return {"exito" : True,
                 "num_videos" : 1,
                 "mensaje"   : u"URL obtenido correctamente",
@@ -108,9 +129,9 @@ class V(Canal.Canal):
                         "url_video" : [url],
                         "url_img"   : img if img is not None else None,
                         "filename"  : [name] if name is not None else None,
-                        "tipo"      : "http",
+                        "tipo"      : "http" if not rtmp else "rtmp",
                         "partes"    : 1,
-                        "rtmpd_cmd" : None,
+                        "rtmpd_cmd" : [rtmpd_cmd] if rtmp else None,
                         "menco_cmd" : None,
                         "url_publi" : None,
                         "otros"     : None,
