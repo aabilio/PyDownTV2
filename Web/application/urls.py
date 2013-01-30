@@ -38,6 +38,9 @@ app.add_url_rule('/apps', 'apps', view_func=views.apps, methods=['GET', 'POST'])
 # MiTele special page
 app.add_url_rule('/mitele', 'mitele', view_func=views.mitele, methods=['GET', 'POST'])
 
+# Iframe embed content
+app.add_url_rule('/embed', 'embed', view_func=views.embed, methods=['GET', 'POST'])
+
 # Legal page
 app.add_url_rule('/legal', 'legal', view_func=views.legal, methods=['GET', 'POST'])
 

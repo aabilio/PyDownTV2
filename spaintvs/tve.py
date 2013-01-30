@@ -128,7 +128,11 @@ class TVE(Canal.Canal):
                 "descs": [desc] if desc is not None else None
                 }
     
-
+    def getID(self, url):
+        IDs = [i for i in url.split("/") if i.isdigit() and len(i)>5]
+        return IDs[0] if IDs else None
+        
+    
     def getInfo(self):
         '''
             Devuelve toda la información asociada a la URL recibida, de la siguiente forma:
@@ -167,6 +171,7 @@ class TVE(Canal.Canal):
         # Primero: nos quedamos con le id dependiendo si el user metio la url con
         # una barra (/) final o no y si tiene extensión (no es alacarta)
         logging.debug(self.url)
+        
         videoID = self.url.split('/')[-1]
         if videoID == "":
             videoID = self.url.split('/')[-2]
@@ -174,8 +179,10 @@ class TVE(Canal.Canal):
             videoID.find(".html") != -1:
             videoID = videoID.split('.')[0]
         
-        self.debug(u"ID del vídeo en url = " + videoID)
-        
+        if not videoID.isdigit(): videoID = self.getID(self.url)
+            
+        try: self.debug(u"ID del vídeo en url = " + videoID)
+        except: pass
         #if self.url.find("rtve.es/infantil/") != -1: self.url = self.url.replace("/#","") # Vídeos de Clan a veces falla con el ancla
         
         # Añadido para vídeos nuevos (periodo de prueba):
@@ -192,6 +199,8 @@ class TVE(Canal.Canal):
         
         self.debug(u"ID del vídeo en HTML = " + videoID_comp if videoID_comp else "No ID en HTML")
         self.log(u"[INFO] ID del Vídeo :", videoID)
+        
+        if videoID is None: raise Error.GeneralPyspainTVsError(u"No se encuentra el ID del vídeo")
         
         if self.url.find("rtve.es/infantil/") != -1:
             return self.__ClanTV(sourceHTML, videoID)

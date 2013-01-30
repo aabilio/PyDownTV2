@@ -298,6 +298,7 @@ def home(urlOrig=None):
         except: pass
     #END - RTPA
     ## END - CASOS ESPECIALES 
+    #if urlOrig.startswith("www"): urlOrig ="http://"+urlOrig
     if not urlOrig.startswith("http://"): urlOrig ="http://"+urlOrig
     if compURL(urlOrig):
         canal = qCanal(urlOrig, opcs)
@@ -308,7 +309,13 @@ def home(urlOrig=None):
     else: #TODO: meter huevos de pascua aquí :P
         flash(u"URL incorrecta: \'%s\'" % urlOrig)
         return redirect(url_for('home'))
-        #return render_template("api.html", messages=URLmalFormada)
+        
+        #Primero meter en una lista las posibles variaciones
+        #try:
+        #    last = RegistroDescargas.gql("WHERE vidTit IN :title order by date DESC LIMIT 20", title=[urlOrig])
+        #except:
+        #    last = None
+        #return last[0].urlOrig
 
     try:
         info = canal.getInfo()
@@ -565,6 +572,55 @@ def mitele(urlOrig=None):
             
     return redirect(miteleGAE.MiTele(urlOrig, opcs).getInfo()['videos'][0]['url_video'][0])
 
+def embed(urlOrig=None):
+    opcs = _default_opcs
+    if urlOrig is None:
+        if request.method == "GET": # La URL se pasa por parámetro http://web.pydowntv.com/?url=""
+            try:
+                urlOrig = request.args['urlOrig']
+            except:
+                return render_template('index.html')
+        else:
+            urlOrig = request.form['urlOrig']
+            
+    if urlOrig.find("rtpa.es") != -1:
+        try: urlOrig = urlOrig.split("video:")[0] + "video:_" + urlOrig.split("_")[1]
+        except: pass
+    #END - RTPA
+    ## END - CASOS ESPECIALES 
+    if not urlOrig.startswith("http://"): urlOrig ="http://"+urlOrig
+    if compURL(urlOrig):
+        canal = qCanal(urlOrig, opcs)
+        if canal == None:
+            flash(u"Lo que has introducido no corresponde con ningún canal soportado por PyDownTV\n")
+            return redirect(url_for('home'))
+            #return render_template("index.html", msgs=TVnoSoportada)
+    else: #TODO: meter huevos de pascua aquí :P
+        flash(u"URL incorrecta: \'%s\'" % urlOrig)
+        return redirect(url_for('home'))
+        #return render_template("api.html", messages=URLmalFormada)
+
+    try:
+        info = canal.getInfo()
+    except Error.GeneralPyspainTVsError, e:
+        flash(u"ERROR al recuperar el vídeo: %s" % e.__str__())
+        return redirect(url_for('home'))
+        #return render_template("api.html", messages=msg)
+    except Exception, e:
+        #flash(unicode(e.__str__()))
+        #return redirect(url_for('home'))
+        flash(u"ERROR al recuperar el vídeo. ¿Es una URL válida?")
+        return redirect(url_for('home'))
+        #return render_template("api.html", messages=ErrorDesconocido)
+
+    return render_template(
+                           "embed.html",
+                           videos=info["videos"],
+                           titulos=info["titulos"],
+                           descripciones=info["descs"],
+                           urlOrig=urlOrig
+                           )
+    
 def ayuda():
     return render_template("ayuda.html")
 

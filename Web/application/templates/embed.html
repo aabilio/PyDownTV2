@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <!--<meta charset="utf-8" />-->
+    <title>PyDownTV WEB: Descarga vídeos de las webs de TV</title>
+
+	<meta name="title" content="PyDownTV: Descarga los vídeos de las Televisiones Españolas">
+	<meta name="author" content="aabilio">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Language" content="es" />
+	<link rel="author" href="http://web.pydowntv.com/static/humans.txt" />
+	<meta name="copyright" content="Copyright (c) 2012 by aabilio">
+	<meta name="keywords" content="Descarga, videos, rtve, tv 1, tv 2, tve, mitele,clan, antena 3, cuatro, la sexta, Fórmula 1, televisiones, descubre, enlaces">
+	<meta name="description" content="Web que muestra los enlaces de descarga de los vídeos de las webs de las principales televiosiones españolas, incluídas autonómicas. Lo único que se tiene que hacer, es introducir en el campo de texto la URL perteneciente a donde se observa el vídeo de forma online en su propia web. PyDownTV buscará por su URL final para y si la encuentra te la mostrará">
+	<meta name="robots" content="index, follow">
+	<meta name="rating" content="general">
+	<meta name="google-site-verification" content="ejavY4el_TExdc8suqFo9yz9amL0KAeDNneXX2_r7Y4" />
+	
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <!-- TUKTUK -->
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/tuktuk.css">
+    <link rel="stylesheet" href="/static/css/tuktuk.theme.css">
+    <!-- TUKTUK.WIDGETS -->
+    <link rel="stylesheet" href="/static/widgets/tuktuk.widget.icon.css">
+    <link rel="stylesheet" href="/static/widgets/tuktuk.widget.modal.css">
+    
+    <!--<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>-->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
+    
+    <script type="text/javascript">
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-22464411-3']);
+	  _gaq.push(['_trackPageview']);
+	
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	</script>
+</head>
+
+<body>
+    <!-- ========================== COLUMNS ========================== -->
+    <section class="bck lightest text center bold color white">
+    	<div class="column_4 embed-container">
+    		<img src="{{ videos[0]['url_img'] }}"/>
+    	</div>
+    	<div class="column_8">
+    		<a href="{{ url_for('home', url=urlOrig) }}">Ver '{{ titulos[0] }}' en PyDownTV</a>
+    	</div>
+    </section>
+</body>
+</html>
