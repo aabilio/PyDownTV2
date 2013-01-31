@@ -91,7 +91,9 @@ class AragonTV(Canal.Canal):
             server = html2.split("netConnectionUrl:\'")[1].split("\'")[0]
             url = server + clip
             name += "." + clip.split(".")[-1]
-            img = self.URL_ARAGONTV_ALACARTA + html.split("logo:")[1].split("url:")[1].split("\'")[1].split("\'")[0]
+            img1 = html.split("logo:")[1].split("url:")[1].split("\'")[1].split("\'")[0]
+            if img1.find("aragontelevision.es") != -1: img = img1
+            else: img = self.URL_ARAGONTV_ALACARTA + img1#html.split("logo:")[1].split("url:")[1].split("\'")[1].split("\'")[0]
             
             try:
                 desc = Utiles.recortar(html, "<span class=\"title\">Resumen del vídeo</span>", "</div>").strip().decode('string-escape')

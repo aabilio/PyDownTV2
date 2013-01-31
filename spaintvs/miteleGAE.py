@@ -136,6 +136,7 @@ class MiTele(Canal.Canal):
         # Obtener HTML y XML:
         try:
             streamHTML = htmlBackup = Descargar.getHtml(self.url).decode('string-escape')
+            html = streamHTML
             tit_vid = streamHTML.split("<title>")[1].split("<")[0]
             streamHTML = streamHTML.replace(" ", "")
             streamXML = Descargar.getHtml(streamHTML.split("{\"host\":\"")[1].split("\"")[0].replace("\/", "/"))
@@ -144,6 +145,8 @@ class MiTele(Canal.Canal):
         
         try:
             img = streamXML.split("<thumb><![CDATA[")[1].split("]")[0]
+            if img.find("esArray") != -1 or img.find("esarray") != -1:
+                img = html.split("class=\"videoEmbed\"")[1].split("<img src=\"")[1].split("\"")[0]
         except Exception, e:
             self.debug("No se puede obtener imagen: "+e.__str__())
             img = None
