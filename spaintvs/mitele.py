@@ -38,8 +38,9 @@ class MiTele(Canal.Canal):
     
     #URL_TIME  = "http://www.mitele.es/media/clock.php"
     URL_TIME = "http://servicios.telecinco.es/tokenizer/clock.php"
-    TOKENIZER = "/tokenizer/tk3.php"
-    URL_POST = "servicios.mitele.es"
+    #TOKENIZER = "/tokenizer/tk3.php"
+    TOKENIZER = "/index.php"
+    URL_POST = "token.mitele.es"
     
     def __init__(self, url="", opcs=None):
         Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
@@ -61,7 +62,7 @@ class MiTele(Canal.Canal):
         tokenizer = self.TOKENIZER
         server_time = Descargar.get(self.URL_TIME).strip()
         toEncode = server_time+";"+ID+";"+startTime+";"+endTime
-        data = AES.encrypt(toEncode, p('eG84NWtUK1FIejNmUk1jSE1YcDljQQ=='), 256)
+        data = AES.encrypt(toEncode, "xo85kT+QHz3fRMcHMXp9cA", 256)
         post_args = {
                     'hash' : data,
                     'id' : ID,

@@ -39,8 +39,9 @@ class MiTele(Canal.Canal):
     
     #URL_TIME  = "http://www.mitele.es/media/clock.php"
     URL_TIME = "http://servicios.telecinco.es/tokenizer/clock.php"
-    TOKENIZER = "/tokenizer/tk3.php"
-    URL_POST = "servicios.mitele.es"
+    #TOKENIZER = "/tokenizer/tk3.php"
+    TOKENIZER = "/index.php"
+    URL_POST = "token.mitele.es"
     
     def __init__(self, url="", opcs=None):
         Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
