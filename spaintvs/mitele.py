@@ -62,7 +62,7 @@ class MiTele(Canal.Canal):
         tokenizer = self.TOKENIZER
         server_time = Descargar.get(self.URL_TIME).strip()
         toEncode = server_time+";"+ID+";"+startTime+";"+endTime
-        data = AES.encrypt(toEncode, "xo85kT+QHz3fRMcHMXp9cA", 256)
+        data = AES.encrypt(toEncode, p('eG84NWtUK1FIejNmUk1jSE1YcDljQQ=='), 256)
         post_args = {
                     'hash' : data,
                     'id' : ID,
