@@ -11,7 +11,7 @@ Important: Place your keys in the secret_keys.py module,
 
 import os
 
-from secret_keys import CSRF_SECRET_KEY, SESSION_KEY
+from secret_keys import CSRF_SECRET_KEY, SESSION_KEY, _DOS_IPS, _IPS_API
 
 
 DEBUG_MODE = True
@@ -27,4 +27,7 @@ SECRET_KEY = CSRF_SECRET_KEY
 CSRF_SESSION_KEY = SESSION_KEY
 
 CSRF_ENABLED = True
+
+DOS_IPS = _DOS_IPS
+IPS_API = _IPS_API
 

@@ -15,6 +15,7 @@ from google.appengine.api import users
 from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 
 from flask import render_template, flash, url_for, redirect, Response, json, request
+from settings import DOS_IPS as dosIPs
 
 #from models import ExampleModel
 #from decorators import login_required, admin_required
@@ -272,6 +273,10 @@ def compURL(url):
 def home(urlOrig=None):
     opcs = _default_opcs
     
+    # Medida temporal:
+    if request.remote_addr in dosIPs:
+        return '''Hemos detectado un posible abuso del servicio. Para más información ponte en contacto con aabilio@pydowntv.com''', 404
+    
     # Obtener los últimos vídeos descargados:
     try:
         last = RegistroDescargas.gql("order by date DESC LIMIT 4")
@@ -364,6 +369,10 @@ def home(urlOrig=None):
 
 def agranel(urlOrig=None): #TODO: Hacer HILOS!!! 
     opcs = _default_opcs
+    
+    # Medida temporal:
+    if request.remote_addr in dosIPs:
+        return '''Hemos detectado un posible abuso del servicio. Para más información ponte en contacto con aabilio@pydowntv.com''', 404
     
     # Obtener los últimos vídeos descargados:
     try:
@@ -470,6 +479,10 @@ def agranel(urlOrig=None): #TODO: Hacer HILOS!!!
 
 def api(urlOrig=None):
     opcs = _default_opcs
+    
+    # Medida temporal:
+    if request.remote_addr in dosIPs:
+        return '''Hemos detectado un posible abuso del servicio. Para más información ponte en contacto con aabilio@pydowntv.com''', 404
         
     if urlOrig is None:
         if request.method == "GET": # La URL se pasa por parámetro http://web.pydowntv.com/?url=""
