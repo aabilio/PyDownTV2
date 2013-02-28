@@ -584,23 +584,48 @@ def mitele(urlOrig=None):
             urlOrig = request.form['urlOrig']
             
     return redirect(miteleGAE.MiTele(urlOrig, opcs).getInfo()['videos'][0]['url_video'][0])
+    
 
 def embed(urlOrig=None):
     opcs = _default_opcs
+
+    # Medida temporal:
+    if request.remote_addr in dosIPs:
+        return '''Hemos detectado un posible abuso del servicio. Para más información ponte en contacto con aabilio@pydowntv.com''', 404
+    
+    if urlOrig is None:
+        if request.method == 'POST':
+            urlOrig = request.form['urlOrig']
+        else:
+            return render_template('embed.html')
+
+    # Obtener los últimos vídeos descargados:
+    try:
+        last = RegistroDescargas.gql("order by date DESC LIMIT 4")
+    except:
+        last = None
+    
     if urlOrig is None:
         if request.method == "GET": # La URL se pasa por parámetro http://web.pydowntv.com/?url=""
             try:
-                urlOrig = request.args['urlOrig']
+                urlOrig = request.args['url']
             except:
-                return render_template('index.html')
+                return render_template('index.html', last=last)
         else:
             urlOrig = request.form['urlOrig']
-            
+    
+    if urlOrig == u'' or urlOrig == u"Introduce AQUÍ la URL del vídeo a descargar...":
+        flash(u"Parece que no has introducido ninguna url")
+        return redirect(url_for('home'))
+    
+    ## CASOS ESPECIALES URL NO ASCCII
+    #RTPA
     if urlOrig.find("rtpa.es") != -1:
         try: urlOrig = urlOrig.split("video:")[0] + "video:_" + urlOrig.split("_")[1]
         except: pass
     #END - RTPA
     ## END - CASOS ESPECIALES 
+    #if urlOrig.startswith("www"): urlOrig ="http://"+urlOrig
     if not urlOrig.startswith("http://"): urlOrig ="http://"+urlOrig
     if compURL(urlOrig):
         canal = qCanal(urlOrig, opcs)
@@ -611,7 +636,13 @@ def embed(urlOrig=None):
     else: #TODO: meter huevos de pascua aquí :P
         flash(u"URL incorrecta: \'%s\'" % urlOrig)
         return redirect(url_for('home'))
-        #return render_template("api.html", messages=URLmalFormada)
+        
+        #Primero meter en una lista las posibles variaciones
+        #try:
+        #    last = RegistroDescargas.gql("WHERE vidTit IN :title order by date DESC LIMIT 20", title=[urlOrig])
+        #except:
+        #    last = None
+        #return last[0].urlOrig
 
     try:
         info = canal.getInfo()
@@ -625,13 +656,36 @@ def embed(urlOrig=None):
         flash(u"ERROR al recuperar el vídeo. ¿Es una URL válida?")
         return redirect(url_for('home'))
         #return render_template("api.html", messages=ErrorDesconocido)
+    
+    # Guardar Registro antes de renderizar: ##.decode('iso-8859-1').encode('utf8')
+    try: 
+        reg = RegistroDescargas(
+                                urlOrig = urlOrig,
+                                urlImg = info["videos"][0]["url_img"],
+                                vidTit = info["titulos"][0].decode('utf8')#,
+                                #vidDesc = info["descs"][0]
+                                )
+        reg.put()
+    except: pass #TODO: Mejorar esto (codificación...)
+    
+    ####################### url2downloader:
+    jdownloader = ""
+    if urlOrig.find('mitele') != -1: #Hasta ahora los vídeos Mitele solo son de un enlace
+        jdownloader += "http://web.pydowntv.com/mitele?urlOrig="+urlOrig+"\r\n"
+    else:
+        for vid in info['videos']:
+            for url in vid['url_video']:
+                jdownloader += url+"\r\n"
+    #################################################
 
     return render_template(
-                           "embed.html",
+                           "index.html",
                            videos=info["videos"],
                            titulos=info["titulos"],
                            descripciones=info["descs"],
-                           urlOrig=urlOrig
+                           urlOrig=urlOrig,
+                           jdownloader=jdownloader,
+                           last=last
                            )
     
 def ayuda():

@@ -29,6 +29,42 @@
     <!--<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>-->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
     
+    <style type="text/css">
+        body > section.landing {
+            padding: 0px 0px 0px 0px;
+            margin: 0px 0px 0px 0px;
+            border: 0px 0px 0px 0px;
+            background: transparent;
+        }
+        body > section.landing .form {
+            margin-top: 0px;
+        }
+
+        .column_12 {
+            margin: 0px 0px 0px 0px;
+            padding: 0px 0px 0px 0px;
+        }
+        .column_8 {
+            margin: 0px 0px 0px 0px;
+            padding: 0px 0px 0px 0px;
+        }
+        .row {
+            margin: 0px 0px 0px 0px;
+            padding: 0px 0px 0px 0px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#sendRequestButton').click(function(){
+                setTimeout(function(){
+                    $('#loading').hide();
+                    $('#sendRequestButton').html('<div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" />Buscando...</div>Buscar!');
+                }, 4000);
+            });
+        });
+    </script>
+
     <script type="text/javascript">
 	  var _gaq = _gaq || [];
 	  _gaq.push(['_setAccount', 'UA-22464411-3']);
@@ -43,14 +79,18 @@
 </head>
 
 <body>
-    <!-- ========================== COLUMNS ========================== -->
-    <section class="bck lightest text center bold color white">
-    	<div class="column_4 embed-container">
-    		<img src="{{ videos[0]['url_img'] }}"/>
-    	</div>
-    	<div class="column_8">
-    		<a href="{{ url_for('home', url=urlOrig) }}">Ver '{{ titulos[0] }}' en PyDownTV</a>
-    	</div>
+    <section class="landing text center color white">
+        <div class="row">
+            <div class="column_8 form">
+                <form action="http://web.pydowntv.com/embed" method="post" id="searchUrlOrig" target="_blank">
+                    <input name="urlOrig" type="text" id="sendRequestInput" class="large float left" placeholder="PyDownTV">
+                    <button style="color: black;" id="sendRequestButton" name="submit" onclick="$('#loading').show();" type="submit" class="button large float">
+                        <div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" />Buscando...</div>
+                        Buscar!
+                    </button>
+                </form>
+            </div>
+        </div>
     </section>
 </body>
 </html>
