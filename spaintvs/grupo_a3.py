@@ -59,10 +59,20 @@ class GrupoA3(Canal.Canal):
     # Comunicación de errores con nivel de aplicación:
     #    - lanzar la excepción: raise Error.GeneralPyspainTVsError("mensaje")
     
+    def __getUrlDescarga(self, xml):
+        try:
+            urlDeDescarga = Utiles.recortar(xml, "<urlHttpVideo><![CDATA[", "]]></urlHttpVideo>")
+        except:
+            urlDeDescarga = self.URL_DE_DESCARGA
+        return urlDeDescarga
+
     def __modoSalonNuevo(self, streamXML):
         '''Nuevos vídeos con extensión .m4v'''
         self.log(u"[INFO] Modo Salón")
         self.log(u"[INFO] Nuevos vídeos en formato f4v")
+
+        self.URL_DE_DESCARGA = self.__getUrlDescarga(streamXML)
+
         if streamXML.find("000.f4v"):
             url2down1 = self.URL_DE_DESCARGA + streamXML.split("<archivo><![CDATA[")[1].split("]")[0]
         else:
@@ -99,6 +109,7 @@ class GrupoA3(Canal.Canal):
         else:
             raise Error.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra XML.")
         
+        self.URL_DE_DESCARGA = self.__getUrlDescarga(streamXML)
         # Comprobar aquí si se puede descargar 000.mp4:
         if streamXML.find(".mp4") != -1:
             tipo = ".mp4"
@@ -144,6 +155,7 @@ class GrupoA3(Canal.Canal):
     def __modoNormalUnaParte(self, streamHTML):
         xmlURL = streamHTML.split("A3Player.swf?xml=")[1].split("\"")[0]
         streamXML = Descargar.getHtml(xmlURL)
+        self.URL_DE_DESCARGA = self.__getUrlDescarga(streamXML)
         url2down =  self.URL_DE_DESCARGA + \
         streamXML.split("<archivo><![CDATA[")[1].split("]]></archivo>")[0]
         name = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0] + ".mp4"
@@ -197,8 +209,9 @@ class GrupoA3(Canal.Canal):
             ret["descs"].append(i.split("\"")[1].split("\"")[0])
             
             xmlURL = self.URL_DE_ANTENA3 + i.split("rel=\"/")[1].split("\"")[0]
-            print xmlURL
+            #print xmlURL
             streamXML = Descargar.getHtml(xmlURL)
+            self.URL_DE_DESCARGA = self.__getUrlDescarga(streamXML)
             
             video["url_video"].append(self.URL_DE_DESCARGA + streamXML.split("<archivo><![CDATA[")[1].split("]")[0])
             video["url_img"] = self.URL_DE_ANTENA3+"clipping"+streamXML.split("<archivo><![CDATA[clipping")[1].split("]")[0]
