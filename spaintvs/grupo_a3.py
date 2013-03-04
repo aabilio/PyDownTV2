@@ -73,28 +73,29 @@ class GrupoA3(Canal.Canal):
 
         self.URL_DE_DESCARGA = self.__getUrlDescarga(streamXML)
 
-        if streamXML.find("000.f4v"):
-            url2down1 = self.URL_DE_DESCARGA + streamXML.split("<archivo><![CDATA[")[1].split("]")[0]
-        else:
-            url2down1 = self.URL_DE_DESCARGA + \
-                streamXML.split("<archivo><![CDATA[")[1].split("001.f4v]]></archivo>")[0] + "000.f4v"
+        # Soporte para una parte OFF (desde hace tiempo no se detecta un 000.mp4)
+        #if streamXML.find("000.f4v"):
+        #    url2down1 = self.URL_DE_DESCARGA + streamXML.split("<archivo><![CDATA[")[1].split("]")[0]
+        #else:
+        #    url2down1 = self.URL_DE_DESCARGA + \
+        #        streamXML.split("<archivo><![CDATA[")[1].split("001.f4v]]></archivo>")[0] + "000.f4v"
         
-        if Descargar.isReachable(url2down1): # Vídeo en una parte
-            url2down = url2down1
-            name = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0] + ".f4v"
-        else: # Vídeo en varias partes
-            self.info(u"[!!!]  No se puede encuentra el vídeo en un archivo (000.m4v)")
-            self.info(u"[INFO] El vídeo consta de varias partes")
-            parts = re.findall("\<archivo\>\<\!\[CDATA\[.*\.f4v\]\]\>\<\/archivo\>", streamXML)
-            if parts:
-                name1 = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0]
-                url2down = []
-                name = []
-                for i in parts:
-                    url2down.append(self.URL_DE_DESCARGA + i.split("<archivo><![CDATA[")[1].split("]]></archivo>")[0])
-                    name.append(name1 + "_" + i.split("]")[0].split("/")[-1])
-            else:
-                raise Error.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra ninguna parte de contenido.")
+        #if Descargar.isReachable(url2down1): # Vídeo en una parte
+        #    url2down = url2down1
+        #    name = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0] + ".f4v"
+        #else: # Vídeo en varias partes
+        #self.info(u"[!!!]  No se puede encuentra el vídeo en un archivo (000.m4v)")
+        self.info(u"[INFO] El vídeo consta de varias partes")
+        parts = re.findall("\<archivo\>\<\!\[CDATA\[.*\.f4v\]\]\>\<\/archivo\>", streamXML)
+        if parts:
+            name1 = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0]
+            url2down = []
+            name = []
+            for i in parts:
+                url2down.append(self.URL_DE_DESCARGA + i.split("<archivo><![CDATA[")[1].split("]]></archivo>")[0])
+                name.append(name1 + "_" + i.split("]")[0].split("/")[-1])
+        else:
+            raise Error.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra ninguna parte de contenido.")
         return [url2down,  name]
     
     def __modoSalon(self, streamHTML):
@@ -113,34 +114,34 @@ class GrupoA3(Canal.Canal):
         # Comprobar aquí si se puede descargar 000.mp4:
         if streamXML.find(".mp4") != -1:
             tipo = ".mp4"
-            url2down1 = self.URL_DE_DESCARGA + \
-                streamXML.split("<archivo><![CDATA[")[1].split("001.mp4]]></archivo>")[0] + "000.mp4"
+            #url2down1 = self.URL_DE_DESCARGA + \
+            #    streamXML.split("<archivo><![CDATA[")[1].split("001.mp4]]></archivo>")[0] + "000.mp4"
         elif streamXML.find(".flv") != -1:
             tipo = ".flv"
-            url2down1 = self.URL_DE_DESCARGA + \
-                streamXML.split("<archivo><![CDATA[")[1].split("001.flv]]></archivo>")[0] + "000.flv"
+            #url2down1 = self.URL_DE_DESCARGA + \
+            #    streamXML.split("<archivo><![CDATA[")[1].split("001.flv]]></archivo>")[0] + "000.flv"
         elif streamXML.find(".f4v") != -1:
             [url2down, name] = self.__modoSalonNuevo(streamXML)
             return [url2down, name]
         else:
             raise Error.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra mp4, f4v ni flv")
         
-        if Descargar.isReachable(url2down1): # Vídeo completo en una parte
-            url2down = url2down1
-            name = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0] + tipo
-        else: # Vídeo en varias partes
-            self.info(u"[!!!]  No se puede encuentra el vídeo en un archivo (000.m4v)")
-            self.info(u"[INFO] El vídeo consta de varias partes")
-            parts = re.findall("\<archivo\>\<\!\[CDATA\[.*"+tipo+"\]\]\>\<\/archivo\>", streamXML)
-            if parts:
-                name1 = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0]
-                url2down = []
-                name = []
-                for i in parts:
-                    url2down.append(self.URL_DE_DESCARGA + i.split("<archivo><![CDATA[")[1].split("]]></archivo>")[0])
-                    name.append(name1 + "_" + i.split("]")[0].split("/")[-1])
-            else:
-                raise Error.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra niguna parte de contenido.")
+        #if Descargar.isReachable(url2down1): # Vídeo completo en una parte
+        #    url2down = url2down1
+        #    name = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0] + tipo
+        #else: # Vídeo en varias partes
+        #self.info(u"[!!!]  No se puede encuentra el vídeo en un archivo (000.mp4)")
+        self.info(u"[INFO] El vídeo consta de varias partes")
+        parts = re.findall("\<archivo\>\<\!\[CDATA\[.*"+tipo+"\]\]\>\<\/archivo\>", streamXML)
+        if parts:
+            name1 = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0]
+            url2down = []
+            name = []
+            for i in parts:
+                url2down.append(self.URL_DE_DESCARGA + i.split("<archivo><![CDATA[")[1].split("]]></archivo>")[0])
+                name.append(name1 + "_" + i.split("]")[0].split("/")[-1])
+        else:
+            raise Error.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra niguna parte de contenido.")
         return [url2down,  name]
     
     def __modoNormalConURL(self,  streamHTML):
