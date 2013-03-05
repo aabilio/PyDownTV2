@@ -93,6 +93,26 @@ def getHtmlUtf8(url): # Sobre todo para descargar VERSION
     except Exception, e:
         raise ErrorDescarga(e.__str__())
         #TODO: Error
+
+def getHtmlUtf8Intereconomia(url): # Sobre todo para descargar VERSION
+    '''
+        Recibe:
+            - url (http://ejemplo.com/ruta/de/ejemplo)
+        Return:
+            - stream html codificado en utf-8
+    '''
+    try:
+        f = urllib2.urlopen(url)
+        Reader = codecs.getreader("utf-8")
+        fh = Reader(f)
+        stream = fh.read()
+        return stream
+    except urllib2.HTTPError, error:
+        contents = error.read()
+        return contents
+    except Exception, e:
+        raise ErrorDescarga(e.__str__())
+        #TODO: Error
     
 def getHtml_(url):
     '''

@@ -82,9 +82,13 @@ class Intereconomia(Canal.Canal):
             "url_video", "filename", "rtmp_cmd", "menco_cmd" (de "videos") deben ser listas de cadenas (si no son None)
         '''
         
-        html = Descargar.getHtmlUtf8(self.url)
+        html = Descargar.getHtmlUtf8Intereconomia(self.url)
+        rtmp = False
+
         try: tit = Utiles.recortar(html, "title: '", "'").encode('utf8')
-        except: tit = u"Vídeo de Intereconomía".encode('utf8')
+        except:
+            try: tit = Utiles.recortar(html, "<title>", "</title>")
+            except:tit = u"Vídeo de Intereconomía".encode('utf8')
         desc = tit
         try: name = Utiles.formatearNombre(tit+".mp4")
         except: name = "VideoIntereconomia.mp4"
@@ -93,8 +97,34 @@ class Intereconomia(Canal.Canal):
         try: url = Utiles.url_fix(Utiles.recortar(html, "clip: '", "'"))
         except: 
             try: url = Utiles.url_fix(html.split("playlist:")[1].split("url: '")[1].split("'")[0])
-            except: raise Error.GeneralPyspainTVsError(u"No se ha podido encontrar el vídeo en la página")
+            except:
+                try:
+                    url = Utiles.url_fix(html.split("clip:")[1].split("url: \'")[1].split("\'")[0])
+                    rtmp = True
+                except: raise Error.GeneralPyspainTVsError(u"No se ha podido encontrar el vídeo en la página")
  
+        if rtmp:
+            url = (Utiles.recortar(html, "netConnectionUrl: \'", "\'") + "/" + url).replace("mp4:", "mp4/")
+            rtmpd_cmd = "rtmpdump -r \'"+url+"\' -o \'"+name+"\'"
+            return {"exito" : True,
+                    "num_videos" : 1,
+                    "mensaje"   : u"URL obtenido correctamente",
+                    "videos":[{
+                            "url_video" : [url],
+                            "url_img"   : img if img is not None else None,
+                            "filename"  : [name] if name is not None else None,
+                            "tipo"      : "rtmp",
+                            "partes"    : 1,
+                            "rtmpd_cmd" : [rtmpd_cmd],
+                            "menco_cmd" : None,
+                            "url_publi" : None,
+                            "otros"     : None,
+                            "mensaje"   : None
+                            }],
+                    "titulos": [tit] if tit is not None else None,
+                    "descs": [desc] if desc is not None else None
+                    }
+
         return {"exito" : True,
                 "num_videos" : 1,
                 "mensaje"   : u"URL obtenido correctamente",
