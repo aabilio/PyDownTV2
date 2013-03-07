@@ -348,16 +348,6 @@ def home(urlOrig=None):
                                 )
         reg.put()
     except: pass #TODO: Mejorar esto (codificación...)
-    
-    ####################### url2downloader:
-    jdownloader = ""
-    if urlOrig.find('mitele') != -1: #Hasta ahora los vídeos Mitele solo son de un enlace
-        jdownloader += "http://web.pydowntv.com/mitele?urlOrig="+urlOrig+"\r\n"
-    else:
-        for vid in info['videos']:
-            for url in vid['url_video']:
-                jdownloader += url+"\r\n"
-    #################################################
 
     #Comprobar IP para antena3:
     for url in ["antena3.com", "lasexta.com", "lasextadeportes.com", "lasextanoticias.com"]:
@@ -371,6 +361,16 @@ def home(urlOrig=None):
             except: break
             break
     #END
+    
+    ####################### url2downloader:
+    jdownloader = ""
+    if urlOrig.find('mitele') != -1: #Hasta ahora los vídeos Mitele solo son de un enlace
+        jdownloader += "http://web.pydowntv.com/mitele?urlOrig="+urlOrig+"\r\n"
+    else:
+        for vid in info['videos']:
+            for url in vid['url_video']:
+                jdownloader += url+"\r\n"
+    #################################################
 
     return render_template(
                            "index.html",
