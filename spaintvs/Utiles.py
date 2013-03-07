@@ -23,7 +23,6 @@ import sys
 import urllib
 import urlparse
 
-
 def isWin():
     ''' return True si se están en Windows '''
     return True if sys.platform == "win32" else False
@@ -227,4 +226,3 @@ def url_fix(s, charset='utf-8'): #Función de Werkzeug
 
 def unescape(s): return urllib.unquote(s)
 def escape(s): return urllib.quote(s)
-

@@ -47,6 +47,12 @@ app.add_url_rule('/legal', 'legal', view_func=views.legal, methods=['GET', 'POST
 # Say hello
 app.add_url_rule('/hello/<username>', 'say_hello', view_func=views.say_hello)
 
+# Rest get URL format home
+app.add_url_rule('/url/<path:url>', 'rest_url_home', view_func=views.rest_url_home)
+
+# Rest get URL format API
+app.add_url_rule('/api/<path:url>', 'rest_url_api', view_func=views.rest_url_api)
+
 # Examples list page
 #app.add_url_rule('/examples', 'list_examples', view_func=views.list_examples, methods=['GET', 'POST'])
 

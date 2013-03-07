@@ -27,6 +27,9 @@ import re
 
 from spaintvs import *
 from spaintvs import miteleGAE
+from spaintvs import Descargar
+
+URL_CHECK_COUNTRY = "http://api.hostip.info/get_json.php?ip="
 
 _default_opcs = {
                 "log": False,
@@ -356,6 +359,19 @@ def home(urlOrig=None):
                 jdownloader += url+"\r\n"
     #################################################
 
+    #Comprobar IP para antena3:
+    for url in ["antena3.com", "lasexta.com", "lasextadeportes.com", "lasextanoticias.com"]:
+        if urlOrig.find(url) != -1:
+            try:
+                resp_country = json.loads(Descargar.get(URL_CHECK_COUNTRY+request.remote_addr))
+                if resp_country['country_code'] != 'ES':
+                    for i in range(len(info["videos"])):
+                        for b in range(len(info["videos"][i]["url_video"])):
+                            info["videos"][i]["url_video"][b] = info["videos"][i]["url_video"][b].replace("geodesprogresiva", "desprogresiva")
+            except: break
+            break
+    #END
+
     return render_template(
                            "index.html",
                            videos=info["videos"],
@@ -475,8 +491,6 @@ def agranel(urlOrig=None): #TODO: Hacer HILOS!!!
                            last=last
                            )
 
-
-
 def api(urlOrig=None):
     opcs = _default_opcs
     
@@ -544,15 +558,15 @@ def api(urlOrig=None):
         #return render_template("api.html", messages=ErrorDesconocido)
         
     # Guardar Registro antes de renderizar: ##.decode('iso-8859-1').encode('utf8')
-    try: 
-        reg = RegistroDescargasAPI(
-                                urlOrig = urlOrig,
-                                urlImg = info["videos"][0]["url_img"],
-                                vidTit = info["titulos"][0].decode('utf8')#,
-                                #vidDesc = info["descs"][0]
-                                )
-        reg.put()
-    except: pass #TODO: Mejorar esto (codificación...)
+    #try: #NO GUARDAR MIENTRAS ESTOY DE VACACIONES :D
+    #    reg = RegistroDescargasAPI(
+    #                            urlOrig = urlOrig,
+    #                            urlImg = info["videos"][0]["url_img"],
+    #                            vidTit = info["titulos"][0].decode('utf8')#,
+    #                            #vidDesc = info["descs"][0]
+    #                            )
+    #    reg.put()
+    #except: pass #TODO: Mejorar esto (codificación...)
     js = json.dumps(info)
     resp = Response(js, status=200, mimetype='application/json')
     return resp
@@ -703,6 +717,12 @@ def legal():
 def say_hello(username):
     """Contrived example to demonstrate Flask's url routing capabilities"""
     return 'Hello %s' % username
+def rest_url_home(url):
+    '''http://web.pydowntv.com/url/http://www.antena3.com/....html'''
+    return home(url)
+def rest_url_api(url):
+    '''http://web.pydowntv.com/api/http://www.antena3.com/....html'''
+    return api(url)
 
 
 #@login_required
