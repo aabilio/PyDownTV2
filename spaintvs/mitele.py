@@ -81,6 +81,12 @@ class MiTele(Canal.Canal):
         else:
             self.debug("DATA:\n" + data)
             if data.find("<stream>") != -1: # FIXME: Este comandono funciona
+                #data = data.replace("&amp;", "&")
+                #server = Utiles.recortar(data, "<stream>", "</stream>") + "/"
+                #server = server.replace("rtmpe://", "http://")
+                #server = server.replace("rtmpe://streaminggeo.mitele.es/","http://videosgeo.mitele.es") +"/"
+                #play = Utiles.recortar(data, "mp4:", "</file>").replace("nvb", "vf").replace("nva","vu").replace("token", "h")
+                #return server + Utiles.recortar(data, "mp4:", "</file>") + "&start=0"
                 raise Error.GeneralPyspainTVsError("mitele.es: RTMP no soportado para el canal por ahora.")
                 #R = data.split("<stream>")[1].split("</stream>")[0]
                 #A = "\""+ "/".join(data.split("/")[4:]).split("</stream>")[0] +"\""

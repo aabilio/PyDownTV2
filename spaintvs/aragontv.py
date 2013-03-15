@@ -100,7 +100,13 @@ class AragonTV(Canal.Canal):
             except:
                 desc = u"Vídeo de Aragón Televisión".encode("utf8")
             else:
-                if desc == u"" or desc == "":desc = u"Vídeo de Aragón Televisión".encode("utf8")
+                try:
+                    if type(desc) is unicode:
+                        if desc == u"": desc = u"Vídeo de Aragón Televisión".encode("utf8")
+                    elif type(desc) is str:
+                        if desc == "": desc = u"Vídeo de Aragón Televisión".encode("utf8")
+                except:
+                    desc = u"Vídeo de Aragón Televisión".encode("utf8")
                 
             try:
                 tit = Utiles.recortar(html, "<title>", "</title>")

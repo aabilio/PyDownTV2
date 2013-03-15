@@ -22,6 +22,10 @@ inbound_services:
 - warmup
 
 handlers:
+- url: /static/favicon.ico #Patch for Warning
+  static_files: application/static/img/favicon.ico
+  upload: application/static/img/favicon.ico
+
 - url: /favicon.ico
   static_files: application/static/img/favicon.ico
   upload: application/static/img/favicon.ico

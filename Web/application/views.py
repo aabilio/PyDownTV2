@@ -14,7 +14,7 @@ For example the *say_hello* handler, handling the URL route '/hello/<username>',
 from google.appengine.api import users
 from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 
-from flask import render_template, flash, url_for, redirect, Response, json, request
+from flask import render_template, flash, url_for, redirect, Response, json, request, g
 from settings import DOS_IPS as dosIPs
 
 #from models import ExampleModel
@@ -349,7 +349,8 @@ def home(urlOrig=None):
         reg.put()
     except: pass #TODO: Mejorar esto (codificación...)
 
-    #Comprobar IP para antena3:
+    # Cambios en URLs debido a localizaciones:
+    # Desgeo URLs de grupo_a3
     for url in ["antena3.com", "lasexta.com", "lasextadeportes.com", "lasextanoticias.com"]:
         if urlOrig.find(url) != -1:
             try:
@@ -360,6 +361,26 @@ def home(urlOrig=None):
                             info["videos"][i]["url_video"][b] = info["videos"][i]["url_video"][b].replace("geodesprogresiva", "desprogresiva")
             except: break
             break
+    # Desgeo URLs de rtve.es
+    if urlOrig.find("rtve.es") != -1:
+        try:
+            resp_country = json.loads(Descargar.get(URL_CHECK_COUNTRY+request.remote_addr))
+            if resp_country['country_code'] != 'ES':
+                for i in range(len(info["videos"])):
+                    for b in range(len(info["videos"][i]["url_video"])):
+                        info["videos"][i]["url_video"][b] = info["videos"][i]["url_video"][b].replace("TE_GLESP", "TE_NGVA")
+                        info["videos"][i]["url_video"][b] = info["videos"][i]["url_video"][b].replace("TE_GLEAD", "TE_NGVA")
+        except: pass
+
+    # Comillas dobles para Windows en EITB
+    if urlOrig.find("eitb.tv") != -1:
+        try:
+            os = request.user_agent.platform
+            if os == 'windows':
+                for i in range(len(info["videos"])):
+                    for b in range(len(info["videos"][i]["rtmpd_cmd"])):
+                        info["videos"][i]["rtmpd_cmd"][b] = info["videos"][i]["rtmpd_cmd"][b].replace("\'", "\"")
+        except: pass
     #END
     
     ####################### url2downloader:
@@ -544,14 +565,14 @@ def api(urlOrig=None):
     except Error.GeneralPyspainTVsError, e:
         msg = {
             "exito": False,
-            "mensaje": e
+            "mensaje": e.__str__()
             }
         js = json.dumps(msg)
         resp = Response(js, status=200, mimetype='application/json')
         return resp
         #return render_template("api.html", messages=msg)
     except Exception, e:
-        return e.__str__()
+        #return e.__str__()
         js = json.dumps(ErrorDesconocido)
         resp = Response(js, status=200, mimetype='application/json')
         return resp
@@ -596,8 +617,11 @@ def mitele(urlOrig=None):
                 return render_template('ayuda.html')
         else:
             urlOrig = request.form['urlOrig']
-            
-    return redirect(miteleGAE.MiTele(urlOrig, opcs).getInfo()['videos'][0]['url_video'][0])
+    try:        
+        return redirect(miteleGAE.MiTele(urlOrig, opcs).getInfo()['videos'][0]['url_video'][0])
+    except:
+        flash(u"Se ha producido un error al localizar el vídeo.\nEste error no se debería de haber producido.\nPuedes volver a intentar a descargar el vídeo.")
+        return redirect(url_for('home'))
     
 
 def embed(urlOrig=None):
@@ -629,8 +653,8 @@ def embed(urlOrig=None):
             urlOrig = request.form['urlOrig']
     
     if urlOrig == u'' or urlOrig == u"Introduce AQUÍ la URL del vídeo a descargar...":
-        flash(u"Parece que no has introducido ninguna url")
-        return redirect(url_for('home'))
+        h(u"Parece que no has introducido ninguna url")
+        return redirect(urflasl_for('home'))
     
     ## CASOS ESPECIALES URL NO ASCCII
     #RTPA
@@ -716,7 +740,22 @@ def legal():
 
 def say_hello(username):
     """Contrived example to demonstrate Flask's url routing capabilities"""
-    return 'Hello %s' % username
+    g.user_info = {
+                 "name": username if username is not None else "NO ESPECIFICADO",
+                 "ip": request.remote_addr if request.remote_addr is not None else "NO ESPECIFICADO",
+                 "os": request.user_agent.platform if request.user_agent.platform is not None else "NO ESPECIFICADO",
+                 "browser": request.user_agent.browser if request.user_agent.browser is not None else "NO ESPECIFICADO",
+                 "browser_version": request.user_agent.version if request.user_agent.version is not None else "NO ESPECIFICADO",
+                 "language": request.user_agent.language if request.user_agent.language is not None else "NO ESPECIFICADO",
+                 "pais": request.headers.get('X-AppEngine-Country') or "NO ESPECIFICADO",
+                 "region": request.headers.get('X-AppEngine-Region') or "NO ESPECIFICADO",
+                 "ciudad": request.headers.get('X-AppEngine-City') or "NO ESPECIFICADO",
+                 "latLong": request.headers.get('X-AppEngine-CityLatLong') or "NO ESPECIFICADO"
+                }
+    return render_template("hello.html")
+    
+    return str(request.headers)
+    #return 'Hello %s' % " ".join(user_info.values())
 def rest_url_home(url):
     '''http://web.pydowntv.com/url/http://www.antena3.com/....html'''
     return home(url)
