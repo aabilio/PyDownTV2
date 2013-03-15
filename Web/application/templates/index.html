@@ -61,6 +61,18 @@
    			}
     	}
 	</script>
+	<script>
+		$(document).ready(function() {
+			$('.listadoEnlaces').click(function() {
+				$('#divListadoEnlaces').toggle();
+				return;
+			});
+			$('.listadoComandos').click(function() {
+				$('#divListadoComandos').toggle();
+				return;
+			});
+		});
+	</script>
 </head>
 
 <body>
@@ -198,10 +210,15 @@
 	    	{% if vid['tipo'] == "rtmp" or urlOrig.find("mitele.es") != -1 %}
 			    <br /><br />
 			    <div class="row text book margin_top" id="social">
-			    	<div class="column_3 offset_6">
+			    	<div class="column_3 offset_3">
 		                <h5 class="text color cancel"> ¿Problemas?</h5>
 		                <br />
 		                <a class="button accept" href="{{ url_for('home', url=urlOrig) }}">Volver a intentar</a>
+		            </div>
+		            <div class="column_3">
+		            	<h5 class="text color accept"> Agragar enlaces a...</h5>
+		            	<br class=""/>
+		            	<button class="button secondary listadoComandos" href="#"> Listado de Comandos</button>
 		            </div>
 		            <div class="column_3">
 		                <h5 class="text color accept"> ¿Te gusta? Comparte ;)</h5>
@@ -218,18 +235,19 @@
 		                <br />
 		                <a class="button accept" href="{{ url_for('home', url=urlOrig) }}">Volver a intentar</a>
 		            </div>
-		            <div class="column_3 hide-tablet">
+		            <div class="column_3">
 		            	<!-- Me reparto el hide phone y hide tablet entre los elementos por que
 		            		parece que no funcionan bien los dos juntos.
 		            		Aunque en phone deje un pequeñísimo espacio por el div -->
-		                <h5 class="text color accept hide-phone"> Agragar enlaces a...</h5>
-		                <br class="hide-phone"/>
-		                <FORM ACTION="http://127.0.0.1:9666/flash/add" target="hidden" METHOD="POST" class="hide-phone"> 
+		                <h5 class="text color accept"> Agragar enlaces a...</h5>
+		                <br class=""/>
+		                <FORM ACTION="http://127.0.0.1:9666/flash/add" target="hidden" METHOD="POST" class=""> 
 						  	<INPUT TYPE="hidden" NAME="source" VALUE="http://web.pydowntv.com">     
 						   	<INPUT TYPE="hidden" NAME="urls" VALUE="{{ jdownloader }}">
 						   	<INPUT TYPE="SUBMIT"  class="button secondary"  id="jdownloaderSubmit" NAME="submit" onclick="return comprobarJdownloader();" VALUE="JDownloader">
 						</FORM>
-						<p class="text thin color cancel hide-phone" id="comprobarJdownloader"><!--AQUÍ info sobre JDOWNLOADER--></p>
+						<p class="text thin color cancel" id="comprobarJdownloader"><!--AQUÍ info sobre JDOWNLOADER--></p>
+						<button class="button secondary listadoEnlaces" href="#"> Listado de Enlaces</button>
 		            </div>
 		            <div class="column_3">
 		                <h5 class="text color accept"> ¿Te gusta? Comparte ;)</h5>
@@ -238,7 +256,17 @@
 		            	<a class="icon twitter button secondary" href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fweb.pydowntv.com%2F&related=aabilio&text=PyDownTV%20WEB%3A%20Descarga%20v%C3%ADdeos%20de%20las%20webs%20de%20TV&tw_p=tweetbutton&url=http%3A%2F%2Fweb.pydowntv.com%2F&via=pydowntv"> Twitter </a>
 		            </div>
 			    </div>
-	    	{% endif %} 
+	    	{% endif %}
+	    	<div class="row" id="divListadoEnlaces" style="padding-top: 10px; display: none;">
+	    		<div class="column_12">
+	    			<pre><code data-language="generic">{% for v in videos %}{% for u in v['url_video'] %}{{ u+"\n" }}{% endfor %}{% endfor %}</code></pre>
+	    		</div>
+	    	</div>
+	    	<div class="row" id="divListadoComandos" style="padding-top: 10px; display: none;">
+	    		<div class="column_12">
+	    			<pre><code data-language="generic">{% for v in videos %}{% for c in v['rtmpd_cmd'] %}{{ c+"\n" }}{% endfor %}{% endfor %}</code></pre>
+	    		</div>
+	    	</div>
 	    {% endif %}
 	</section>
 	<div style="height: 5px; background-color: white;"><!--separación entre resultados de vídeos--></div>

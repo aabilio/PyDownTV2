@@ -28,6 +28,12 @@
     
     <!--<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>-->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
+
+    <!-- Include Rainbow Code Highlighter -->
+    <script src="/static/rainbow/rainbow.min.js"></script>
+    <script src="/static/rainbow/language/generic.js"></script>
+    <script src="/static/rainbow/language/shell.js"></script>
+    <link href="/static/rainbow/themes/tricolore.css" rel="stylesheet" type="text/css">
     
     <script type="text/javascript">
 	  var _gaq = _gaq || [];
@@ -54,6 +60,14 @@
    				return false;
    			}
     	}
+	</script>
+	<script>
+		$(document).ready(function() {
+			$('.listadoEnlaces').click(function() {
+				$('#divListadoEnlaces').toggle();
+				return;
+			});
+		});
 	</script>
 </head>
 
@@ -194,10 +208,15 @@
 	    	{% if vid['tipo'] == "rtmp" %}
 			    <br /><br />
 			    <div class="row text book margin_top" id="social">
-			    	<div class="column_3 offset_6">
+			    	<div class="column_3 offset_3">
 		                <h5 class="text color cancel"> ¿Problemas?</h5>
 		                <br />
 		                <a class="button accept" href="{{ url_for('home', url=urlOringTmp) }}">Volver a intentar</a>
+		            </div>
+		            <div class="column_3">
+		            	<h5 class="text color accept"> Agragar enlaces a...</h5>
+		            	<br class=""/>
+		            	<button class="button secondary listadoEnlaces" href="#"> Listado de Enlaces</button>
 		            </div>
 		            <div class="column_3">
 		                <h5 class="text color accept"> ¿Te gusta? Comparte ;)</h5>
@@ -235,6 +254,11 @@
 		            </div>
 			    </div>
 	    	{% endif %} 
+	    	<div class="row" id="divListadoEnlaces" style="padding-top: 10px; display: none;">
+	    		<div class="column_12">
+	    			<pre><code data-language="generic">{% for v in videos %}{% for u in v['url_video'] %}{% if u.find("rtmp://") == -1 and u.find("rtmpe://") == -1 %}{{ u+"\n" }}{% endif %}{% endfor %}{% endfor %}{% for v in videos %}{% if v['rtmpd_cmd'] %}{% for c in v['rtmpd_cmd'] %}{{ c+"\n" }}{% endfor %}{% endif %}{% endfor %}</code></pre>
+	    		</div>
+	    	</div>
 	    {% endif %}
 	    {% if loop.index == videos|length %} <!-- Después del último vídeo -->
 	    	{% if errors %}
