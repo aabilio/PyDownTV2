@@ -108,7 +108,9 @@ class GrupoA3(Canal.Canal):
             streamXML = \
             Descargar.getHtml(self.URL_DE_ANTENA3 + streamHTML.split("player_capitulo.xml='")[1].split("'")[0])
         else:
-            raise Error.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra XML.")
+            if streamHTML.find("<div class=\"premium\">") != -1: 
+                raise Error.GeneralPyspainTVsError(u"PyDownTV no acepta la descarga de contenidos premium de las cadenas.")
+            raise Error.GeneralPyspainTVsError(u"Grupo Antena 3. No se encuentra XML.")
         
         self.URL_DE_DESCARGA = self.__getUrlDescarga(streamXML)
         # Comprobar aquí si se puede descargar 000.mp4:
@@ -141,7 +143,7 @@ class GrupoA3(Canal.Canal):
                 url2down.append(self.URL_DE_DESCARGA + i.split("<archivo><![CDATA[")[1].split("]]></archivo>")[0])
                 name.append(name1 + "_" + i.split("]")[0].split("/")[-1])
         else:
-            raise Error.GeneralPyspainTVsError("Grupo Antena 3. No se encuentra niguna parte de contenido.")
+            raise Error.GeneralPyspainTVsError(u"Grupo Antena 3. No se encuentra niguna parte de contenido.")
         return [url2down,  name]
     
     def __modoNormalConURL(self,  streamHTML):
@@ -334,7 +336,11 @@ class GrupoA3(Canal.Canal):
         # print "[+] Procesando descarga"
         streamHTML = Descargar.getHtml(self.url)
         if self.url.find(".com/videos/") != -1: # Modo Salón
-            img = self.URL_DE_ANTENA3 + Utiles.qe(streamHTML).split("player_capitulo.poster=\'/")[1].split("\'")[0]
+            try:
+                img = self.URL_DE_ANTENA3 + Utiles.qe(streamHTML).split("player_capitulo.poster=\'/")[1].split("\'")[0]
+            except:
+                if streamHTML.find("<div class=\"premium\">") != -1: 
+                    raise Error.GeneralPyspainTVsError(u"PyDownTV no acepta la descarga de contenidos premium de las cadenas.")
             url2down, name = self.__modoSalon(streamHTML)
         else: # Otro vídeos (No modo salón)
             self.log(u"[INFO] Vídeo normal (no Modo Salón)")
