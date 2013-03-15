@@ -105,7 +105,7 @@ class CRTVG(Canal.Canal):
                 
         if name:
             name = Utiles.formatearNombre(name)
-        rtmpd_cmd = "rtmpdump -r "+url+" -y "+y+" -s "+s+" -a "+a+" -o "+name
+        rtmpd_cmd = "rtmpdump -v -r "+url+" -y "+y+" -s "+s+" -a "+a+" -o "+name
         
         desc = None        
         try: #FIXME: Pillar más que solo el primer párrafo
