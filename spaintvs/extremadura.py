@@ -116,7 +116,10 @@ class CExtremadura(Canal.Canal):
                 try: desc = Utiles.recortar(html2, "<div class=\"descripcion\">", "</div>").strip()#.ecnode('utf8')
                 except: desc = u"Vídeo de Canal Extremadura".encode('utf8')
                 else:
-                    if desc == u"": desc = u"Vídeo de Canal Extremadura".encode('utf8')
+                    if type(desc) is str:
+                        if desc == "": desc = u"Vídeo de Canal Extremadura".encode('utf8')
+                    elif type(desc) is unicode:
+                        if desc == u"": desc = u"Vídeo de Canal Extremadura".encode('utf8')
                 
                 rtmpd_cmd = u"rtmpdump -r "+url+" -o "+name
                 
@@ -172,7 +175,10 @@ class CExtremadura(Canal.Canal):
         try: desc = Utiles.recortar(html2, "<div class=\"descripcion\">", "</div>").strip()#.ecnode('utf8')
         except: desc = u"Vídeo de Canal Extremadura".encode('utf8')
         else:
-            if desc == u"": desc = u"Vídeo de Canal Extremadura".encode('utf8')
+            if type(desc) is str:
+                if desc == "": desc = u"Vídeo de Canal Extremadura".encode('utf8')
+            elif type(desc) is unicode:
+                if desc == u"": desc = u"Vídeo de Canal Extremadura".encode('utf8')
         
         return {"exito" : True,
                 "num_videos" : 1,

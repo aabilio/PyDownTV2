@@ -163,12 +163,15 @@ class EITB(Canal.Canal):
                 except: desc = u"Vídeo de Euskal Irrati Telebista".encode('utf8')
                 else:
                     if desc is None or desc == "": desc = u"Vídeo de Euskal Irrati Telebista".encode('utf8')
-                    
+                tit = None     
                 try: tit = rtmpdata['displayName'].encode('utf8')
                 except: tit = u"Vídeo de Euskal Irrati Telebista".encode('utf8')
                 else:
-                    if tit == u"" or tit is None: tit = u"Vídeo de Euskal Irrati Telebista".encode('utf8')
-                
+                    if type(tit) is unicode:
+                        if tit == u"": tit = u"Vídeo de Euskal Irrati Telebista".encode('utf8')
+                    elif type(tit) is str:
+                        if tit == "": tit = u"Vídeo de Euskal Irrati Telebista".encode('utf8')
+                    if tit is None: tit = u"Vídeo de Euskal Irrati Telebista".encode('utf8')                
                 try:
                     name = Utiles.formatearNombre(str(rtmpdata['displayName'].encode('utf8'))+".mp4")
                 except:

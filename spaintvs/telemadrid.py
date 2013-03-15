@@ -143,12 +143,22 @@ class Telemadrid(Canal.Canal):
                 if desc2 is not None: desc = desc2
         except: desc = u"Vídeo de Telemadrid".encode('utf8')
         else:
-            if desc is None or desc == u"": desc = u"Vídeo de Telemadrid".encode('utf8')
-            
+            if desc is None: desc = u"Vídeo de Telemadrid".encode('utf8')
+            else:
+                if type(desc) is unicode:
+                    if desc == u"": desc = u"Vídeo de Telemadrid".encode('utf8')
+                elif type(desc) is str:
+                    if desc == "": desc = u"Vídeo de Telemadrid".encode('utf8')
+        
+        tit = None   
         try: tit = info['displayName'].encode('utf8')
         except: tit = u"Vídeo de Telemadrid".encode('utf8')
         else:
-            if tit == u"" or tit is None: tit = u"Vídeo de Telemadrid".encode('utf8')
+            if tit is None: tit = u"Vídeo de Telemadrid".encode('utf8')
+            if type(tit) is unicode:
+                if tit == u"": tit = u"Vídeo de Telemadrid".encode('utf8')
+            elif type(tit) is str:
+                if tit == "": tit = u"Vídeo de Telemadrid".encode('utf8')
         
         #FIXME: Ver qué pasa aquí!! --> name = Utiles.formatearNombre(tit + ext)
         name = "VideoTelemadrid"+ext
