@@ -117,7 +117,10 @@ class TV3(Canal.Canal):
         ID = self.__searchID(self.url)
         if ID is None or self.url.find("324.cat") != -1 or self.url.find("3cat24.cat") != -1: #324cat
             html = Descargar.get(self.url)
-            ID = html.split("flashvars.videoid =")[1].split(";")[0].strip()
+            try:
+                ID = html.split("flashvars.videoid =")[1].split(";")[0].strip()
+            except:
+                raise Error.GeneralPyspainTVsError(u"Error al recuperar el vídeo. ¿Es la URL correcta?")
         if ID is None:
             raise Error.GeneralPyspainTVsError(u"No se encuentra vídeo en la página")
         
