@@ -63,23 +63,50 @@
     
     <section class="bck lightest text justify">
     	<div class="row ">
-    		<h1 class="text color theme">Información Importante</h1>
+    		<h1 class="text color theme">Política de Privacidad</h1>
     		<br />
-    		<p class="text book">
-    			La aplicación de PyDownTV intenta encontrar los vídeos "de la forma en la que lo haría un navegador" y es por eso que 
-    			<span class="text normal" style="background-color: black; color: white;">PyDownTV NO almacena en ningún momento ningún contenido audiovisial ni
-    			ninguna otra información de las cadenas de televisión que soporta.</span><br /><br />
-    			PyDownTV solo <span class="text normal" style="background-color: black; color: white;">busca</span> y 
-    			<span class="text normal" style="background-color: black; color: white;">proprorciona los enlaces a los vídeos</span>.<br /><br />
-    			Aún teniendo en cuenta lo anterior, debes saber, que los enlaces proporcionados por esta web, pertenecen a los servidores de las propias
-    			cadenas, y que los vídeos alojados allí, pueden estar protegidos con derechos de autor por las leyes de propiadad intelectual.<br /><br />
-    			Por eso <span class="text normal" style="background-color: black; color: white;">usted</span> como usuario de esta web, <span class="text normal" style="background-color: black; color: white;">debe conocer y aceptar las Condiciones del Servicio de las respectivas cadenas soportadas por esta web</span>
-    			así como de cumplir con las leyes de propiedad intelectual.<br /><br /><br />
-    			PyDownTV <span class="text normal" style="background-color: black; color: white;">no</span> conoce ni tiene relación directa ni indirecta alguna con las cadenas de TV que soporta.<br /><br />
-    			<span class="text normal" style="background-color: black; color: white;">PyDownTV no obtiene ningún beneficio</span>, ni directo, ni indirecto, proveniente del manteniemiento y publicaicón de esta web.<br /><br />
-    			<span class="text normal" style="background-color: black; color: white;">Ni PyDownTV ni ninguno de sus desarrolladores se hace responsable del mal uso que 
-    			por parte de los usuarios de esta web se pueda hacer de la aplicación (PyDownTV)</span>
-    		</p>
+    		<p class="text book" style="padding-bottom: 10px;">
+                PyDownTV <span class="text normal" style="background-color: black; color: white;">no almacena ninguna información</span> sobre el usuario que se conecta a la web.
+            </p>
+            <p class="text book" style="padding-bottom: 10px;">
+                Además, PyDownTV <span class="text normal" style="background-color: black; color: white;">no almecana ninguna Cookie</span> en tu navegador.
+            </p>
+            <p class="text book" style="padding-bottom: 10px;">
+                PyDownTV SÍ dispone de una Base de Datos para mantener un <span class="text normal" style="background-color: black; color: white;">registro histórico de los vídeos que se descargan
+                a través de la web</span>, pero en ningún caso se guarda información relacionada sobre el usuario que descargó el vídeo. En esta base de datos se guardan:
+            </p>
+            <!--<div class="row" style="margin: 0 auto;">
+                <div class="column_6" style="margin: 0 auto;">-->
+                    <table style="text-align: center;">
+                    <thead>
+                        <tr>
+                            <th>Campos BBDD</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Fecha (día, hora, ...)</td>
+                        </tr>
+                        <tr>
+                            <td>URL de la miniatura del vídeo</td>
+                        </tr>
+                        <tr>
+                            <td>URL introducida por el usuario</td>
+                        </tr>
+                        <tr>
+                            <td>Título del vídeo</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                <!--</div>
+            </div>-->
+            <p class="text book" style="padding-bottom: 10px;">
+                <span class="text normal" style="background-color: black; color: white;">PyDownTV puede acceder a varios datos del usuario del servicio</span> proporcionados por su IP y su navegador, estos datos <span class="text normal" style="background-color: black; color: white;">solo son utilizados para proporcionar una mejor experiencia al usuario y en ningún caso se guardan en ningún registro</span>. Solo son utilizados en cada conexión particular.
+                Los datos a los que actualmente tiene acceso PyDownTV <span class="text normal" style="background-color: black; color: white;">se pueden consultar</span> en el siguiente apartado: <a href="{{ url_for('say_hello', username="Usuario de PyDownTV") }}">Consulta los datos que PyDownTV conoce sobre ti.</a>
+            </p>
+            <p class="text book" style="padding-bottom: 10px;">
+                <span class="text normal" style="background-color: black; color: white;">PyDownTV es Software Libre</span> y se puede comprobar su código <a href="https://github.com/aabilio/PyDownTV2/tree/master/Web">aquí</a>.
+            </p>
     	</div>
     </section>
 

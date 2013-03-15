@@ -738,6 +738,9 @@ def apps():
 def legal():
     return render_template("legal.html")
 
+def privacidad():
+    return render_template("privacidad.html")
+
 def say_hello(username):
     """Contrived example to demonstrate Flask's url routing capabilities"""
     g.user_info = {

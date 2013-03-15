@@ -44,6 +44,9 @@ app.add_url_rule('/embed', 'embed', view_func=views.embed, methods=['GET', 'POST
 # Legal page
 app.add_url_rule('/legal', 'legal', view_func=views.legal, methods=['GET', 'POST'])
 
+# Privacy page
+app.add_url_rule('/privacidad', 'privacidad', view_func=views.privacidad, methods=['GET', 'POST'])
+
 # Say hello
 app.add_url_rule('/hello/<username>', 'say_hello', view_func=views.say_hello)
 

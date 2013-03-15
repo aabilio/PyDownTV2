@@ -92,8 +92,10 @@
     			se están desarrollando aplicaciones para Escritorio (C++ &amp; QT5) y Android (Java Android SDK), pero si quieres
     			crear tus propias aplicaciones y te apetece solo centrarte en la vista <span class="text bold color theme">
     			puedes utilizar nuestra API Online</span><br /><br />
-    			A la mini API se accede a desde esta url (<span class="text color theme" id="prueba"></span><script>$("#prueba").html(window.location.href);</script>)
-    			y haciendo peticiones HTTP GET a "url".<br /><br />
+    			A la mini API se accede desde esta url (<span class="text color theme" id="url1"></span><script>$("#url1").html(window.location.href);</script>)
+    			y haciendo peticiones HTTP GET a "url".<br />
+    			(También existe una manera más "RESTfuliana": <span class="text color theme" id="url2"></span><script>$("#url2").html(window.location.href);</script><span class="text color theme">/[AQUÍ LA URL]</span>)
+    			<br /><br />
     			La API devolverá respuestas en formato JSON con la info del vídeo pedido.<br /><br />
     			<!--<hr />--><br />
     			<span class="text bold">Ejemplos:</span><br /><br />
@@ -269,7 +271,7 @@
                     &copy; Copyleft 2011 by <a href=http://aabilio.tumblr.com/>aabilio</a> // Powered by <a href="http://flask.pocoo.org/">Flask</a> &amp; <a href="https://appengine.google.com/">GAE</a> &amp; <a href="http://tuktuk.tapquo.com/">tuktuk</a>
                 </small>-->
                 <small>
-                	Importante: <a href="{{ url_for('legal') }}">Aviso Legal</a>
+                	Importante: <a href="{{ url_for('legal') }}">Aviso Legal</a> | <a href="{{ url_for('privacidad') }}">Política de Privacidad</a>
                 </small>
             </div>
         </div>
