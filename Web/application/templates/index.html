@@ -264,7 +264,7 @@
 	    	</div>
 	    	<div class="row" id="divListadoComandos" style="padding-top: 10px; display: none;">
 	    		<div class="column_12">
-	    			<pre><code data-language="generic">{% for v in videos %}{% for c in v['rtmpd_cmd'] %}{{ c+"\n" }}{% endfor %}{% endfor %}</code></pre>
+	    			<pre><code data-language="generic">{% for v in videos %}{% if v['rtmpd_cmd'] %}{% for c in v['rtmpd_cmd'] %}{{ c+"\n" }}{% endfor %}{% endif %}{% endfor %}</code></pre>
 	    		</div>
 	    	</div>
 	    {% endif %}
