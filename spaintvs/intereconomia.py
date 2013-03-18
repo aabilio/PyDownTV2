@@ -85,9 +85,9 @@ class Intereconomia(Canal.Canal):
         html = Descargar.getHtmlUtf8Intereconomia(self.url)
         rtmp = False
 
-        try: tit = Utiles.recortar(html, "title: '", "'").encode('utf8')
+        try: tit = Utiles.recortar(html, "title: '", "'").encode('utf-8')
         except:
-            try: tit = Utiles.recortar(html, "<title>", "</title>")
+            try: tit = Utiles.recortar(html, "<title>", "</title>").encode('utf-8')
             except:tit = u"Vídeo de Intereconomía".encode('utf8')
         desc = tit
         try: name = Utiles.formatearNombre(tit+".mp4")
@@ -104,7 +104,7 @@ class Intereconomia(Canal.Canal):
                 except: raise Error.GeneralPyspainTVsError(u"No se ha podido encontrar el vídeo en la página")
  
         if rtmp:
-            url = (Utiles.recortar(html, "netConnectionUrl: \'", "\'") + "/" + url).replace("mp4:", "mp4/")
+            url = (Utiles.recortar(html, "netConnectionUrl: \'", "\'") + "/" + url).replace("mp4:", "mp4/").replace("mp4%3A", "mp4/")
             rtmpd_cmd = "rtmpdump -r \'"+url+"\' -o \'"+name+"\'"
             return {"exito" : True,
                     "num_videos" : 1,
