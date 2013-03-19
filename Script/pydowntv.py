@@ -116,25 +116,27 @@ def argsparse():
                       help="Mostrar menos info por pantalla")
     parser.add_option("-d", "--debug", dest="debug", action="store_true", 
                       help="Mostrar info de debug")
+    parser.add_option("-p", "--partes", dest="partes", help="-p 1,2,3")
+    parser.add_option("-F", "--formula1", dest="formula1", help="V, S, c, P, C")
     return parser.parse_args()
         
-def comprobar_version():
-    '''
-        Comprueba la versión del cliente con la última lanzada utilizando la clase
-        PdtVersion() de utilies.py
-    '''
-    uiUtiles.printt(u"[INFO VERSIÓN] Comprobando si existen nuevas versiones de PyDownTV")
-    pdtv = uiUtiles.PdtVersion()
-    try:
-        new_version, changelog = pdtv.get_new_version()
-        if new_version == -1:
-            uiUtiles.printt(u"[!!!] ERROR al comprobar la versión del cliente")
-        else:
-            pdtv.comp_version(new_version, changelog)
-    except KeyboardInterrupt:
-        uiUtiles.printt(u"[+] Comprobación cancelada")
-    except Exception:
-        uiUtiles.printt(u"[!!!] ERROR al comprobar la versión del cliente")
+# def comprobar_version():
+#     '''
+#         Comprueba la versión del cliente con la última lanzada utilizando la clase
+#         PdtVersion() de utilies.py
+#     '''
+#     uiUtiles.printt(u"[INFO VERSIÓN] Comprobando si existen nuevas versiones de PyDownTV")
+#     pdtv = uiUtiles.PdtVersion()
+#     try:
+#         new_version, changelog = pdtv.get_new_version()
+#         if new_version == -1:
+#             uiUtiles.printt(u"[!!!] ERROR al comprobar la versión del cliente")
+#         else:
+#             pdtv.comp_version(new_version, changelog)
+#     except KeyboardInterrupt:
+#         uiUtiles.printt(u"[+] Comprobación cancelada")
+#     except Exception:
+#         uiUtiles.printt(u"[!!!] ERROR al comprobar la versión del cliente")
 
     
 def isURL(url):
@@ -153,15 +155,20 @@ if __name__ == "__main__":
     (options, urls) = argsparse()
     
     if not urls: uiUtiles.printt(u"PyDownTV (Descarga vídeos de las webs de TV españolas):\n--------\n")
-    if not options.check_version: comprobar_version()
+    #if not options.check_version: comprobar_version()
     
     # Serializar las opciones que se mandaran al módulo de la TV:
     opcs =  {
             "log": options.silent if options.silent is not None else True,
-            "debug": options.debug if options.debug is not None else False
+            "debug": options.debug if options.debug is not None else False,
+            "partes": [int(p) for p in options.partes.split(",")] if options.partes is not None else None,
+            "formula1": options.formula1 if options.formula1 is not None else None
             }
     ####
-    
+
+    print opcs["partes"]
+    sys.exit()
+
     if not urls:
         uiUtiles.printt(u"[--->] Introduce las URL de los vídeos (separadas por espacios):")
         inPut = raw_input()
@@ -217,7 +224,7 @@ if __name__ == "__main__":
                 else: # Descargar el vídeo
                     if info["num_videos"] == 1:
                         for video in info["videos"]: # for, aunque solo debería de haber un vídeo
-                            for indice_parte in range(video["partes"]): #TODO: Cómo descargar, todas las partes o preguntar
+                            for indice_parte in range(video["partes"]): # Las partes se pasan por parámetro, sino TODO!
                                 d = uiDescargar.Descargar(
                                                           video["url_video"][indice_parte],
                                                           video["filename"][indice_parte],
@@ -225,7 +232,12 @@ if __name__ == "__main__":
                                                           video["rtmpd_cmd"][indice_parte] if video["rtmpd_cmd"] is not None else None,
                                                           video["menco_cmd"][indice_parte] if video["menco_cmd"] is not None else None,
                                                           )
-                                d.descargarVideo()
+                                if opcs["partes"]:
+                                    if indice_parte in opcs["partes"]:
+                                        d.descargarVideo()
+                                else:
+                                    d.descargarVideo()
+
                     else:
                         # TODO: Decidir qué hacer con los vídeo aquí (descargar, preguntar cuál,...) y luego las partes de cada uno
                         # De momento descargar todos:
