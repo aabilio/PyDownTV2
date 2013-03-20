@@ -6,7 +6,7 @@ URL dispatch route mappings and error handlers
 
 """
 
-from flask import render_template
+from flask import render_template, request, redirect
 
 from application import app
 from application import views
@@ -76,4 +76,18 @@ def page_not_found(e):
 @app.errorhandler(500)
 def server_error(e):
     return render_template('500.html'), 500
+
+## Other handlers
+@app.before_request
+def change_request_url():
+	if request.url.find("http://localhost:") != -1:
+		pass
+	elif request.url.find("pydowntv.appspot.com") != -1:
+		pass
+	elif request.url.find("pydowntv2.appspot.com") != -1:
+		pass
+	elif request.url.find("://web.pydowntv.") != -1:
+		return redirect(request.url.replace("://web.pydowntv.", "://www.pydowntv."))
+	else:
+		pass
 

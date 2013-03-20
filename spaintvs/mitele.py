@@ -44,7 +44,7 @@ class MiTele(Canal.Canal):
     
     def __init__(self, url="", opcs=None):
         Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
-        
+
     def __getUrl2down(self, ID, startTime, endTime):
         '''
             Tercer método implementado:
@@ -69,7 +69,7 @@ class MiTele(Canal.Canal):
                     'startTime' : '0',
                     'endTime': '0'
                     }
-        
+
         try:
             data = Descargar.doPOST(self.URL_POST, tokenizer, post_args, doseq=True)
             #data = Descargar.doPOST("linfox.es", "/pydowntv/mitele.php", post_args, doseq=True)
@@ -137,7 +137,7 @@ class MiTele(Canal.Canal):
             "videos", "mesajes" y "descs" deben ser listas de cadenas (si no son None)
             "url_video", "filename", "rtmp_cmd", "menco_cmd" (de "videos") deben ser listas de cadenas (si no son None)
         '''
-        
+
         tit_vid = None
         # Obtener HTML y XML:
         try:
@@ -148,7 +148,7 @@ class MiTele(Canal.Canal):
             streamHTML = streamHTML.replace(" ", "")
             streamXML = Descargar.getHtml(streamHTML.split("{\"host\":\"")[1].split("\"")[0].replace("\/", "/"))
         except Exception, e:
-            raise Error.GeneralPyspainTVsError("mitele.es: No se puede obenter enlaces: ", e)
+            raise Error.GeneralPyspainTVsError("mitele.es: No se puede obenter enlaces: "+e.__str__())
         
         try:
             img = streamXML.split("<thumb><![CDATA[")[1].split("]")[0]

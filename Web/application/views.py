@@ -617,12 +617,20 @@ def mitele(urlOrig=None):
                 return render_template('ayuda.html')
         else:
             urlOrig = request.form['urlOrig']
-    try:        
-        #return redirect(miteleGAE.MiTele(urlOrig, opcs).getInfo()['videos'][0]['url_video'][0]) #BANNED!
-        return redirect("http://aabilio.me/pydowntv/mt.php?mt_url="+miteleGAE.MiTele(urlOrig, opcs).getInfo()['videos'][0]['url_video'][0])
+    try:
+        response = redirect(miteleGAE.MiTele(urlOrig, opcs).getInfo()['videos'][0]['url_video'][0])
+        response.headers['Referer'] = "http://olaokase.com"
+        return response
     except:
         flash(u"Se ha producido un error al localizar el vídeo.\nEste error no se debería de haber producido.\nPuedes volver a intentar a descargar el vídeo.")
         return redirect(url_for('home'))
+    #try:        
+        #return redirect(miteleGAE.MiTele(urlOrig, opcs).getInfo()['videos'][0]['url_video'][0]) #BANNED!
+        #return redirect("http://aabilio.me/pydowntv/mt.php?mt_url="+miteleGAE.MiTele(urlOrig, opcs).getInfo()['videos'][0]['url_video'][0]) #Mucho tiempo (caduca)
+    #    return redirect("http://aabilio.me/pydowntv/mt.php?mt_url="+urlOrig)
+    #except:
+    #    flash(u"Se ha producido un error al localizar el vídeo.\nEste error no se debería de haber producido.\nPuedes volver a intentar a descargar el vídeo.")
+    #    return redirect(url_for('home'))
     
 
 def embed(urlOrig=None):

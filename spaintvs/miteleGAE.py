@@ -73,7 +73,7 @@ class MiTele(Canal.Canal):
         
         try:
             #data = Descargar.doPOST(self.URL_POST, tokenizer, post_args, doseq=True)
-            data = Descargar.doPOST("linfox.es", "/pydowntv/mitele.php", post_args, doseq=True)
+            data = Descargar.doPOST("aabilio.me", "/pydowntv/mitele.php", post_args, doseq=True)
         except Exception, e:
             raise Error.GeneralPyspainTVsError("mitele.es: Error en Tokenizer: "+e.__str__())
 
@@ -148,7 +148,7 @@ class MiTele(Canal.Canal):
             streamHTML = streamHTML.replace(" ", "")
             streamXML = Descargar.getHtml(streamHTML.split("{\"host\":\"")[1].split("\"")[0].replace("\/", "/"))
         except Exception, e:
-            raise Error.GeneralPyspainTVsError("mitele.es: No se puede obenter enlaces: ", e)
+            raise Error.GeneralPyspainTVsError("mitele.es: No se puede obenter enlaces: "+e.__str__())
         
         try:
             img = streamXML.split("<thumb><![CDATA[")[1].split("]")[0]

@@ -166,9 +166,6 @@ if __name__ == "__main__":
             }
     ####
 
-    print opcs["partes"]
-    sys.exit()
-
     if not urls:
         uiUtiles.printt(u"[--->] Introduce las URL de los vídeos (separadas por espacios):")
         inPut = raw_input()

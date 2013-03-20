@@ -173,7 +173,7 @@
 					{% set tit = titulos[loop.index0].decode('utf8')|safe %}
 					{% for parte in vid['url_video'] %}
 						{% if urlOrig.find("mitele.es") != -1 %}
-							<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a href="{{ url_for('mitele', urlOrig=urlOrig) }}" style="text-decoration: underline;"><h5>{{ tit }}</h5></a></li>
+							<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a href="{{ url_for('mitele', urlOrig=urlOrig) }}" style="text-decoration: underline;"><h5>{{ tit }}</h5></a><!--<a href="{{ "http://pydowntv.appspot.com/mitele?urlOrig="+urlOrig }}" target="_blank" style="text-decoration: underline;"><h5>{{ tit }}</h5></a>--><!--<a href="{{ "http://aabilio.me/pydowntv/mt.php?mt_url="+urlOrig }}" target="_blank" style="text-decoration: underline;"><h5>{{ tit }}</h5></a>--></li>
 						{% else %}
 							<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a href="{{ parte }}" style="text-decoration: underline;"><h5>{{ tit }}</h5></a></li>
 						{% endif %}
