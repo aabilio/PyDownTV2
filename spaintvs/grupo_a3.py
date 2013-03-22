@@ -148,6 +148,14 @@ class GrupoA3(Canal.Canal):
     
     def __modoNormalConURL(self,  streamHTML):
         url2down = streamHTML.split(".seoURL='")[1].split("'")[0]
+        if not Descargar.isReachable(url2down): # A veces el vídeo de .seoURL da NOT FOUND!
+            xmlURL = Utiles.recortar(streamHTML, ".xml=\'", "\'")
+            streamXML = Descargar.getHtml(self.URL_DE_ANTENA3 + xmlURL)
+            self.URL_DE_DESCARGA = self.__getUrlDescarga(streamXML)
+            url2down =  self.URL_DE_DESCARGA + \
+            streamXML.split("<archivo><![CDATA[")[1].split("]]></archivo>")[0]
+            name = streamXML.split("<nombre><![CDATA[")[1].split("]]>")[0] + ".mp4"
+            return [url2down, name]
         url2down = url2down.replace("deslasexta", "desprogresiva")
         try: # Parece que a veces aunque en el código aparezca el html, este no existe..
             name = Descargar.getHtml(self.URL_DE_ANTENA3 + streamHTML.split(".xml='")[1].split("'")[0]).split("<nombre><![CDATA[")[1].split("]]>")[0] + ".mp4"

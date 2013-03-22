@@ -6,7 +6,7 @@ URL dispatch route mappings and error handlers
 
 """
 
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, Response
 
 from application import app
 from application import views
@@ -80,6 +80,8 @@ def server_error(e):
 ## Other handlers
 @app.before_request
 def change_request_url():
+	#request.headers['User-Agent'] = "Mozilla/5.0 (Linux; U; Android 2.3.5; en-us; HTC Vision Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"
+	#return request.headers.get('User-Agent')
 	if request.url.find("http://localhost:") != -1:
 		pass
 	elif request.url.find("pydowntv.appspot.com") != -1:

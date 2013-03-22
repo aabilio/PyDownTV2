@@ -1,5 +1,5 @@
 Sitemap: http://web.pydowntv.com/static/sitemap.xml
 
 User-Agent: *
-Disallow:
+Disallow: /mitele
 

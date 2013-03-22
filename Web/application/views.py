@@ -605,8 +605,8 @@ def api(urlOrig=None):
     #    resp = Response(js, status=200, mimetype='application/json')
     #    return resp
     #    #return render_template("api.html", messages=ErrorDesconocido)
-        
-def mitele(urlOrig=None):
+
+def mitele(urlOrig=None):  #Ahora ya no se pasa por aquí
     '''Función especial para mitele'''
     opcs = _default_opcs
     if urlOrig is None:
@@ -619,7 +619,8 @@ def mitele(urlOrig=None):
             urlOrig = request.form['urlOrig']
     try:
         response = redirect(miteleGAE.MiTele(urlOrig, opcs).getInfo()['videos'][0]['url_video'][0])
-        response.headers['Referer'] = "http://olaokase.com"
+        response.headers['Referer'] = "http://marka.com"
+        response.headers['User-Agent'] = "Mozilla/5.0 (Linux; U; Android 2.3.5; en-us; HTC Vision Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"
         return response
     except:
         flash(u"Se ha producido un error al localizar el vídeo.\nEste error no se debería de haber producido.\nPuedes volver a intentar a descargar el vídeo.")

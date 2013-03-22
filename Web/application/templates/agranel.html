@@ -108,6 +108,13 @@
             	</form>
             </div>
         </div>
+        <!--{% if not videos %}
+        <div class="row" style="padding-top: 10px;">
+    		<div class="columns_12">
+    			<h5 class="text book color theme">Estamos al corriente de los problemas con algunos vídeos de MiTele. Estamos en ello ;)</h5>
+    		</div>
+    	</div>
+    	{% endif %}-->
     </section>
      
     <section class="bck light underline navigation ">
@@ -166,7 +173,7 @@
 	        	<h4 style="font-size: 1.6em;">{{ titulos[loop.index0].decode('utf8')|safe }}</h4>
 				<p style="color: #bfbfbf;">{{ descripciones[loop.index0].decode('utf8')|safe }}</p>
 				<br />
-				<p><strong class="text bold" style="color: #16a6b6;">Partes: </strong>{{ vid['partes'] }}. <strong class="text bold" style="color: #16a6b6;">Enlaces </strong>{% if vid['tipo'] == "http" %}<span class="text thin color secondary">(Clic derecho: "Guardar enlace como...")</span>{% elif vid['tipo'] == "rtmp" %}<span class="text thin color secondary">(RTMP: Utilizar comando proporcionado para rtmpdump)</span>{% endif %}<strong style="color: #16a6b6;">:</strong></p>
+				<p><strong class="text bold" style="color: #16a6b6;">Partes: </strong>{{ vid['partes'] }}. <strong class="text bold" style="color: #16a6b6;">Enlaces </strong>{% if vid['tipo'] == "http" %}{% if urlOringTmp.find("mitele.es") != -1 or urlOringTmp.find("divinity.es") != -1 or urlOringTmp.find("cuatro.com") != -1 or urlOringTmp.find("telecinco.es") != -1 %}<span class="text thin color secondary">(Clic derecho: "Guardar enlace como...")</span>{% else %}<span class="text thin color secondary">(Clic derecho: "Guardar enlace como...")</span>{% endif %}{% elif vid['tipo'] == "rtmp" %}<span class="text thin color secondary">(RTMP: Utilizar comando proporcionado para rtmpdump)</span>{% endif %}<strong style="color: #16a6b6;">:</strong></p>
 				{% if vid['mensaje'] %}<p><strong class="text bold" style="color: #16a6b6;">Más Info: </strong><span class="text thin">{{ vid['mensaje'].decode('utf8')|safe }}</span></p>{% endif %}
 				{% if vid['otros'] %}<p><strong class="text bold" style="color: #16a6b6;">Calidad: </strong><span class="text bold">{{ vid['otros'].decode('utf8')|safe }}</span></p>{% endif %}
 				<br />
@@ -174,9 +181,21 @@
 					{% set tit = titulos[loop.index0].decode('utf8')|safe %}
 					{% for parte in vid['url_video'] %}
 						{% if urlOringTmp.find("mitele.es") != -1 %}
-							<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a href="{{ url_for('mitele', urlOrig=urlOringTmp) }}" style="text-decoration: underline;"><h5>{{ tit }}</h5></a></li>
+							<!--<li class="text bold color theme" style="color: #ee6557;">
+								<iframe src="{{ "http://pydowntv.p.ht/pydowntv/mt4.php?u="+urlOringTmp+"&tit="+tit }}" allowtransparency="true" border="0" frameborder="0" scrolling="no" style="max-height: 24px;"></iframe>
+							</li>-->
+							<!--<li class="text bold color theme" style="color: #ee6557;">--><!--Parte {{ loop.index0+1 }}: --><!--<a rel=noreferrer href="{{ url_for('mitele', urlOrig=urlOringTmp) }}" style="text-decoration: underline;"><h5>{{ tit }}</h5></a></li>-->
+							<li class="text bold color theme" style="color: #ee6557;"><span id="url_kill_referrer"></span></li>
+							<script>
+								document.getElementById('url_kill_referrer').innerHTML = ReferrerKiller.linkHtml( '{{ url_for('mitele', urlOrig=urlOringTmp) }}', '{{ tit }}', { target: 'destiny' }, { verticalAlign: 'bottom' } );
+							</script>
+						{% elif urlOringTmp.find("divinity.es") != -1 or urlOringTmp.find("cuatro.com") != -1 or urlOringTmp.find("telecinco.es") != -1 %}
+							<li class="text bold color theme" style="color: #ee6557;"><span id="url_kill_referrer"></span></li>
+							<script>
+								document.getElementById('url_kill_referrer').innerHTML = ReferrerKiller.linkHtml( '{{ parte }}', '{{ tit }}', { target: 'destiny' }, { verticalAlign: 'bottom' } );
+							</script>
 						{% else %}
-							<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a href="{{ parte }}" style="text-decoration: underline;"><h5>{{ tit }}</h5></a></li>
+							<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a  href="{{ parte }}" style="text-decoration: underline;"><h5>{{ tit }}</h5></a></li>
 						{% endif %}
 					{% endfor %}
 				</ol>
