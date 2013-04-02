@@ -79,6 +79,11 @@
 				$('#divListadoComandos').toggle();
 				return;
 			});
+			var FF = !(window.mozInnerScreenX == null);
+			if (FF) {
+				$('#sendRequestButton').css('max-width', $('#sendRequestButton').width()+8+'px');
+				$('#sendRequestButton').css('height', '54px');
+			}
 		});
 	</script>
 	<script src="/static/js/ReferrerKiller.js"></script>
@@ -197,7 +202,7 @@
 							<!--<li class="text bold color theme" style="color: #ee6557;">--><!--Parte {{ loop.index0+1 }}: --><!--<a href="{{ url_for('mitele', urlOrig=urlOrig) }}" style="text-decoration: underline;"><h5>{{ tit }}</h5></a>-->
 							<li class="text bold color theme" style="color: #ee6557;"><span id="url_kill_referrer"></span></li>
 							<script>
-								document.getElementById('url_kill_referrer').innerHTML = ReferrerKiller.linkHtml( '{{ url_for('mitele', urlOrig=urlOrig) }}', '{{ tit }}', { target: 'destiny' }, { verticalAlign: 'bottom' } );
+								document.getElementById('url_kill_referrer').innerHTML = ReferrerKiller.linkHtml( '{{ url_for('mitele', urlOrig=urlOrig) }}', "{{ tit }}", { target: 'destiny' }, { verticalAlign: 'bottom' } );
 							</script>
 						{% elif urlOrig.find("divinity.es") != -1 or urlOrig.find("cuatro.com") != -1 or urlOrig.find("telecinco.es") != -1 %}
 							<li class="text bold color theme" style="color: #ee6557;"><span id="url_kill_referrer"></span></li>
@@ -346,15 +351,17 @@
                 	PyDownTV web soporta la mayoría de los canales nacionales y autonómicos y algunos locales
                 </h3>
              </div>
-             <div class="carrousel">
-				<div>
-				<img src="/static/img/logo_tvs/1.svg">
-				<img src="/static/img/logo_tvs/2.svg">
-				<img src="/static/img/logo_tvs/3.png">
-				<img src="/static/img/logo_tvs/4.svg">
-				<img src="/static/img/logo_tvs/5.png">
-				<img src="/static/img/logo_tvs/6.png">
-				<img src="/static/img/logo_tvs/mt.png">
+             <div class="row">
+	             <div class="carrousel">
+					<div>
+					<img src="/static/img/logo_tvs/1.svg">
+					<img src="/static/img/logo_tvs/2.svg">
+					<img src="/static/img/logo_tvs/3.png">
+					<img src="/static/img/logo_tvs/4.svg">
+					<img src="/static/img/logo_tvs/5.png">
+					<img src="/static/img/logo_tvs/6.png">
+					<img src="/static/img/logo_tvs/mt.png">
+					</div>
 				</div>
 			</div>
 			<div class="column_10 offset_1 margin_bottom">

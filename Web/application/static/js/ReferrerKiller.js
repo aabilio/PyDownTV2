@@ -188,7 +188,7 @@ var ReferrerKiller = (function () {
 		if (IE_GT_8) {
 			urlRedirection = URL_REDIRECTION;
 		}
-		html = '<a rel="noreferrer" href="' + urlRedirection + escapeDoubleQuotes(url) + '" ' + objectToHtmlAttributes(anchorParams) + '>' + innerHTML + '</a>';
+		html = '<a style="color: #16a6b6; text-decoration: underline; font-weight: bold; font-family: \"Source Sans Pro\";" rel="noreferrer" href="' + urlRedirection + escapeDoubleQuotes(url) + '" ' + objectToHtmlAttributes(anchorParams) + '>' + innerHTML + '</a>';
 		return htmlString(html, iframeAttributes);
 	}
 	PUB.linkHtml = linkHtml;
