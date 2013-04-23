@@ -235,6 +235,49 @@ class GrupoA3(Canal.Canal):
             #name.append(i.split("\"")[1].split("\"")[0] + '.' + ext)   
         
         return ret
+
+    def normalMultiple(self, xmls):
+        ret =   {
+                "exito" : True,
+                "num_videos" : 0,
+                "mensaje"   : u"URLs obtenido correctamente",
+                "videos":[],
+                "titulos": [],
+                "descs": []
+                }
+        cont = 0
+        for xml in xmls:
+            video = {
+                    "url_video" : [],
+                    "url_img"   : None,
+                    "filename"  : [],
+                    "tipo"      : "http",
+                    "partes"    : 0,
+                    "rtmpd_cmd" : None,
+                    "menco_cmd" : None,
+                    "url_publi" : None,
+                    "otros"     : None,
+                    "mensaje"   : None
+                    }
+
+            sxml = Descargar.get(xml)  
+            url_desc = self.__getUrlDescarga(sxml)
+            url_img = re.findall("<urlImg><!\[CDATA\[(.*)\]\]></urlImg>", sxml)[0]
+
+            ret["num_videos"] += 1
+            ret["titulos"].append(re.findall("<nombre><!\[CDATA\[(.*)\]\]></nombre>", sxml)[0])
+            ret["descs"].append(re.findall("<descripcion><!\[CDATA\[(.*)\]\]></descripcion>", sxml)[0])
+            
+            video["url_video"].append(url_desc+re.findall("<archivo><!\[CDATA\[(.*\.mp4)\]\]></archivo>", sxml)[0])
+            video["url_img"] = url_img+re.findall("<archivo><!\[CDATA\[(.*\.jpg)\]\]></archivo>", sxml)[0]
+            print cont, ":", ret["titulos"][cont]
+            video["filename"].append(Utiles.formatearNombre(ret["titulos"][cont]))
+            video["partes"] = 1
+            ret["videos"].append(video)
+
+            cont += 1
+
+        return ret
     
     def __modoF1(self, streamHTML):#TODO: ¡¡¡Acabar esta función para devolver todos los videos y sus partes!!!
         '''
@@ -352,7 +395,15 @@ class GrupoA3(Canal.Canal):
             url2down, name = self.__modoSalon(streamHTML)
         else: # Otro vídeos (No modo salón)
             self.log(u"[INFO] Vídeo normal (no Modo Salón)")
+            # EN PRUEBAS (solo si hay varios vídeos...)! (23/04/2013) [RETROCOMPATIBLE]: #########
+            xmls = re.findall("\.xml='(.*)'", streamHTML)
+            if len(xmls) > 1:
+                xmls = ["/".join(self.url.split("/")[:3])+i for i in xmls]
+                return self.normalMultiple(xmls)
+
+            #####################################################################################
             if streamHTML.find(".seoURL='") != -1: # Url directamente en HTML
+                self.debug(u"Vídeo con SEO URL")
                 img = self.URL_DE_ANTENA3 + streamHTML.split(".poster=\'/")[1].split("\'")[0]
                 url2down, name = self.__modoNormalConURL(streamHTML)
             elif streamHTML.find("a3_gp_visor_player") != -1:
