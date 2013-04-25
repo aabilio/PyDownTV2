@@ -16,10 +16,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with spaintvs.  If not, see <http://www.gnu.org/licenses/>.
 
-# Módulo para descargar todos los vídeos de la web de Telemadrid
+# Módulo para descargar todos los vídeos de la web de abc.es
 
 __author__="aabilio"
-__date__ ="$17-dic-2012 11:35:37$"
+__date__ ="$23-abr-2013 18:00:00$"
+
+import re
 
 import Canal
 import Utiles
@@ -29,16 +31,16 @@ import Error
 import httplib
 from pyamf import remoting
 
-url_validas = ["telemadrid.es"]
+url_validas = ["abc.es"]
 
-class Telemadrid(Canal.Canal):
+class ABC(Canal.Canal):
     '''
-        Clase para manejar los vídeos de Telemadrid
+        Clase para manejar los vídeos de ABC
     '''
     
-    URL_TELEMADRID = "http://telemadrid.es"
-    Publisher_ID = "104403117001"
-    Player_ID = "111787372001"
+    URL_ABC = "http://www.abc.es"
+    Publisher_ID = ""
+    Player_ID = ""
     Const = "9f8617ac59091bcfd501ae5188e4762ffddb9925"
     
     def __init__(self, url="", opcs=None):
@@ -116,11 +118,17 @@ class Telemadrid(Canal.Canal):
         '''
         
         html = Descargar.get(self.url)
-        # NO BORRAR, ver FIXME abajo --> name = html.split("<meta name=\"dc.title\" content=\"")[1].split("\"")[0]
-        VideoPlayer = html.split("<param name=\"@videoPlayer\" value=\"")[1].split("\"")[0]
+
+        #Por ahora solo soportados para brightcove:
+        if not re.findall("ORIGEN[ \=\"\']*([a-zA-Z]*)[ \"\']*;", html)[0] == "bc":
+            raise Error.GeneralPyspainTVsError(u'Tipo de vídeo aun no soportado para ABC. Por favor, comunica la incidencia.')
+
+        self.Publisher_ID = re.findall("publisherID=([0-9]*)", html)[0]
+        self.Player_ID = re.findall("playerID=([0-9]*)", html)[0]
+        VideoPlayer = re.findall("RUTA_VIDEO[ \=\"\']*([0-9]*)[ \"\']*;", html)[0]
+
         info = self.__get_info(VideoPlayer)
         self.debug(u"info:",info)
-        
         #TODO: Soltar todos los vídeos con las distintas calidades, ahora está solo la de mayor
         big = 0
         for video in info['renditions']:
@@ -141,32 +149,35 @@ class Telemadrid(Canal.Canal):
             if desc1 is not None: desc = desc1
             else:
                 if desc2 is not None: desc = desc2
-        except: desc = u"Vídeo de Telemadrid".encode('utf8')
+        except: desc = u"Vídeo de ABC".encode('utf8')
         else:
-            if desc is None: desc = u"Vídeo de Telemadrid".encode('utf8')
+            if desc is None: desc = u"Vídeo de ABC".encode('utf8')
             else:
                 if type(desc) is unicode:
-                    if desc == u"": desc = u"Vídeo de Telemadrid".encode('utf8')
+                    if desc == u"": desc = u"Vídeo de ABC".encode('utf8')
                 elif type(desc) is str:
-                    if desc == "": desc = u"Vídeo de Telemadrid".encode('utf8')
+                    if desc == "": desc = u"Vídeo de ABC".encode('utf8')
         
         tit = None   
         try: tit = info['displayName'].encode('utf8')
-        except: tit = u"Vídeo de Telemadrid".encode('utf8')
+        except: tit = u"Vídeo de ABC".encode('utf8')
         else:
-            if tit is None: tit = u"Vídeo de Telemadrid".encode('utf8')
+            if tit is None: tit = u"Vídeo de ABC".encode('utf8')
             if type(tit) is unicode:
-                if tit == u"": tit = u"Vídeo de Telemadrid".encode('utf8')
+                if tit == u"": tit = u"Vídeo de ABC".encode('utf8')
             elif type(tit) is str:
-                if tit == "": tit = u"Vídeo de Telemadrid".encode('utf8')
+                if tit == "": tit = u"Vídeo de ABC".encode('utf8')
         
         #FIXME: Ver qué pasa aquí!! --> name = Utiles.formatearNombre(tit + ext)
         try:
             name = Utiles.formatearNombre2(tit+ext)
         except:
-            name = "VideoTelemadrid"+ext
+            name = "VideoABC"+ext
         
-        url = "/".join(img.split("/")[:3])+"/"+"/".join(url.split("/")[3:])
+        # Parece que NO funciona lo siguiente para ABC, solo para Telemadrid
+        #url = "/".join(img.split("/")[:3])+"/"+"/".join(url.split("/")[3:])
+        rtmpd_cmd = "rtmpdump -r '"+url.replace("&mp4:","mp4/")+"' -o '"+name+"'"
+
         
         return {"exito" : True,
                 "num_videos" : 1,
@@ -175,9 +186,9 @@ class Telemadrid(Canal.Canal):
                         "url_video" : [url],
                         "url_img"   : img if img is not None else None,
                         "filename"  : [name] if name is not None else None,
-                        "tipo"      : "http",
+                        "tipo"      : "rtmp",
                         "partes"    : 1,
-                        "rtmpd_cmd" : None,
+                        "rtmpd_cmd" : [rtmpd_cmd],
                         "menco_cmd" : None,
                         "url_publi" : None,
                         "otros"     : None,

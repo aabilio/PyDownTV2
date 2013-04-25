@@ -22,6 +22,10 @@
 import sys
 import urllib
 import urlparse
+import unicodedata
+import string
+
+validFilenameChars = "-_.() %s%s" % (string.ascii_letters, string.digits)
 
 def isWin():
     ''' return True si se están en Windows '''
@@ -196,6 +200,11 @@ def stringFormat(s):
     s = s.replace("\xc2", "") #"a" de segunda
     
     return s
+
+def formatearNombre2(filename):
+    cleanedFilename = unicodedata.normalize('NFKD', filename).encode('ASCII', 'ignore')
+    init = ''.join(c for c in cleanedFilename if c in validFilenameChars)
+    return formatearNombre(init)
 
 def qe(s):
     return s.replace(" ", "")

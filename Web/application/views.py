@@ -219,6 +219,13 @@ class Canales(object):
         for url in urls:
             if self._url.find(url) != -1: return True
         return False
+
+    def isABC(self):
+        '''return True si la URL pertenece a Canal Plus'''
+        urls = ["abc.es"]
+        for url in urls:
+            if self._url.find(url) != -1: return True
+        return False
     
 def qCanal(url, opcs):
     '''
@@ -251,6 +258,7 @@ def qCanal(url, opcs):
     elif canal.isPlus(): return plus.Plus(url, opcs)
     elif canal.isVtelevision(): return vtelevision.V(url, opcs)
     elif canal.isRiasBaixas(): return riasbaixas.RiasBaixas(url, opcs)
+    elif canal.isABC(): return abc.ABC(url, opcs)
     else: return None
 
 def compURL(url):

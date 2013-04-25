@@ -54,7 +54,8 @@ _url_canales = {
                "historia": ["historia.adnstream.com"],
                "plus": ["canalplus.es", "plus.es"],
                "vtelevision": ["vtelevision.es"],
-               "riasbaixas": ["canalriasbaixas.com"]
+               "riasbaixas": ["canalriasbaixas.com"],
+               "abc": ["abc.es"]
                }
 _mod_tv = {
            "rtve": {"mod":tve.TVE,"comentario":"[INFO] Radio Televión Española", "urls":_url_canales["rtve"]},
@@ -79,7 +80,8 @@ _mod_tv = {
            "historia": {"mod":historia.Historia,"comentario":"[INFO] Canal Historia","urls":_url_canales["historia"]},
            "plus": {"mod":plus.Plus,"comentario":"[INFO] Canal Plus","urls":_url_canales["plus"]},
            "vtelevision": {"mod":vtelevision.V,"comentario":"[INFO] V Televisión","urls":_url_canales["vtelevision"]},
-           "riasbaixas": {"mod":riasbaixas.RiasBaixas,"comentario":"[INFO] Rias Baixas TV","urls":_url_canales["riasbaixas"]}
+           "riasbaixas": {"mod":riasbaixas.RiasBaixas,"comentario":"[INFO] Rias Baixas TV","urls":_url_canales["riasbaixas"]},
+           "abc": {"mod":abc.ABC,"comentario":"[INFO] ABC Multimedia","urls":_url_canales["abc"]}
            #"nombre" : {"mod":rutaAlaClase, "comentario":"infoParaImprimir", "urls":_url_canales["canal"]}
            }
 # Fin de edición
