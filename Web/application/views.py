@@ -378,6 +378,7 @@ def home(urlOrig=None):
                     for b in range(len(info["videos"][i]["url_video"])):
                         info["videos"][i]["url_video"][b] = info["videos"][i]["url_video"][b].replace("TE_GLESP", "TE_NGVA")
                         info["videos"][i]["url_video"][b] = info["videos"][i]["url_video"][b].replace("TE_GLEAD", "TE_NGVA")
+                        info["videos"][i]["url_video"][b] = info["videos"][i]["url_video"][b].replace("TE_GLUCA", "TE_NGVA")
         except: pass
 
     # Comillas dobles para Windows en EITB

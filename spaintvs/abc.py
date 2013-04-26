@@ -183,7 +183,7 @@ class ABC(Canal.Canal):
                 "num_videos" : 1,
                 "mensaje"   : u"URL obtenido correctamente",
                 "videos":[{
-                        "url_video" : [url],
+                        "url_video" : [url.replace("&mp4:","mp4/")],
                         "url_img"   : img if img is not None else None,
                         "filename"  : [name] if name is not None else None,
                         "tipo"      : "rtmp",
