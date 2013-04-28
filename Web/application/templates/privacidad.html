@@ -19,12 +19,7 @@
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <!-- TUKTUK -->
-    <link rel="stylesheet" href="/static/css/base.css">
-    <link rel="stylesheet" href="/static/css/tuktuk.css">
-    <link rel="stylesheet" href="/static/css/tuktuk.theme.css">
-    <!-- TUKTUK.WIDGETS -->
-    <link rel="stylesheet" href="/static/widgets/tuktuk.widget.icon.css">
-    <link rel="stylesheet" href="/static/widgets/tuktuk.widget.modal.css">
+    {% include 'includes/include_tuktuk.html' %}
     
     <!--<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>-->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>  
@@ -32,46 +27,34 @@
 </head>
 
 <body>
-    <!-- ========================== HEADER ========================== -->
-    <header class="bck darkest padding_top" style="padding-bottom: 60px;">
-        <div class="row text color white shadow">
-            <div class="column_5">
-                <a href="{{ url_for('home') }}" class="logo text normal color white">Py<span class="text book">DownTV</span> web<img src="/static/img/favicon.png"/></a>
-            </div>
-            <div class="column_4 offset_3 text right">
-                <span class="text bold">Síguenos! </span>
-                <a style="font-size:1.2em" href="https://twitter.com/pydowntv" alt="Síguenos en twitter" class="icon twitter"></a>
-                <a style="font-size:1.2em" href="https://www.facebook.com/webpydowntv" alt="Síguenos en Facebook" class="icon facebook"></a>
-            </div>
-        </div>
-    </header>
+    <!-- Header -->
+    {% include 'includes/header.html' %}
     
-    <section class="bck light underline navigation ">
+    <section class="bck dark underline navigation ">
         <div class="row text center">
-            <nav class="group text bold">
+            <nav data-tuktuk="menu" class="padding text bold">
                 <a href="{{ url_for('home') }}"><span class="icon download"></span>Descargar!</a>
                 <a href="{{ url_for('agranel') }}"><span class="icon download"></span><span class="logo text normal">A</span>Granel</a>
                 <a href="{{ url_for('ayuda') }}"><span class="icon tag"></span>FAQ y Ayuda</a>
-                <a href="{{ url_for('canales') }}"><span class="icon cube"></span>Televisiones Soportadas</a>
+                <a href="{{ url_for('canales') }}"><span class="icon pushpin"></span>Televisiones Soportadas</a>
                 <a href="{{ url_for('apps') }}"><span class="icon star"></span>Apps</a>
                 <a href="{{ url_for('api') }}"><span class="icon cog"></span>API</a>
                 <a href="https://github.com/aabilio/PyDownTV2"><span class="icon github"></span>El proyecto en Github</a>
-                <a href="http://old.pydowntv.appspot.com/"><span class="icon chrome"></span>Versión Antigua de la web</a>
             </nav>
         </div>
     </section>
     
-    <section class="bck lightest text justify">
+    <section class="bck lightest text justify padding">
     	<div class="row ">
     		<h1 class="text color theme">Política de Privacidad</h1>
     		<br />
-    		<p class="text book" style="padding-bottom: 10px;">
+    		<p class="text normal" style="padding-bottom: 10px;">
                 PyDownTV <span class="text normal" style="background-color: black; color: white;">no almacena ninguna información</span> sobre el usuario que se conecta a la web.
             </p>
-            <p class="text book" style="padding-bottom: 10px;">
+            <p class="text normal" style="padding-bottom: 10px;">
                 Además, PyDownTV <span class="text normal" style="background-color: black; color: white;">no almecana ninguna Cookie</span> en tu navegador.
             </p>
-            <p class="text book" style="padding-bottom: 10px;">
+            <p class="text normal" style="padding-bottom: 10px;">
                 PyDownTV SÍ dispone de una Base de Datos para mantener un <span class="text normal" style="background-color: black; color: white;">registro histórico de los vídeos que se descargan
                 a través de la web</span>, pero en ningún caso se guarda información relacionada sobre el usuario que descargó el vídeo. En esta base de datos se guardan:
             </p>
@@ -100,39 +83,18 @@
                     </table>
                 <!--</div>
             </div>-->
-            <p class="text book" style="padding-bottom: 10px;">
+            <p class="text normal" style="padding-bottom: 10px;">
                 <span class="text normal" style="background-color: black; color: white;">PyDownTV puede acceder a varios datos del usuario del servicio</span> proporcionados por su IP y su navegador, estos datos <span class="text normal" style="background-color: black; color: white;">solo son utilizados para proporcionar una mejor experiencia al usuario y en ningún caso se guardan en ningún registro</span>. Solo son utilizados en cada conexión particular.
-                Los datos a los que actualmente tiene acceso PyDownTV <span class="text normal" style="background-color: black; color: white;">se pueden consultar</span> en el siguiente apartado: <a href="{{ url_for('say_hello', username="Usuario de PyDownTV") }}">Consulta los datos que PyDownTV conoce sobre ti.</a>
+                Los datos a los que actualmente tiene acceso PyDownTV <span class="text normal" style="background-color: black; color: white;">se pueden consultar</span> en el siguiente apartado: <a class="button tiny" href="{{ url_for('say_hello', username="Usuario de PyDownTV") }}">Consulta los datos que PyDownTV conoce sobre ti.</a>
             </p>
-            <p class="text book" style="padding-bottom: 10px;">
-                <span class="text normal" style="background-color: black; color: white;">PyDownTV es Software Libre</span> y se puede comprobar su código <a href="https://github.com/aabilio/PyDownTV2/tree/master/Web">aquí</a>.
+            <p class="text normal" style="padding-bottom: 10px;">
+                <span class="text normal" style="background-color: black; color: white;">PyDownTV es Software Libre</span> y se puede comprobar su código <a class="button tiny" href="https://github.com/aabilio/PyDownTV2/tree/master/Web">aquí</a>.
             </p>
     	</div>
     </section>
 
-    <!-- ========================== FOOTER ========================== -->
-    <footer class="bck dark text color white">
-        <div class="row margin_top margin_bottom">
-            <!--<div class="column_8">
-                <p class="text bold">Made by...</p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea similique fugit debitis saepe dolorem
-            </div>-->
-            <div class="column_4">
-	            <small>
-	                &copy; Copyleft 2013 by <a href=http://aabilio.tumblr.com/>aabilio</a> // Powered by <a href="http://flask.pocoo.org/">Flask</a> &amp; <a href="https://appengine.google.com/">GAE</a> &amp; <a href="http://tuktuk.tapquo.com/">tuktuk</a>
-	            </small>
-            </div>
-            <div class="column_4 offset_4">
-                <!--<p class="text bold">Sobre..</p>-->
-                <!--<small>
-                    &copy; Copyleft 2011 by <a href=http://aabilio.tumblr.com/>aabilio</a> // Powered by <a href="http://flask.pocoo.org/">Flask</a> &amp; <a href="https://appengine.google.com/">GAE</a> &amp; <a href="http://tuktuk.tapquo.com/">tuktuk</a>
-                </small>-->
-                <small>
-                    Importante: <a href="{{ url_for('legal') }}">Aviso Legal</a> | <a href="{{ url_for('privacidad') }}">Política de Privacidad</a>
-                </small>
-            </div>
-        </div>
-    </footer>
+    <!-- Footer -->
+    {% include 'includes/footer.html' %}
     
 </body>
 </html>

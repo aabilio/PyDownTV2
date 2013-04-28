@@ -1,0 +1,184 @@
+<!-- ========================== Channels Table ========================== -->
+<section class="bck light features padding">
+    <div class="row text center margin_bottom">
+        <div class="column_8 offset_2" id="tablaCompleta">
+            <h1 class="icon cube text color theme"> Tabla de Canales Soportados</h1>
+            <br />
+            <h4 class="text normal">
+            	PyDownTV está en contínuo desarrollo, y se espera que dentro de poco soporte todos <a href="http://code.google.com/p/pydowntv/wiki/Televisiones_Soportadas">los canales</a> que soportaba su antigua versión
+            	<br />
+            	Si quieres recomendar un canal <a href="{{ url_for('ayuda')+'#soporteNuevoCanalComo' }}">mira cómo hacerlo en nuestro FAQ</a>.
+            </h4>
+        </div>
+    </div>
+    <div class="row text center normal margin_top"> <!-- aquí la tabla -->
+    	<table>
+            <thead>
+                <tr>
+                    <th>Canal</th>
+                    <th>Formato</th>
+                    <th>Protocolo</th>
+                    <th >Notas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Televisión Española</td>
+                    <td>MP4</td>
+                    <td>HTTP</td>
+                    <td>La 1, La 2, etc.</td>
+                </tr>
+                <tr>
+                    <td>Antena 3</td>
+                    <td>MP4</td>
+                    <td>HTTP</td>
+                    <td>Todas las versones del grupo: Neox, Nova, Nitro, Xplora, ...</td>
+                </tr>
+                <tr>
+                    <td>Cuatro</td>
+                    <td>MP4</td>
+                    <td>HTTP</td>
+                    <td>Como canal específico</td>
+                </tr>
+                <tr>
+                    <td>Telecinco</td>
+                    <td>MP4</td>
+                    <td>HTTP</td>
+                    <td>Como canal específico</td>
+                </tr>
+                <tr>
+                    <td>Mi Tele</td>
+                    <td>MP4</td>
+                    <td>HTTP</td>
+                    <td>Todos los canales en mitele.es del grupo Mediaset</td>
+                </tr>
+                <tr>
+                    <td>La Sexta</td>
+                    <td>MP4</td>
+                    <td>HTTP</td>
+                    <td>La Sexta 3, Grupo Antena 3..</td>
+                </tr>
+                <tr>
+                    <td>Divinity</td>
+                    <td>MP4</td>
+                    <td>HTTP</td>
+                    <td>Como parte de Telecinco</td>
+                </tr>
+                <tr>
+                    <td>Televisión de Galicia</td>
+                    <td>MP4</td>
+                    <td>RTMP</td>
+                    <td>Se necesita rtmpdump. <a href="{{ url_for('ayuda')+'#DescargarRtmp' }}">Ver FAQ.</a></td>
+                </tr>
+                <tr>
+                    <td>Televisión Principado de Asturias</td>
+                    <td>MP4</td>
+                    <td>HTTP</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Canal Sur</td>
+                    <td>MP4</td>
+                    <td>HTTP</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Aragón Televisión</td>
+                    <td>MP4</td>
+                    <td>RTMP</td>
+                    <td>Se necesita rtmpdump. <a href="{{ url_for('ayuda')+'#DescargarRtmp' }}">Ver FAQ.</a></td>
+                </tr>
+                <tr>
+                    <td>MTV</td>
+                    <td>MP4</td>
+                    <td>RTMP</td>
+                    <td>Se necesita rtmpdump. <a href="{{ url_for('ayuda')+'#DescargarRtmp' }}">Ver FAQ.</a>. Soporte experimental para mtv.com.</td>
+                </tr>
+                <tr>
+                    <td>Canal Extremadura</td>
+                    <td>MP4</td>
+                    <td>HTTP / RTMP</td>
+                    <td>Puede que se necesite rtmpdump. <a href="{{ url_for('ayuda')+'#DescargarRtmp' }}">Ver FAQ.</a></td>
+                </tr>
+                <tr>
+                    <td>Telemadrid</td>
+                    <td>MP4</td>
+                    <td>HTTP</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Clan TV</td>
+                    <td>MP4</td>
+                    <td>HTTP</td>
+                    <td>Mejorado soporte como canal único</td>
+                </tr>
+                <tr>
+                    <td>Radio Televisión Castilla y León</td>
+                    <td>MP4</td>
+                    <td>HTTP</td>
+                    <td>Vídeos propios, NO los de YouTube</td>
+                </tr>
+                <tr>
+                    <td>Euskal Irrati Telebista (EITB)</td>
+                    <td>MP4</td>
+                    <td>RTMP</td>
+                    <td>Vídeos en distintas calidades. Se necesita rtmpdump. <a href="{{ url_for('ayuda')+'#DescargarRtmp' }}">Ver FAQ.</a></td>
+                </tr>
+                <tr>
+                    <td>Radio Televisión Castilla-La Mancha</td>
+                    <td>MP4</td>
+                    <td>RTMP</td>
+                    <td>Vídeos propios, NO YouTube. Se necesita rtmpdump. <a href="{{ url_for('ayuda')+'#DescargarRtmp' }}">Ver FAQ.</a></td>
+                </tr>
+                <tr>
+                    <td>Televisió de Catalunya</td>
+                    <td>MP4</td>
+                    <td>HTTP</td>
+                    <td>tv3.cat, 324.cat, 3xl.cat, esport3.cat</td>
+                </tr>
+                <tr>
+                    <td>Giralda Televisión</td>
+                    <td>MOV</td>
+                    <td>HTTP</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Radiotelevisión Valenciana</td>
+                    <td>MP4</td>
+                    <td>HTTP</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Intereconomía</td>
+                    <td>MP4/FLV</td>
+                    <td>HTTP</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Canal Historia</td>
+                    <td>MP4/FLV</td>
+                    <td>HTTP</td>
+                    <td>Vídeos de "A la Carta"</td>
+                </tr>
+                <tr>
+                    <td>Canal Plus</td>
+                    <td>MP4</td>
+                    <td>HTTP</td>
+                    <td>Vídeos de Canal Plus PLAY: http://www.canalplus.es/play/ y plus.es/video</td>
+                </tr>
+                <tr>
+                    <td>V Televisión</td>
+                    <td>MP4</td>
+                    <td>HTTP</td>
+                    <td>Vídeos de La Voz de Galicia</td>
+                </tr>
+                <tr>
+                    <td>Canal RiasBaixas</td>
+                    <td>FLV</td>
+                    <td>HTTP / RTMP</td>
+                    <td>Algunos vídeos aún no soportados. Puede que se necesite rtmpdump. <a href="{{ url_for('ayuda')+'#DescargarRtmp' }}">Ver FAQ.</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

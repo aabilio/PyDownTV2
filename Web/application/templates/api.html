@@ -20,12 +20,7 @@
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <!-- TUKTUK -->
-    <link rel="stylesheet" href="/static/css/base.css">
-    <link rel="stylesheet" href="/static/css/tuktuk.css">
-    <link rel="stylesheet" href="/static/css/tuktuk.theme.css">
-    <!-- TUKTUK.WIDGETS -->
-    <link rel="stylesheet" href="/static/widgets/tuktuk.widget.icon.css">
-    <link rel="stylesheet" href="/static/widgets/tuktuk.widget.modal.css">
+    {% include 'includes/include_tuktuk.html' %}
     
     <!-- Include Rainbow Code Highlighter -->
     <script src="/static/rainbow/rainbow.min.js"></script>
@@ -50,43 +45,31 @@
 </head>
 
 <body>
-    <!-- ========================== HEADER ========================== -->
-    <header class="bck darkest padding_top" style="padding-bottom: 60px;">
-        <div class="row text color white shadow">
-            <div class="column_5">
-                <a href="{{ url_for('home') }}" class="logo text normal color white">Py<span class="text book">DownTV</span> web<img src="/static/img/favicon.png"/></a>
-            </div>
-            <div class="column_4 offset_3 text right">
-                <span class="text bold">Síguenos! </span>
-                <a style="font-size:1.2em" href="https://twitter.com/pydowntv" alt="Síguenos en twitter" class="icon twitter"></a>
-                <a style="font-size:1.2em" href="https://www.facebook.com/webpydowntv" alt="Síguenos en Facebook" class="icon facebook"></a>
-            </div>
-        </div>
-    </header>
+    <!-- Header -->
+    {% include 'includes/header.html' %}
     
-    <section class="bck light underline navigation ">
+    <section class="bck dark underline navigation">
         <div class="row text center">
-            <nav class="group text bold">
+            <nav data-tuktuk="menu" class="padding text bold">
                 <a href="{{ url_for('home') }}"><span class="icon download"></span>Descargar!</a>
                 <a href="{{ url_for('agranel') }}"><span class="icon download"></span><span class="logo text normal">A</span>Granel</a>
                 <a href="{{ url_for('ayuda') }}"><span class="icon tag"></span>FAQ y Ayuda</a>
-                <a href="{{ url_for('canales') }}"><span class="icon cube"></span>Televisiones Soportadas</a>
+                <a href="{{ url_for('canales') }}"><span class="icon pushpin"></span>Televisiones Soportadas</a>
                 <a href="{{ url_for('apps') }}"><span class="icon star"></span>Apps</a>
                 <a href="{{ url_for('api') }}" class="active"><span class="icon cog"></span>API</a>
                 <a href="https://github.com/aabilio/PyDownTV2"><span class="icon github"></span>El proyecto en Github</a>
-                <a href="http://old.pydowntv.appspot.com/"><span class="icon chrome"></span>Versión Antigua de la web</a>
             </nav>
         </div>
     </section>
     
-    <section class="bck light text justify">
+    <section class="bck light text justify padding">
     	<div class="row text">
     		<h1 class="icon cog text center color theme">
     			API de spaintvs
     		</h1>
     		<h4 class="text center">Para crear tu front-end</h4>
     		<br />
-    		<p class="text justify color thin">
+    		<p class="text justify color normal">
     			PyDownTV web, utiliza la biblioteca Python de <a class="icon github" href="https://github.com/aabilio/PyDownTV2/tree/master/spaintvs">spaintvs</a> para obtener los enlaces
     			de descarga de los vídeos de los canales de televisión. En la página del <a class="icon github" href="https://github.com/aabilio/PyDownTV2">proyecto</a>
     			se están desarrollando aplicaciones para Escritorio (C++ &amp; QT5) y Android (Java Android SDK), pero si quieres
@@ -253,29 +236,8 @@
     	</div>
     </section>
 
-    <!-- ========================== FOOTER ========================== -->
-    <footer class="bck dark text color white">
-        <div class="row margin_top margin_bottom">
-            <!--<div class="column_8">
-                <p class="text bold">Made by...</p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea similique fugit debitis saepe dolorem
-            </div>-->
-            <div class="column_4">
-	            <small>
-	                &copy; Copyleft 2013 by <a href=http://aabilio.tumblr.com/>aabilio</a> // Powered by <a href="http://flask.pocoo.org/">Flask</a> &amp; <a href="https://appengine.google.com/">GAE</a> &amp; <a href="http://tuktuk.tapquo.com/">tuktuk</a>
-	            </small>
-            </div>
-            <div class="column_4 offset_4">
-                <!--<p class="text bold">Sobre..</p>-->
-                <!--<small>
-                    &copy; Copyleft 2011 by <a href=http://aabilio.tumblr.com/>aabilio</a> // Powered by <a href="http://flask.pocoo.org/">Flask</a> &amp; <a href="https://appengine.google.com/">GAE</a> &amp; <a href="http://tuktuk.tapquo.com/">tuktuk</a>
-                </small>-->
-                <small>
-                	Importante: <a href="{{ url_for('legal') }}">Aviso Legal</a> | <a href="{{ url_for('privacidad') }}">Política de Privacidad</a>
-                </small>
-            </div>
-        </div>
-    </footer>
+    <!-- Footer -->
+    {% include 'includes/footer.html' %}
     
 </body>
 </html>

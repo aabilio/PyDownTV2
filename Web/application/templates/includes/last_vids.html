@@ -1,0 +1,28 @@
+<section id="lastVids" class="bck color features padding">
+	<div class="row text center margin_bottom">
+        <div class="column_12">
+            <h1 class="text color theme">Últimos vídeos descargados</h1><!--<h5><a href="#">Ver más...</a></h5>-->
+            <br />
+        </div>
+    </div>
+	<div class="row text center book margin_top">
+		{% for l in last %}
+        <div class="column_3">
+        	<div class="row" style="max-width: 267px;">
+        		{% if l.urlImg %}
+        			<a href="{{ url_for('home', url=l.urlOrig)|safe }}">
+        				<img src="{{ l.urlImg }}" alt="Obtener enlace: {{ l.vidName }}" style="outline: 0;  max-width: 210px; max-height: 124px; height: auto;  border: 1px solid #CCC;  background: #F3F3F3;  padding: 6px;"/>
+        			</a>
+				{% else %}
+					<a href="{{ url_for('home', url=l.urlOrig)|safe }}">
+						<img src="/static/img/noImg.gif" alt="Obtener enlace: {{ l.vidName }}" style="outline: 0;  max-width: 210px; max-height: 124px; height: auto;  border: 1px solid #CCC;  background: #F3F3F3;  padding: 6px;"/>
+					</a>
+				{% endif %}
+                <br />
+                <small class="text normal color theme" style="max-width: 210px">{{ l.vidTit|safe }}</small><br />
+                <small class="text bold color normal"><a class="icon download" href="{{ url_for('home', url=l.urlOrig)|safe }}"> Obtener Enlace!</a></small>
+        	</div>
+        </div>
+        {% endfor %}
+    </div>	   
+</section>

@@ -19,12 +19,7 @@
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <!-- TUKTUK -->
-    <link rel="stylesheet" href="/static/css/base.css">
-    <link rel="stylesheet" href="/static/css/tuktuk.css">
-    <link rel="stylesheet" href="/static/css/tuktuk.theme.css">
-    <!-- TUKTUK.WIDGETS -->
-    <link rel="stylesheet" href="/static/widgets/tuktuk.widget.icon.css">
-    <link rel="stylesheet" href="/static/widgets/tuktuk.widget.modal.css">
+    {% include 'includes/include_tuktuk.html' %}
     
     <!--<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>-->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
@@ -42,290 +37,34 @@
 </head>
 
 <body>
-    <!-- ========================== HEADER ========================== -->
-    <header class="bck darkest padding_top">
-        <div class="row text color white shadow">
-            <div class="column_5">
-                <a href="{{ url_for('home') }}" class="logo text normal color white">Py<span class="text book">DownTV</span> web<img src="/static/img/favicon.png"/></a>
-            </div>
-            <div class="column_4 offset_3 text right">
-                <span class="text bold">Síguenos! </span>
-                <a style="font-size:1.2em" href="https://twitter.com/pydowntv" alt="Síguenos en twitter" class="icon twitter"></a>
-                <a style="font-size:1.2em" href="https://www.facebook.com/webpydowntv" alt="Síguenos en Facebook" class="icon facebook"></a>
-            </div>
-        </div>
-    </header>
+    <!-- Header -->
+    {% include 'includes/header.html' %}
 
-    <section class="bck darkest landing text center color white" id="myLanding">
-        <div class="row">
-            <div class="column_8 offset_2">
-                <h2 class="text book ">Descarga vídeos de las webs de televisiones españolas</h2>
-                <br />
-            </div>
-        </div>
-        <div class="row">
-            <div class="column_8 offset_2 form">
-            	<form action="{{ url_for('home') }}" method="post" id="searchUrlOrig">
-	                <input name="urlOrig" type="text" id="sendRequestInput" class="large float left" placeholder="Introduce AQUÍ la URL del vídeo a descargar...">
-					<button style="color: black;" id="sendRequestButton" name="submit" onclick="$('#loading').show();" type="submit" class="button large float">
-	                	<div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" />Buscando...</div>
-	                	Buscar!
-	                </button>
-            	</form>
-            </div>
-        </div>
-    </section>
+    <!-- landing -->
+    {% include 'includes/landing.html' %}
     
-    <section class="bck light underline navigation ">
+    <section class="bck dark underline navigation ">
         <div class="row text center">
-            <nav class="group text bold">
+            <nav data-tuktuk="menu" class="padding text bold">
                 <a href="{{ url_for('home') }}"><span class="icon download"></span>Descargar!</a>
                 <a href="{{ url_for('agranel') }}"><span class="icon download"></span><span class="logo text normal">A</span>Granel</a>
                 <a href="{{ url_for('ayuda') }}"><span class="icon tag"></span>FAQ y Ayuda</a>
-                <a href="{{ url_for('canales') }}" class="active"><span class="icon cube"></span>Televisiones Soportadas</a>
+                <a href="{{ url_for('canales') }}" class="active"><span class="icon pushpin"></span>Televisiones Soportadas</a>
                 <a href="{{ url_for('apps') }}"><span class="icon star"></span>Apps</a>
                 <a href="{{ url_for('api') }}"><span class="icon cog"></span>API</a>
                 <a href="https://github.com/aabilio/PyDownTV2"><span class="icon github"></span>El proyecto en Github</a>
-                <a href="http://old.pydowntv.appspot.com/"><span class="icon chrome"></span>Versión Antigua de la web</a>
             </nav>
         </div>
     </section>
     
-    <!-- ========================== COLUMNS ========================== -->
-    <section class="bck lightest text center">
-        <div class="row ">
-            <div class="column_10 offset_1 margin_bottom">
-                <h1 class="text color theme"><a href="{{ url_for('canales')+'#tablaCompleta' }}">¿Qué canales soporta pydowntv web?</a></h1>
-                <h3 class="text thin">
-                	PyDownTV web soporta la mayoría de los canales nacionales y autonómicos y algunos locales
-                </h3>
-            </div>
-            <div class="row">
-                <div class="carrousel">
-                    <div>
-                    <img src="/static/img/logo_tvs/1.svg">
-                    <img src="/static/img/logo_tvs/2.svg">
-                    <img src="/static/img/logo_tvs/3.png">
-                    <img src="/static/img/logo_tvs/4.svg">
-                    <img src="/static/img/logo_tvs/5.png">
-                    <img src="/static/img/logo_tvs/6.png">
-                    <img src="/static/img/logo_tvs/mt.png">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- feautes Channels -->
+    {% include 'includes/features_channels.html' %}
     
-    <!-- ========================== FEATURES ========================== -->
-    <section class="bck light features">
-        <div class="row text center margin_bottom">
-            <div class="column_8 offset_2" id="tablaCompleta">
-                <h1 class="icon cube text color theme"> Tabla de Canales Soportados</h1>
-                <br />
-                <h4 class="text thin">
-                	PyDownTV está en contínuo desarrollo, y se espera que dentro de poco soporte todos <a href="http://code.google.com/p/pydowntv/wiki/Televisiones_Soportadas">los canales</a> que soportaba su antigua versión
-                	<br />
-                	Si quieres recomendar un canal <a href="{{ url_for('ayuda')+'#soporteNuevoCanalComo' }}">mira cómo hacerlo en nuestro FAQ</a>.
-                </h4>
-            </div>
-        </div>
-        <div class="row text center book margin_top"> <!-- aquí la tabla -->
-        	<table>
-                <thead>
-                    <tr>
-                        <th>Canal</th>
-                        <th>Formato</th>
-                        <th>Protocolo</th>
-                        <th >Notas</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Televisión Española</td>
-                        <td>MP4</td>
-                        <td>HTTP</td>
-                        <td>La 1, La 2, etc.</td>
-                    </tr>
-                    <tr>
-                        <td>Antena 3</td>
-                        <td>MP4</td>
-                        <td>HTTP</td>
-                        <td>Todas las versones del grupo: Neox, Nova, Nitro, Xplora, ...</td>
-                    </tr>
-                    <tr>
-                        <td>Cuatro</td>
-                        <td>MP4</td>
-                        <td>HTTP</td>
-                        <td>Como canal específico</td>
-                    </tr>
-                    <tr>
-                        <td>Telecinco</td>
-                        <td>MP4</td>
-                        <td>HTTP</td>
-                        <td>Como canal específico</td>
-                    </tr>
-                    <tr>
-                        <td>Mi Tele</td>
-                        <td>MP4</td>
-                        <td>HTTP</td>
-                        <td>Todos los canales en mitele.es del grupo Mediaset</td>
-                    </tr>
-                    <tr>
-                        <td>La Sexta</td>
-                        <td>MP4</td>
-                        <td>HTTP</td>
-                        <td>La Sexta 3, Grupo Antena 3..</td>
-                    </tr>
-                    <tr>
-                        <td>Divinity</td>
-                        <td>MP4</td>
-                        <td>HTTP</td>
-                        <td>Como parte de Telecinco</td>
-                    </tr>
-                    <tr>
-                        <td>Televisión de Galicia</td>
-                        <td>MP4</td>
-                        <td>RTMP</td>
-                        <td>Se necesita rtmpdump. <a href="{{ url_for('ayuda')+'#DescargarRtmp' }}">Ver FAQ.</a></td>
-                    </tr>
-                    <tr>
-                        <td>Televisión Principado de Asturias</td>
-                        <td>MP4</td>
-                        <td>HTTP</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Canal Sur</td>
-                        <td>MP4</td>
-                        <td>HTTP</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Aragón Televisión</td>
-                        <td>MP4</td>
-                        <td>RTMP</td>
-                        <td>Se necesita rtmpdump. <a href="{{ url_for('ayuda')+'#DescargarRtmp' }}">Ver FAQ.</a></td>
-                    </tr>
-                    <tr>
-                        <td>MTV</td>
-                        <td>MP4</td>
-                        <td>RTMP</td>
-                        <td>Se necesita rtmpdump. <a href="{{ url_for('ayuda')+'#DescargarRtmp' }}">Ver FAQ.</a>. Soporte experimental para mtv.com.</td>
-                    </tr>
-                    <tr>
-                        <td>Canal Extremadura</td>
-                        <td>MP4</td>
-                        <td>HTTP / RTMP</td>
-                        <td>Puede que se necesite rtmpdump. <a href="{{ url_for('ayuda')+'#DescargarRtmp' }}">Ver FAQ.</a></td>
-                    </tr>
-                    <tr>
-                        <td>Telemadrid</td>
-                        <td>MP4</td>
-                        <td>HTTP</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Clan TV</td>
-                        <td>MP4</td>
-                        <td>HTTP</td>
-                        <td>Mejorado soporte como canal único</td>
-                    </tr>
-                    <tr>
-                        <td>Radio Televisión Castilla y León</td>
-                        <td>MP4</td>
-                        <td>HTTP</td>
-                        <td>Vídeos propios, NO los de YouTube</td>
-                    </tr>
-                    <tr>
-                        <td>Euskal Irrati Telebista (EITB)</td>
-                        <td>MP4</td>
-                        <td>RTMP</td>
-                        <td>Vídeos en distintas calidades. Se necesita rtmpdump. <a href="{{ url_for('ayuda')+'#DescargarRtmp' }}">Ver FAQ.</a></td>
-                    </tr>
-                    <tr>
-                        <td>Radio Televisión Castilla-La Mancha</td>
-                        <td>MP4</td>
-                        <td>RTMP</td>
-                        <td>Vídeos propios, NO YouTube. Se necesita rtmpdump. <a href="{{ url_for('ayuda')+'#DescargarRtmp' }}">Ver FAQ.</a></td>
-                    </tr>
-                    <tr>
-                        <td>Televisió de Catalunya</td>
-                        <td>MP4</td>
-                        <td>HTTP</td>
-                        <td>tv3.cat, 324.cat, 3xl.cat, esport3.cat</td>
-                    </tr>
-                    <tr>
-                        <td>Giralda Televisión</td>
-                        <td>MOV</td>
-                        <td>HTTP</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Radiotelevisión Valenciana</td>
-                        <td>MP4</td>
-                        <td>HTTP</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Intereconomía</td>
-                        <td>MP4/FLV</td>
-                        <td>HTTP</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Canal Historia</td>
-                        <td>MP4/FLV</td>
-                        <td>HTTP</td>
-                        <td>Vídeos de "A la Carta"</td>
-                    </tr>
-                    <tr>
-                        <td>Canal Plus</td>
-                        <td>MP4</td>
-                        <td>HTTP</td>
-                        <td>Vídeos de Canal Plus PLAY: http://www.canalplus.es/play/ y plus.es/video</td>
-                    </tr>
-                    <tr>
-                        <td>V Televisión</td>
-                        <td>MP4</td>
-                        <td>HTTP</td>
-                        <td>Vídeos de La Voz de Galicia</td>
-                    </tr>
-                    <tr>
-                        <td>Canal RiasBaixas</td>
-                        <td>FLV</td>
-                        <td>HTTP / RTMP</td>
-                        <td>Algunos vídeos aún no soportados. Puede que se necesite rtmpdump. <a href="{{ url_for('ayuda')+'#DescargarRtmp' }}">Ver FAQ.</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
+    <!-- Features Channels Table -->
+    {% include 'includes/channels_table.html' %}
     
-    
-
-    <!-- ========================== FOOTER ========================== -->
-    <footer class="bck dark text color white">
-        <div class="row margin_top margin_bottom">
-            <!--<div class="column_8">
-                <p class="text bold">Made by...</p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea similique fugit debitis saepe dolorem
-            </div>-->
-            <div class="column_4">
-	            <small>
-	                &copy; Copyleft 2013 by <a href=http://aabilio.tumblr.com/>aabilio</a> // Powered by <a href="http://flask.pocoo.org/">Flask</a> &amp; <a href="https://appengine.google.com/">GAE</a> &amp; <a href="http://tuktuk.tapquo.com/">tuktuk</a>
-	            </small>
-            </div>
-            <div class="column_4 offset_4">
-                <!--<p class="text bold">Sobre..</p>-->
-                <!--<small>
-                    &copy; Copyleft 2011 by <a href=http://aabilio.tumblr.com/>aabilio</a> // Powered by <a href="http://flask.pocoo.org/">Flask</a> &amp; <a href="https://appengine.google.com/">GAE</a> &amp; <a href="http://tuktuk.tapquo.com/">tuktuk</a>
-                </small>-->
-                <small>
-                    Importante: <a href="{{ url_for('legal') }}">Aviso Legal</a> | <a href="{{ url_for('privacidad') }}">Política de Privacidad</a>
-                </small>
-            </div>
-        </div>
-    </footer>
+    <!-- Footer -->
+    {% include 'includes/footer.html' %}
     
 </body>
 </html>

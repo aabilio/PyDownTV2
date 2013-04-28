@@ -19,12 +19,7 @@
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <!-- TUKTUK -->
-    <link rel="stylesheet" href="/static/css/base.css">
-    <link rel="stylesheet" href="/static/css/tuktuk.css">
-    <link rel="stylesheet" href="/static/css/tuktuk.theme.css">
-    <!-- TUKTUK.WIDGETS -->
-    <link rel="stylesheet" href="/static/widgets/tuktuk.widget.icon.css">
-    <link rel="stylesheet" href="/static/widgets/tuktuk.widget.modal.css">
+    {% include 'includes/include_tuktuk.html' %}
     
     <!--<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>-->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
@@ -65,404 +60,40 @@
 </head>
 
 <body>
-    <!-- ========================== HEADER ========================== -->
-    <header class="bck darkest padding_top">
-        <div class="row text color white shadow">
-            <div class="column_5">
-                <a href="{{ url_for('home') }}" class="logo text normal color white">Py<span class="text book">DownTV</span> web<img src="/static/img/favicon.png"/></a>
-            </div>
-            <div class="column_4 offset_3 text right">
-                <span class="text bold">Síguenos! </span>
-                <a style="font-size:1.2em" href="https://twitter.com/pydowntv" alt="Síguenos en twitter" class="icon twitter"></a>
-                <a style="font-size:1.2em" href="https://www.facebook.com/webpydowntv" alt="Síguenos en Facebook" class="icon facebook"></a>
-            </div>
-        </div>
-    </header>
+    <!-- Header -->
+    {% include 'includes/header.html' %}
 
-    <section class="bck darkest landing text center color white" id="myLanding">
-        <div class="row">
-            <div class="column_8 offset_2">
-                <h2 class="text book ">Descarga vídeos de las webs de televisiones españolas</h2>
-                <br />
-            </div>
-        </div>
-        <div class="row">
-            <div class="column_8 offset_2 form">
-            	<form action="{{ url_for('home') }}" method="post" id="searchUrlOrig">
-	                <input name="urlOrig" type="text" id="sendRequestInput" class="large float left" placeholder="Introduce AQUÍ la URL del vídeo a descargar...">
-            		<button style="color: black;" id="sendRequestButton" name="submit" onclick="$('#loading').show();" type="submit" class="button large float">
-	                	<div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" />Buscando...</div>
-	                	Buscar!
-	                </button>
-            	</form>
-            </div>
-        </div>
-    </section>
+    <!-- Landing -->
+    {% include 'includes/landing.html' %}
     
-    <section class="bck light underline navigation ">
+    <section class="bck dark underline navigation ">
         <div class="row text center">
-            <nav class="group text bold">
+            <nav data-tuktuk="menu" class="padding text bold">
                 <a href="{{ url_for('home') }}"><span class="icon download"></span>Descargar!</a>
                 <a href="{{ url_for('agranel') }}"><span class="icon download"></span><span class="logo text normal">A</span>Granel</a>
                 <a href="{{ url_for('ayuda') }}" class="active"><span class="icon tag"></span>FAQ y Ayuda</a>
-                <a href="{{ url_for('canales') }}"><span class="icon cube"></span>Televisiones Soportadas</a>
+                <a href="{{ url_for('canales') }}"><span class="icon pushpin"></span>Televisiones Soportadas</a>
                 <a href="{{ url_for('apps') }}"><span class="icon star"></span>Apps</a>
                 <a href="{{ url_for('api') }}"><span class="icon cog"></span>API</a>
                 <a href="https://github.com/aabilio/PyDownTV2"><span class="icon github"></span>El proyecto en Github</a>
-                <a href="http://old.pydowntv.appspot.com/"><span class="icon chrome"></span>Versión Antigua de la web</a>
             </nav>
         </div>
     </section>
     
-    <section class="bck light text justify">
-        <div class="row text justify book margin_top FAQ">
-        	<h1 class="icon tag text color theme faqtit" style="text-align: center;"> Preguntas Frecuentes</h1>
-        	<br />
-            <p class="question text bold">
-                ¿Qué es exactamente PyDownTV?
-            </p>
-            <div class="answer-wrapper">
-                <p class="answer">PyDownTV es un proyecto que se encuntra en desarrollo en <a href="https://github.com/aabilio/PyDownTV2"><span class="icon github">GitHub</span></a> que consta de una serie de Apps para ayudar a descargar los vídeos de las páginas web de las principales cadenas de televisión españolas. PyDownTV web (esta web) es una de ellas.</p>
-            </div>
-            <p class="question text bold">
-                ¿Funciona PyDownTV Web en cualquier navegador y/o Sistema Operativo?
-            </p>
-            <div class="answer-wrapper">
-                <p class="answer">
-                    <span style="background-color: black; color: white;">Debería ;)</span><br />
-                    PyDownTV está diseñado para que funcione en cualquier navegador y en cualquier Sistema Operativo, incluso para adaptarse a todos los tamaños de pantalla tanto de ordenadores personales como tablets o smartphones. Sin embargo, está optimizado para funcionar de manera correcta en Google Chrome/Chromium.<br />
-                    Se han detectado, por ejemplo, fallos de maquetación en alguna versión de Firefox e Internet Explorer.<br />
-                    Para el correcto funcionamiento de PyDownTV el navegador debe tener Javascript activado (esto es lo normal) y es preferible que se use un navegador actualizado a su última versión.<br />
-                    Desde PyDownTV se recomienda utilizar Google Chrome/Chromium para navegar por la aplicación y obtener así el máximo redimiento de la misma.
-                </p>
-            </div>
-            <p class="question text bold">
-            	¿Cómo puedo descargar un vídeo a través de esta web?
-            </p>
-            <div class="answer-wrapper">
-                <p class="answer">
-                	Muy fácil, solo tienes que sguir los pasos indicados más abajo, pero por si acaso, los detallo más a continuación.<br />
-                	Básicamente, si estás en una navegando por la web de una televisión de España, y estás justo en una página donde
-                	hay un vídeo, lo único que tienes que hacer es <a href="" style="cursor: text; background-color: black;">copiar</a> la URL (la dirección web, esa que empieza por "http://www...")
-                	que se encuentra en la barra de navegación. Después tendrás que entrar en esta web, y en el cuadro de búsqueda que se encuentra
-                	arriba de todo, tendrás que <a href="" style="cursor: text; background-color: black;">pegar</a> el enlace copiado antes.
-                	Una vez hecho esto, solo hay que dar a <a href="" style="cursor: text; background-color: black;">Buscar!</a> y esperar a que PyDownTV encuentre el vídeo.<br />
-                	Si PyDownTV encuentra el vídeo, entonces solo tendrás que dar sobre el enlace de las partes del mismo con clic
-                	derecho de ratón y darle a "Guardar enlace como" a cada una de las partes.
-                	Hay vídeos que no se pueden descargar con este procedimiento, para ello necesitaremos un programa especial.
-                </p>
-            </div>
-            <p class="question text bold">
-            	<a style="color: black;" name="DescargarRtmp">¿Y cómo se descargan los vídeos "rtmp"?</a>
-            </p>
-            <div class="answer-wrapper">
-                <p class="answer">
-                	Esos vídeos que aparecen como "rtmp", no se pueden descargar directamente haciendo clic con el botón derecho del ratón.
-                	Necesitarás un programa especial. En <a href=">https://github.com/aabilio/PyDownTV2/tree/master/Escritorio"><span class="icon github">GitHub</span></a>
-                	estamos desarrollando una versión de Escritorio sobre todo para ayudar en la descarga de estos vídeos.
-                	Pero mientras, lo mejor es utilizar un programa llamado <span style="background-color: black; color: white;">rtmpdump</span>.<br />
-                	Lo único malo es que <span style="background-color: black; color: white;">rtmpdump</span> no dispone de interfaz gráfica, y es 
-                	un programa que se ejecuta desde línea de comandos, pero vamos a ello, los pasos a seguir son:
-                	<ol class="square">
-                		<li>Descarga <span style="background-color: black; color: white;">rtmpdump</span> desde aquí:</li>
-                		<ul class="circle">
-                			<li><a href="http://pydowntv.googlecode.com/files/rtmpdump-win32.zip">Versión para Windows</a>. No es un instalador, ver siguiente paso...</li>
-                			<li><a href="http://pydowntv.googlecode.com/files/rtmpdump-2.4_mac.pkg">Versión para Mac OS X</a> o instalar a través de <a href="http://mxcl.github.com/homebrew/">Homebrew</a>.</li>
-                			<li>Para GNU/Linux, instalar a través de el gestor de paquetes (ejemplo Debian: <span style="font-family: 'Andale Mono', 'Courier New', Courier, 'Nimbus Mono L', monospace; font-size:smaller; background-color:black; color:white;">sudo apt-get install rtmpdump</span>)</li>
-                		</ul>
-                		<li>Ejecutar <span style="background-color: black; color: white;">rtmpdump</span>:</li>
-                		<ul class="circle">
-                			<li>
-                				Mac OS X: Abrir la Terminal (Aplicaciones > Utilidades > Terminal) y pegar el comando que te propone PyDownTV.
-                				El vídeo se descargará en tu carpeta personal.
-                			</li>
-                			<li>
-                				GNU/Linux: Se supone que el que usa GNU/Linux ya tiene más conocimiento sobre la terminal, pero por si acaso, el procedimiento,
-                				es el mismo que para Mac OS X: Abrir terminal, copiar comando, ENTER.
-                			</li>
-                			<li>
-                				Windows: Aquí ya tenemos más problemas, por que normalmente al usuario de Windows le da más miedo la Consola.
-                				Hay varias maneras más correctas de "instalar" <span style="background-color: black; color: white;">rtmpdump</span>
-                				que la siguiente, pero quizá sea esta la más fácil.
-                				<ul class="normal">
-                					<li>
-                						<a href="" style="cursor: text; background-color: black;">Copiar</a> el archivo <span style="font-family: 'Andale Mono', 'Courier New', Courier, 'Nimbus Mono L', monospace; font-size:smaller; background-color:black; color:white;">rtmpdump.exe</span>
-                						descargado y <a href="" style="cursor: text; background-color: black;">pegar</a> este en la carpeta <span style="font-family: 'Andale Mono', 'Courier New', Courier, 'Nimbus Mono L', monospace; font-size:smaller; background-color:black; color:white;">System32</span> de tu sistema.
-                						Quedará entonces el ejecutable en la siguiente ruta (NOTA: puede cambiar la unidad C:, D:, ..): <span style="font-family: 'Andale Mono', 'Courier New', Courier, 'Nimbus Mono L', monospace; font-size:smaller; background-color:black; color:white;">c:\Windows\System32\rtmpdump.exe</span>
-                					</li>
-                					<li>
-                						A partir de ahora solo tienes que Abrir la consola y pegar el comando que proporiciona PyDownTV para bajar el vídeo.
-                						Para abrir la consola, hay varias maneras, una es Inicio > ejecutar, y escribir "cmd" y presionar ENTER (o Inicio y en el cuadro de
-                						búsqueda escribir "cmd" para versiones recientes de Windows).
-                						Para pegar en la consola de Windows, se hace clic con el botón derecho del ratón sobre el fondo negro de la consola, y se selecciona pegar.
-                					</li>
-                					<li>
-                						El vídeo se descargará en la raíz del sistema. Se podrá acceder a el a través de <span style="font-family: 'Andale Mono', 'Courier New', Courier, 'Nimbus Mono L', monospace; font-size:smaller; background-color:black; color:white;">Mi PC > Disco Local (C:)</span> (puede cambiar la Unidad) para versiones de Windows igual o menores que Windows XP.
-                						Y para versiones Windows Vista y superirores, se podrá acceder al vídeo a través de <span style="font-family: 'Andale Mono', 'Courier New', Courier, 'Nimbus Mono L', monospace; font-size:smaller; background-color:black; color:white;">Equipo > Disco Local (C:)</span> (puede cambiar la unidad).
-                					</li>
-                				</ul> 
-                			</li>
-                		</ul>
-                	</ol>
-                </p>
-            </div>
-            <p class="question text bold">
-            	PyDownTV web no funciona para un enlace que estoy seguro que es correcto, ¿Qué hago?
-            </p>
-            <div class="answer-wrapper">
-                <p class="answer">
-                	PyDownTV no es infalible a la hora de recoger toda la información sobre los vídeos, por lo que puede fallar, y lo hará.
-                	Lo importante, es que si detectas un fallo en la aplicación, nos lo hagas saber, para poder resolverlo cuanto antes.
-                	Si encuentras un problema con la web, por favor, háznoslo saber en el siguiente enlace: <a href="https://github.com/aabilio/PyDownTV2/issues/">Reportar errores PyDownTV</a>.<br />
-                	<ol class="square">
-                		<li>
-                			Crea una nueva Issue, haciendo clic a la derecha arriba en <span style="background-color: black; color: white;">New Issue</span>.
-                		</li>
-                		<li>
-                			En la derecha especifica que es un <span style="background-color: black; color: white;">bug</span>.
-                		</li>
-                		<li>
-                			Elige el título que creas conveniente, pero que sea <span style="background-color: black; color: white;">descriptivo</span> y que se espeifique que se hace alusión a <span style="background-color: black; color: white;">la versión web de PyDownTV</span>.
-                		</li>
-                		<li>
-                			Rellena el cuadro de la Issue con las particularidades del fallo, intentando explicar lo mejor posible todos los detalles.
-                		</li>
-                	</ol>
-                </p>
-            </div>
-            <p class="question text bold">
-            	<a style="color: black;" name="ProblemaMiTele">Mi Tele descarga un archivo de poco tamaño en vez del vídeo</a>
-            </p>
-            <div class="answer-wrapper">
-                <p class="answer">
-                	Antes que nada, los problemas del tiempo de descarga con MiTele deberían estar solucionados gracias a una GENIAL idea de el <span style="background-color: black; color: white;">javiero</span>,
-                	cuya web podéis visitar <a href="http://eljaviero.com/descargarvideosdelasexta/">aquí</a>. Gracias de nuevo, a veces, las mejores ideas, son las más simples ;).<br /><br />
-                	Por si acaso, dejo la información del error que daba antes a continuación:<br /><br />
-                	No pasa nada, vas a poder descargarlos, pero <span style="background-color: black; color: white;">tienes que ser rápid@ ;)</span><br />
-                	Los vídeos de MiTele, al generarse el enlace para aser descargados desde el servidor de MiTele, <span style="background-color: black; color: white;">sino se accede a ellos
-                	en poco segundos caducan</span>, es por eso, que solo se descarga un archivo (.html) de poco tamaño.<br /><br />
-                	Para porder descargar los vídeos de MiTele hay que ser rápidos. Tan rápidos, que 
-                	<span style="background-color: black; color: white;">no da tiempo a hacer clic derecho con el ratón</span>
-                	para guardarlo y descargarlo.<br />
-                	Por eso propongo unas opciones:
-                	<ul class="normal">
-                		<li>
-                			<span style="background-color: black; color: cyan;">Usando Chrome:</span>
-                			tienes que hacer un simple <span style="background-color: black; color: white;">clic normal</span> 
-                			con el ratón, pero <span style="background-color: black; color: white;">mientras mantienes presionada la tecla "Alt"</span>
-                			del teclado.<br />
-                			La tecla "Alt" es una tecla que suele estar situada en la primera fila de los teclados, empezando por
-                			abajo. Suele estar tanto a la derecha como a la izquierda de la barra espaciadora, justo después de la tecla "Control" o "Ctrl".<br/>
-                			El vídeo se descargará autimaticamente, el único inconviente es que no se puede guardar con un nombre elegido
-                			pero una vez terminada las descarga le podrás cambiar el nombre.
-                		</li>
-                		<li>
-                			<span style="background-color: black; color: cyan;">Usando Firefox:</span>
-                			tienes que hacer un <span style="background-color: black; color: white;">clic con el botón derecho</span> 
-                			del ratón, pero <span style="background-color: black; color: white;">mientras mantienes presionada la tecla "Shift"</span>
-                			del teclado.<br />
-                			La tecla "Shift" es una tecla que suele estar situada en la segunda fila en los teclados, empezando por
-                			abajo. Suele estar tanto a la derecha como a la izquierda del todo de esta segunda línea.
-                			Es la tecla que se utiliza para poner una Mayúscula simple (por eso suele poner también "Mayus" y también
-                			suele estar representada por una flecha con sentido ascendente).<br/>
-                			El vídeo se descargará autimaticamente, el único inconviente es que no se puede guardar con un nombre elegido
-                			pero una vez terminada las descarga le podrás cambiar el nombre.
-                		</li>
-                		<li>
-                			<span style="background-color: black; color: cyan;">En otros navegadores:</span>
-                			En algunos navegadores como por ejemplo <span style="background-color: black; color: white;">Firefox</span> 
-                			permiten definir el comportamiento del mismo según que tipo de enlace intente abrir el usuario.
-                			Por ello podréis cambiar el funcionamiento del navegador para que cuando detecte un archivo MP4, en vez de
-                			intentar abrirlo con un plugin, lo descarge directamente, así solo se tendrá que realizar un clic normal rápido sobre
-                			el enlace.<br />
-                			En Firefox es fácil y se hace en opciones de contenido. Allí tendréis que asociar la apertura de los archivos .mp4
-                			(se puede hacer una búsqueda utilizando el cuadro para encontrarlo antes) su descarga directamente.
-                		</li>
-                		<li>
-                			<span style="background-color: black; color: cyan;">Para Internet Explorer y Opera:</span> no conozco 
-                			cómo se puede descargar un vídeo de manera más rápida que la normal (clic derecho y "guardar archivo como...")
-                			por lo que recomiendo para esos usuarios es, que utilicen, aunque sea solo para utilizar esta web, Google
-                			Chrome o Firefox. Y utilicen los métodos descritos más arriba.
-                		</li>
-                		<li>
-                			<span style="background-color: black; color: white;">De manera personal, recomiendo Google Chrome 
-                			para el uso de esta web</span>
-                		</li>
-                	</ul>
-                </p>
-            </div>
-            <p class="question text bold">
-                <a style="color: black;">Mi Tele descarga un archivo grande con estensión .php</a>
-            </p>
-            <div class="answer-wrapper">
-                <p class="answer">
-                    Se ha detectado que en algunos navegadores, sobre todo móviles, <span style="background-color: black; color: white;">en vez de descargarse un archivo .mp4 se descarga un .php</span>.
-                    Si te fijas, el archivo es de gran tamaño, eso es por que sí es el vídeo, solo que se descarga con la extensión incorrecta. Con un navegador de archivos <span style="background-color: black; color: white;">hay que cambiar el nombre del vídeo, reemplazando el .php por el .mp4</span>.
-                </p>
-            </div>
-            <p class="question text bold" id="soporteNuevoCanalComo">
-            	¿Qué hago si PyDownTV no soporta un canal del cual quiero descargar un vídeo?
-            </p>
-            <div class="answer-wrapper">
-                <p class="answer">
-                	Si PyDownTV no soporta un canal que te gustaría que estuviera soportado, siempre puedes pedirlo, en la medida de lo
-                	posible, se intentará ayudarte. PyDownTV es software libre, y todo el mundo puede contribuír a desarrollar un canal,
-                	así que, ¿Por qué no pedirlo? <br />
-                	Puedes hacerlo en el siguiente enlace: <a href="https://github.com/aabilio/PyDownTV2/issues/">Petición de canales</a>.<br />
-                	<ol class="square">
-                		<li>
-                			Crea una nueva Issue, haciendo clic a la derecha arriba en <span style="background-color: black; color: white;">New Issue</span>.
-                		</li>
-                		<li>
-                			En la derecha especifica que es un <span style="background-color: black; color: white;">Pedir soporte para nuevo canal</span>.
-                		</li>
-                		<li>
-                			Elige el título que creas conveniente, pero que sea <span style="background-color: black; color: white;">descriptivo</span> e incluya que <span style="background-color: black; color: white;">es una petición de nuevo canal</span>.
-                		</li>
-                		<li>
-                			Rellena el cuadro de la Issue con los detalles de la petición.
-                		</li>
-                	</ol>
-                </p>
-            </div>
-             <p class="question text bold">
-            	Tengo una sugerencia: "Me gustaría que..."
-            </p>
-            <div class="answer-wrapper">
-                <p class="answer">
-                	Si tienes una sugerencia, nos gustaría que la comunicaras. Nosotros veremos qué podemos hacer al respecto<br />
-                	Puedes hacerlo en el siguiente enlace: <a href="https://github.com/aabilio/PyDownTV2/issues/">Sugerencias</a>.<br />
-                	<ol class="square">
-                		<li>
-                			Crea una nueva Issue, haciendo clic a la derecha arriba en <span style="background-color: black; color: white;">New Issue</span>.
-                		</li>
-                		<li>
-                			En la derecha especifica que es un <span style="background-color: black; color: white;">Sugerencias</span>.
-                		</li>
-                		<li>
-                			Elige el título que creas conveniente, pero que sea <span style="background-color: black; color: white;">descriptivo</span>. Acuerdate de aclarar que hablas de la <span style="background-color: black; color: white;">versión web de PyDownTV</span>.
-                		</li>
-                		<li>
-                			Rellena el cuadro de la Issue con los detalles de la Sugerencia.
-                		</li>
-                	</ol>
-                </p>
-            </div>
-            <!--<p class="question text bold">
-            </p>
-            <div class="answer-wrapper">
-                <p class="answer"></p>
-            </div>-->
-        </div>
-    </section>
+    <!-- FAQ -->
+    {% include 'includes/faq.html' %}
     
-    <section class="bck lightest text center">
-        <div class="row ">
-            <div class="column_10 offset_1 margin_bottom" id="vidHowTo">
-                <h1 class="text color theme">Usar PyDownTV</h1>
-                <h3 class="text thin">
-                	Vídeos de cómo usarlo normalmente y a través de plugins
-                </h3>
-             </div>
-             <div class="column_10 offset_1">
-             	<div class="video-container" id="genericUse">
-             		<iframe width="560" height="315" src="http://www.youtube.com/embed/1_y9MXiHhis?rel=0" frameborder="0" allowfullscreen></iframe>
-             	</div>
-             	<br /><br />
-             	<div class="video-container" id="UsePlugins">
-             		<iframe width="560" height="315" src="http://www.youtube.com/embed/xmIdf6T0HsY?rel=0" frameborder="0" allowfullscreen></iframe>
-             	</div>
-             </div>
-        </div>
-    </section>
+    <!-- features_howto_vids -->
+    {% include 'includes/features_howto_vids.html' %}
     
-    <!-- ========================== FEATURES ========================== -->
-    <section class="bck light features">
-        <div class="row text center margin_bottom">
-            <div class="column_8 offset_2">
-                <h1 class="text color theme">¿Cómo uso pydowntv web?</h1>
-                <br />
-            </div>
-        </div>
-        <div class="row text center book margin_top">
-            <div class="column_3">
-                <h1 class="icon search text color theme"></h1>
-                <h5>1. Copia la URL</h5>
-                <small>Solo tienes que copiar la URL de la página que contiene el vídeo. Sí, eso que pone: "http://www.anten..."</small>
-            </div>
-            <div class="column_3">
-                <h1 class="icon share text color theme"></h1>
-                <h5>2. Pega la URL</h5>
-                <small>Ahora, en esta página, pegas lo que copiaste en el cuadro de búsqueda que se encuentra arrriba y le das a Buscar!</small>
-            </div>
-            <div class="column_3">
-                <h1 class="icon download text color theme"></h1>
-                <h5>3. Descarga el Vídeo</h5>
-                <small>En el cuadro del vídeo, sobre las partes, haces clic con el botón derecho, y le das a "Guardar enlace como..."</small>
-            </div>
-            <div class="column_3">
-                <h1 class="icon accept text color theme"></h1>
-                <h5>o.. Utiliza un plugin</h5>
-                <small>También puedes utilizar directamente los plugins para los navegadores, y descargar los vídeos de manera más cómoda. Descargar <a href="{{ url_for('apps')+'#Plugins' }}">desde aquí</a></small>
-            </div>
-        </div>
-    </section>
-    
-    <!-- ========================== COLUMNS ========================== -->
-    <section class="bck lightest text center">
-        <div class="row ">
-            <div class="column_10 offset_1 margin_bottom">
-                <h1 class="text color theme"><a href="{{ url_for('canales')+'#tablaCompleta' }}">¿Qué canales soporta pydowntv web?</a></h1>
-                <h3 class="text thin">
-                	PyDownTV web soporta la mayoría de los canales nacionales y autonómicos y algunos locales
-                </h3>
-             </div>
-            <div class="row">
-                <div class="carrousel">
-                    <div>
-                    <img src="/static/img/logo_tvs/1.svg">
-                    <img src="/static/img/logo_tvs/2.svg">
-                    <img src="/static/img/logo_tvs/3.png">
-                    <img src="/static/img/logo_tvs/4.svg">
-                    <img src="/static/img/logo_tvs/5.png">
-                    <img src="/static/img/logo_tvs/6.png">
-                    <img src="/static/img/logo_tvs/mt.png">
-                    </div>
-                </div>
-            </div>
-			<div class="column_10 offset_1 margin_bottom">
-                <h5 class="text thin">
-                	Lista completa <a href="{{ url_for('canales') }}">aquí</a>
-                </h5>
-             </div>
-        </div>
-    </section>
-    
-    
+    <!-- Features HOWTO -->
+    {% include 'includes/features_howto.html' %}
 
-    <!-- ========================== FOOTER ========================== -->
-    <footer class="bck dark text color white">
-        <div class="row margin_top margin_bottom">
-            <!--<div class="column_8">
-                <p class="text bold">Made by...</p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea similique fugit debitis saepe dolorem
-            </div>-->
-            <div class="column_4">
-                <small>
-                    &copy; Copyleft 2013 by <a href=http://aabilio.tumblr.com/>aabilio</a> // Powered by <a href="http://flask.pocoo.org/">Flask</a> &amp; <a href="https://appengine.google.com/">GAE</a> &amp; <a href="http://tuktuk.tapquo.com/">tuktuk</a>
-                </small>
-            </div>
-            <div class="column_4 offset_4">
-                <!--<p class="text bold">Sobre..</p>-->
-                <!--<small>
-                    &copy; Copyleft 2011 by <a href=http://aabilio.tumblr.com/>aabilio</a> // Powered by <a href="http://flask.pocoo.org/">Flask</a> &amp; <a href="https://appengine.google.com/">GAE</a> &amp; <a href="http://tuktuk.tapquo.com/">tuktuk</a>
-                </small>-->
-                <small>
-                    Importante: <a href="{{ url_for('legal') }}">Aviso Legal</a> | <a href="{{ url_for('privacidad') }}">Política de Privacidad</a>
-                </small>
-            </div>
-        </div>
-    </footer>
+    <!-- Features Channels -->
+    {% include 'includes/features_channels.html' %}
+    
+    <!-- Footer -->
+    {% include 'includes/footer.html' %}
     
 </body>
 </html>

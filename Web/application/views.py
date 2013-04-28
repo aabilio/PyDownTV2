@@ -559,13 +559,19 @@ def api(urlOrig=None):
         canal = qCanal(urlOrig, opcs)
         if canal == None:
             js = json.dumps(TVnoSoportada)
-            resp = Response(js, status=200, mimetype='application/json')
-            return resp
+            if request.args.has_key("jsoncallback"):
+                return request.args["jsoncallback"] + "(" + js + ");"
+            else:
+                resp = Response(js, status=200, mimetype='application/json')
+                return resp 
             #return render_template("api.html", messages=TVnoSoportada)
     else:
         js = json.dumps(URLmalFormada)
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
+        if request.args.has_key("jsoncallback"):
+            return request.args["jsoncallback"] + "(" + js + ");"
+        else:
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp 
         #return render_template("api.html", messages=URLmalFormada)
 
 
@@ -577,14 +583,20 @@ def api(urlOrig=None):
             "mensaje": e.__str__()
             }
         js = json.dumps(msg)
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
+        if request.args.has_key("jsoncallback"):
+            return request.args["jsoncallback"] + "(" + js + ");"
+        else:
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp 
         #return render_template("api.html", messages=msg)
     except Exception, e:
         #return e.__str__()
         js = json.dumps(ErrorDesconocido)
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
+        if request.args.has_key("jsoncallback"):
+            return request.args["jsoncallback"] + "(" + js + ");"
+        else:
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
         #return render_template("api.html", messages=ErrorDesconocido)
         
     # Guardar Registro antes de renderizar: ##.decode('iso-8859-1').encode('utf8')
@@ -597,9 +609,13 @@ def api(urlOrig=None):
     #                            )
     #    reg.put()
     #except: pass #TODO: Mejorar esto (codificación...)
+
     js = json.dumps(info)
-    resp = Response(js, status=200, mimetype='application/json')
-    return resp
+    if request.args.has_key("jsoncallback"):
+        return request.args["jsoncallback"] + "(" + js + ");"
+    else:
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp 
     #return render_template("api.html", messages=info)
     #except Error.GeneralPyspainTVsError, e:
     #    msg = {
