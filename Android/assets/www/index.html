@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lungo 2 - HTML5 Cross-Device Framework</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="cleartype" content="on">
+
+    <!-- iPhone -->
+    <link href="http://lungo.tapquo.com/resources/icon-57.png" sizes="57x57" rel="apple-touch-icon">
+    <link href="http://lungo.tapquo.com/resources/startup-image-320x460.png" media="(device-width: 320px) and (device-height: 480px)
+             and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">
+
+    <!-- iPhone (Retina) -->
+    <link href="http://lungo.tapquo.com/resources/icon-114.png" sizes="114x114" rel="apple-touch-icon">
+    <link href="http://lungo.tapquo.com/resources/startup-image-640x920.png" media="(device-width: 320px) and (device-height: 480px)
+             and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+
+    <!-- iPhone 5 -->
+    <link href="http://lungo.tapquo.com/resources/startup-image-640x1096.png" media="(device-width: 320px) and (device-height: 568px)
+             and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+
+    <!-- iPad -->
+    <link href="http://lungo.tapquo.com/resources/icon-72.png" sizes="72x72" rel="apple-touch-icon">
+    <link href="http://lungo.tapquo.com/resources/startup-image-768x1004.png" media="(device-width: 768px) and (device-height: 1024px)
+             and (orientation: portrait)
+             and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">
+    <link href="http://lungo.tapquo.com/resources/startup-image-748x1024.png" media="(device-width: 768px) and (device-height: 1024px)
+             and (orientation: landscape)
+             and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">
+
+    <!-- iPad (Retina) -->
+    <link href="http://lungo.tapquo.com/resources/icon-144.png" sizes="144x144" rel="apple-touch-icon">
+    <link href="http://lungo.tapquo.com/resources/startup-image-1536x2008.png" media="(device-width: 768px) and (device-height: 1024px)
+             and (orientation: portrait)
+             and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+    <link href="http://lungo.tapquo.com/resources/startup-image-1496x2048.png" media="(device-width: 768px) and (device-height: 1024px)
+             and (orientation: landscape)
+             and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+
+    <!-- Lungo - Stylesheets -->
+    <link rel="stylesheet" href="components/lungo/lungo.css">
+    <link rel="stylesheet" href="components/lungo/lungo.icon.css">
+    <link rel="stylesheet" href="components/lungo/lungo.icon.brand.css">
+    <link rel="stylesheet" href="components/lungo/theme.lungo.css">
+</head>
+
+<body class="app">
+
+    <section id="main_search" data-transition="slide">
+        <header data-title="PyDownTV">
+            <nav class="left box">
+                <a href="#" data-icon="search"></a>
+            </nav>
+            <nav class="right">
+                <a href="#downloads" data-router="section" data-label="Descargas" class="button" data-count="1"></a>
+            </nav>
+        </header>
+        
+        <article id="main_search_main_view" class="active list indented scroll">
+            <ul id="video_results">
+                <li>
+                    <div class="form">
+                        <div style="text-align: center;">
+                            <strong>Buscador</strong>
+                        </div>
+                        <fieldset data-icon="search">
+                            <label>URL</label>
+                            <input id="Search4url" type="search" data-event="hola" placeholder="Buscar por URL...">
+                        </fieldset>
+                        <button id="Search4urlButton" style="width: 100%;">Buscar</button>
+                    </div>
+                </li>
+                <!-- Results here -->
+                     
+            </ul>
+        </article>
+    </section>
+
+    <section id="downloads" data-transition="slide">
+        <header data-title="Descargas">
+            <nav>
+                <a href="#back" data-router="section" data-label="Buscar" data-icon="search" class="button"></a>
+            </nav>
+        </header>
+        <footer></footer>
+        <article></article>
+    </section>
+
+    <!-- Lungo - Dependencies -->
+    <script src="components/quo/quo.js"></script>
+    <script src="components/lungo/lungo.js"></script>
+    <script src="pydowntv.js"></script>
+    <!-- Cordova Dependecies -->
+    <script type="text/javascript" src="cordova-2.6.0.js"></script>
+    <script type="text/javascript" src="js/webintent.js"></script>
+    <script type="text/javascript" src="js/downloader.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <!-- Lungo - Sandbox App -->
+    <script>
+        Lungo.init({
+            name: 'pydowntv'
+        });
+        app.initialize();
+    </script>
+</body>
+</html>
