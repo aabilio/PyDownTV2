@@ -96,16 +96,16 @@ Lungo.Events.init({
 	'doubleTap section#main_search': function() {
 		Lungo.Notification.confirm({
 		    icon: 'user',
-		    title: 'Eres tonto del culo',
-		    description: 'Para qué coño andas a hacer doble clic en la pantall principal????',
+		    title: 'Prueba Doblre Tap',
+		    description: '¿Funciona bien la prueba?',
 		    accept: {
 		        icon: 'checkmark',
-		        label: 'Sí, soy tonto del culo',
+		        label: 'Sí, muy bien',
 		        callback: function(){  }
 		    },
 		    cancel: {
 		        icon: 'close',
-		        label: 'No',
+		        label: 'No (estaría yo aquí! :S)',
 		        callback: function(){  }
 		    }
 		});
