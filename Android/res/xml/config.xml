@@ -56,7 +56,8 @@
     <plugin name="Globalization" value="org.apache.cordova.Globalization"/>
     <plugin name="InAppBrowser" value="org.apache.cordova.InAppBrowser"/>
     <plugin name="WebIntent" value="com.borismus.webintent.WebIntent" />
-    <plugin name="Downloader" value="com.phonegap.plugins.downloader.Downloader"/>
+    <plugin name="Downloader" value="org.apache.cordova.plugins.Downloader" />
+    <!--<plugin name="Downloader" value="com.phonegap.plugins.downloader.Downloader"/> ANTIGUO-->
 </plugins>
 </cordova>
 

@@ -1,10 +1,8 @@
-function Downloader() {}
-
-Downloader.prototype.downloadFile = function(fileUrl, params, win, fail) {
-
-    //Make params hash optional.
-    if (!fail) win = params;
-cordova.exec(win, fail, "Downloader", "downloadFile", [fileUrl, params]);
-};
-
-window.downloader = new Downloader();
+cordova.define("cordova/plugin/downloader", function (require, exports, module) {
+ var exec = require("cordova/exec");
+ module.exports = {
+  get: function (message, win, fail) {
+   exec(win, fail, "Downloader", "get", [message]);
+  }
+ };
+});
