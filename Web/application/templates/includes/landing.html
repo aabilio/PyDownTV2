@@ -1,7 +1,8 @@
 <section class="bck darkest landing text center color white" id="myLanding">
     <div class="row">
         <div class="column_8 offset_2">
-            <h3 class="text book">Descarga vídeos de las webs de televisiones españolas</h3>
+            <h2 class="text normal hide-phone">Descarga vídeos de las webs de televisiones españolas</h2>
+            <h3 class="text normal show-phone">Descarga vídeos de las webs de televisiones españolas</h3>
             <br />
         </div>
     </div>
@@ -10,13 +11,8 @@
         	<form action="{{ url_for('home') }}" method="post" id="searchUrlOrig">
                 <input name="urlOrig" type="text" id="sendRequestInput" class="large on-left" placeholder="Introduce AQUÍ la URL del vídeo a descargar...">
                 <button style="color: black;" id="sendRequestButton" name="submit" onclick="$('#loading').show();" type="submit" class="button large on-right">
-                	<div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" />Buscando...</div>
+                	<div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" /></div>
                 	<span id="normalSearchImg" class="icon search"></span>
-                    <script>
-                        $('#sendRequestButton').click(function(){
-                             $('#normalSearchImg').hide();
-                        });       
-                    </script>
                 </button>
         	</form>
         </div>

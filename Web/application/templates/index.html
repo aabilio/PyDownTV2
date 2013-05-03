@@ -69,8 +69,12 @@
    			}
     	}
 	</script>
+
 	<script>
 		$(document).ready(function() {
+			$('#sendRequestButton').click(function(){
+                 $('#normalSearchImg').hide();
+            }); 
 			$('.listadoEnlaces').click(function() {
 				$('#divListadoEnlaces').toggle();
 				return;
@@ -115,14 +119,14 @@
 	{% if videos %}
 	<script>
 		$('#loading').hide();
-		$('#sendRequestButton').html('<div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" />Buscando...</div>Encontrado!');
+		$('#sendRequestButton').html('<div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" /></div>Encontrado!');
 		setTimeout(function(){
   			$(window).one("scroll", function() {
-  				$('#sendRequestButton').html('<div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" />Buscando...</div>Buscar!');
+  				$('#sendRequestButton').html('<div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" /></div><span id="normalSearchImg" class="icon search"></span>');
 			});
 		}, 2000);
 		setTimeout(function(){
-  			$('#sendRequestButton').html('<div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" />Buscando...</div>Buscar!');
+  			$('#sendRequestButton').html('<div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" /></div><span id="normalSearchImg" class="icon search"></span>');
 		}, 5000);
 	</script>
 	{% for vid in videos %}

@@ -20,7 +20,10 @@
 package com.aabilio.pydowntv2;
 
 import android.os.Bundle;
+import android.util.Log;
+
 import org.apache.cordova.*;
+import org.apache.cordova.plugins.GlobalFlags;
 
 public class pydowntv2 extends DroidGap
 {
@@ -32,5 +35,24 @@ public class pydowntv2 extends DroidGap
         super.loadUrl(Config.getStartUrl());
         //super.loadUrl("file:///android_asset/www/index.html")
     }
+    
+    @Override
+    public void onStart(){
+            super.onStart();
+            int fromNotification = getIntent().getExtras().getInt("cancel_download", -1); // getIntE("com.package.from.notification", -1);
+            if(fromNotification == 1){
+            	Log.d("PhoneGapLog", "LE HE DADO A CANCELAR SISISISISISISISISIS LE HE DADO QUE YO LO VI =================");
+                   //callSomeMethod();
+                   //int x = y + z;
+                   // Do whatever you want basically
+            }
+    }  
+    /*@Override
+    public void onStart(Bundle savedInstanceState)
+    {
+    	//Global variable from GlobalFlags:
+		//Log.d("PhoneGapLog", "LE HE DADO A CANCELAR SISISISISISISISISIS LE HE DADO QUE YO LO VI =================");
+		//GlobalFlags.CANCEL_DOWLOAD_FLAG = true;
+    }*/
 }
 
