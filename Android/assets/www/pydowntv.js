@@ -4,9 +4,10 @@ var cont = "cc";
 
 // DEBUG:
 var hola;
-var url_example = 'http://www.mitele.es/series-online/aida/temporada-8/capitulo-145/';
+var url_example = 'http://www.antena3.com/videos/con-el-culo-al-aire/temporada-2/capitulo-2.html';
 
-//
+// Prototyping
+// String.endsWith(String)
 if (typeof String.prototype.endsWith !== 'function') {
     String.prototype.endsWith = function(suffix) {
         return this.indexOf(suffix, this.length - suffix.length) !== -1;
@@ -14,60 +15,100 @@ if (typeof String.prototype.endsWith !== 'function') {
 }
 
 
-function download(url, msg, filename, overwrite) {
-	var downloader = cordova.require("cordova/plugin/downloader");
- 	downloader.get({fileName: filename, message: msg, url: url, overwrite: overwrite},
-  		function() {
-   			//console.log("PhoneGap Plugin: Downloader: callback success");
-  		},
-  		function() {
-   			console.log("PhoneGap Plugin: Downloader: callback error");
-	   			Lungo.Notification.error(
-			    "Error al descargar",                      //Title
-			    'Lo sentimos, se ha producido un error al iniciar la descarga',     //Description
-			    "cancel",                     //Icon
-			    4,                            //Time on screen
-			    null             //Callback function
-			);
-  		}
- 	);
-}
-/*var onCancelDonwloadPressed = function(event) {
-	alert("cancel download button pressed");
+// Pydowntv logic
+
+var onCancelConfirmation = function(progress, data_video) {
+	//en vez de borrar:
+	//1.Poner a cero el progress y la etiqueta
+	Lungo.Element.progress(data_video.html_list.lastElementChild.querySelector('.progress-normal'), 0, false);
+	data_video.html_list.lastElementChild.querySelector('.left.tag.blue').textContent = "0%";
+	//2.Volver a ocultar lo antterior
+	data_video.html_list.lastElementChild.setAttribute("style", "display:none;");
+	//3.Poner a false data-isactive
+	data_video.html_list.lastElementChild.setAttribute("data-isactive", "false");
+
+	//data_video.html_list.parentNode.removeChild(data_video.html_list);
+	downloadmanager("cancel", {id: progress.id}, function(){}, function(){});
 }
 
-var videoDownload = function(result) {
-	thiss = Lungo.Data.Cache.get('this_cache').thiss;
-    Lungo.Element.progress(thiss.lastElementChild.querySelector('#progress-normal'), result.progress, true);
-    thiss.lastElementChild.querySelector('.left.tag.blue').textContent = result.progress+"%";
-    console.log(result.progress);
-    if (result.progress == 20) {
-    	console.log("intentando cargarme esto");
-    	result.status = 1;
-    }
-}*/
+var onCancelDonwloadPressed = function(progress, data_video) {
+	Lungo.Notification.confirm({
+	    icon: 'info',
+	    title: '¿Seguro que quieres cancelar la descarga?',
+	    description: 'Si confirmas, la descarga del vídeo se cancelará y no se podrá reanudar.',
+	    accept: {
+	        icon: 'checkmark',
+	        label: 'Sí',
+	        callback: function() {
+	        	onCancelConfirmation(progress, data_video);
+	        }
+	    },
+	    cancel: {
+	        icon: 'close',
+	        label: 'No',
+	        callback: function(){ /* Do nothing */ }
+	    }
+	});
+}
 
-var onDownloadConfirmation = function(event) {
-	thiss = Lungo.Data.Cache.get('this_cache').thiss;
-	url2down = Lungo.Data.Cache.get('this_cache').url2down;
-	titulo = Lungo.Data.Cache.get('this_cache').titulo;
-	fileName = Lungo.Data.Cache.get('this_cache').fileName;
+var onDownloadProgress = function(progress, data_video) {
+	Lungo.Element.progress(data_video.html_list.lastElementChild.querySelector('.progress-normal'), progress.progress, false);
+	data_video.html_list.lastElementChild.querySelector('.left.tag.blue').textContent = progress.progress+"%";
+}
+
+var onDownloadConfirmation = function(data_video) {
+	//data_video = Lungo.Data.Cache.get(html_list.getAttribute('data-usercache'));
+	data_video.html_list.lastElementChild.setAttribute("style", "display:true;"); //overflow-y
 	
-	if (!fileName.endsWith(".mp4")) fileName = fileName + '.mp4';
-	download(url2down, 'Descargando: '+titulo, fileName, false);
-	/*window.downloader.downloadFile(url2down, {overwrite: true}, videoDownload, function(error) {
-		Lungo.Notification.error(
-		    "Error al descargar",                      //Title
-		    error,     //Description
-		    "cancel",                     //Icon
-		    4,                            //Time on screen
-		    null             //Callback function
-		);
-	});*/
+	// Pruebas para refrescar section:
+	//alert($$('#video_results').height());
+	//alert($$(data_video.html_list).height());
+	//$$('#video_results').style('height', ($$('#video_results').height()+$$(data_video.html_list).height()).toString()+'px !important');
+	//alert($$('#video_results').height());
+	//$$('#video_results').height();
+	//Lungo.Router.section("downloads");
+	//current = Lungo.Element.Cache.section;
+	//query = "section"+"#"+"main_search_main_view";
+	//target = Lungo.dom("#main_search_main_view");
+	//Lungo.Element.Cache.article.attr('id');
+	//Lungo.dom('[data-view-article]').removeClass("active").filter("[data-view-article=#main_search_main_view]").addClass("active");
+	Lungo.Router.section('downloads'); // TEMPORAL FIX
+	setTimeout(function() {
+		Lungo.Router.back();
+	}, 500);
+
+	data_video.html_list.lastElementChild.setAttribute("data-isactive", "true");
+	if (!data_video.fileName.endsWith(".mp4")) data_video.fileName = data_video.fileName + '.mp4';
+
+	downloadmanager(
+		"start",
+		{
+			url: data_video.url2down,
+			filePath: "Pydowntv",
+			fileName: data_video.fileName,
+			overwrite: true,
+			useNotificationBar: true,
+        	startToast: "Preparando la descarga...",
+        	endToast: "¡Descarga finalizada!",
+        	ticker: data_video.titulo,
+        	notificationTitle: data_video.titulo,
+        	cancelToast: "¡Descarga Cancelada!"
+		},
+		function(progress) {
+			Lungo.dom(data_video.html_list.lastElementChild.querySelector('.button.small.cancel')).on("tap",function() {
+				onCancelDonwloadPressed(progress, data_video);});
+			onDownloadProgress(progress, data_video);
+		},
+		function(error) {
+			alert(error);
+		}
+	);
+	
+
 
 	/* Not more tap event onVideoResultClick */
-	/*Lungo.dom(thiss).off("tap", onCancelDonwloadPressed);
-	Lungo.dom(thiss.lastElementChild.querySelector('.button.small.cancel')).on("tap", onCancelDonwloadPressed);*/
+	/*Lungo.dom(thiss).off("tap", onCancelDonwloadPressed);*/
+	
 	/*  */
 
 	/* DEPRECATED */
@@ -85,16 +126,10 @@ var onDownloadConfirmation = function(event) {
 
 var onVideoResultClick = function(event) {
 	data_video = Lungo.Data.Cache.get(this.getAttribute('data-usercache'));
-	var user_cache = {
-		thiss: this,
-		url2down: data_video.url2down,
-		titulo: data_video.titulo,
-		fileName: data_video.fileName
-	};
-	Lungo.Data.Cache.set('this_cache', user_cache);
-	hola = this;
-    /* Ask for download */
-    if (true) { /* Firs Time */
+	data_video.html_list = this;
+	Lungo.Data.Cache.set(this.getAttribute('data-usercache'), data_video);
+	
+    if (this.lastElementChild.getAttribute("data-isactive") == "false") {
     	Lungo.Notification.confirm({
 		    icon: 'info',
 		    title: '<br />'+data_video.titulo,
@@ -102,7 +137,9 @@ var onVideoResultClick = function(event) {
 		    accept: {
 		        icon: 'checkmark',
 		        label: 'Descargar el vídeo',
-		        callback: onDownloadConfirmation
+		        callback: function() {
+		        	onDownloadConfirmation(data_video);
+		        }
 		    },
 		    cancel: {
 		        icon: 'close',
@@ -134,20 +171,20 @@ var parsePydowntvAPI = function(api){
 					titulo: api.titulos[v],
 					desc: api.descs[v],
 					url2down: api.videos[v].url_video[p],
-					fileName: api.videos[v].filename[p]
+					fileName: api.videos[v].filename[p],
 				};
 
 				Lungo.Data.Cache.set('cache_'+api.videos[v].url_video[p], user_cache);
 
 				html = '<li data-image="'+api.videos[v].url_img+'" class="thumb video_result '+cont+'" data-usercache="'+'cache_'+api.videos[v].url_video[p]+'"> \
-					<img src="'+api.videos[v].url_img+'" class="icon"/> \
+					<img src="'+api.videos[v].url_img+'" /> \
 					<strong>'+api.titulos[v]+'</strong> \
 					 <a href="#" class="right tag red">Parte '+(parseInt(p)+parseInt(1))+'</a> \
-					<small>'+api.descs[v]+'</small></div>';/* \
-					<div class="form" style="display:none;" data-isactive="false"> \
+					<small>'+api.descs[v]+'</small></div> \
+					<div class="form" style="display:none;" data-isactive="false" data-first="true"> \
 						<br /> \
 						<span>Progreso:</span>\
-                        <div id="progress-normal" data-progress="0%"> \
+                        <div class="progress-normal" data-progress="0%"> \
                             <div class="progress"> \
                                 <span class="bar"> \
                                     <span class="value" style="width: 0%"></span> \
@@ -161,7 +198,7 @@ var parsePydowntvAPI = function(api){
                         	Cancelar \
                     	</a> \
                     	<br /><br /> \
-                    </div>';*/
+                    </div>';
 				$$('#video_results').append(html);
 			}
 		}
@@ -174,15 +211,14 @@ var parsePydowntvAPI = function(api){
 
 	} else {
 		Lungo.Notification.error(
-		    "Error",                      //Title
-		    api.mensaje,     //Description
-		    "cancel",                     //Icon
-		    4,                            //Time on screen
-		    null             //Callback function
+		    "Error",
+		    api.mensaje,
+		    "cancel",
+		    4,
+		    null
 		);
 	}
 		
-    //alert(result.videos[0].url_video[0])
 };
 
 Lungo.ready(function(){
@@ -222,7 +258,7 @@ Lungo.Events.init({
 	},
 
 	'tap #Search4urlButton': function() {
-		//$$('#Search4url').val("http://www.mitele.es/series-online/aida/temporada-9/capitulo-185/"); //TEMP !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		$$('#Search4url').val(url_example); //TEMP !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		if ($$('#Search4url').val() === '') {
 			Lungo.Notification.error(
 			    "Error",                      //Title

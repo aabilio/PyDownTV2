@@ -87,6 +87,7 @@ var app = {
                 );
             } else {
                 Lungo.Notification.show();
+                $$('#Search4url').val(url);
                 Lungo.Service.get(pydowntv_api_url+url, null, parsePydowntvAPI, "json");
             }
         }, function() { //Fail
