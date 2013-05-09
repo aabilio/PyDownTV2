@@ -86,7 +86,7 @@ public class DownloadManager extends CordovaPlugin {
 						
 						// Get an ID:
 						int downloader_id = new Random().nextInt(10000);
-						String downloader_id_str = String.valueOf(downloader_id);
+						String downloader_id_str = String.valueOf(downloader_id); 
 						
 						// Instantiate Downloader with the ID:
 						Downloader downloadFile = new Downloader(

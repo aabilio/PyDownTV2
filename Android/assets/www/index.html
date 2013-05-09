@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>PyDownTV web app Android</title>
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="Aplicación PyDownTV para Android">
+    <meta name="author" content="aabilio@gmail.com">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,37 +12,6 @@
     <meta name="format-detection" content="telephone=no">
     <meta http-equiv="cleartype" content="on">
 
-    <!-- iPhone -->
-    <link href="http://lungo.tapquo.com/resources/icon-57.png" sizes="57x57" rel="apple-touch-icon">
-    <link href="http://lungo.tapquo.com/resources/startup-image-320x460.png" media="(device-width: 320px) and (device-height: 480px)
-             and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">
-
-    <!-- iPhone (Retina) -->
-    <link href="http://lungo.tapquo.com/resources/icon-114.png" sizes="114x114" rel="apple-touch-icon">
-    <link href="http://lungo.tapquo.com/resources/startup-image-640x920.png" media="(device-width: 320px) and (device-height: 480px)
-             and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
-
-    <!-- iPhone 5 -->
-    <link href="http://lungo.tapquo.com/resources/startup-image-640x1096.png" media="(device-width: 320px) and (device-height: 568px)
-             and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
-
-    <!-- iPad -->
-    <link href="http://lungo.tapquo.com/resources/icon-72.png" sizes="72x72" rel="apple-touch-icon">
-    <link href="http://lungo.tapquo.com/resources/startup-image-768x1004.png" media="(device-width: 768px) and (device-height: 1024px)
-             and (orientation: portrait)
-             and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">
-    <link href="http://lungo.tapquo.com/resources/startup-image-748x1024.png" media="(device-width: 768px) and (device-height: 1024px)
-             and (orientation: landscape)
-             and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">
-
-    <!-- iPad (Retina) -->
-    <link href="http://lungo.tapquo.com/resources/icon-144.png" sizes="144x144" rel="apple-touch-icon">
-    <link href="http://lungo.tapquo.com/resources/startup-image-1536x2008.png" media="(device-width: 768px) and (device-height: 1024px)
-             and (orientation: portrait)
-             and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
-    <link href="http://lungo.tapquo.com/resources/startup-image-1496x2048.png" media="(device-width: 768px) and (device-height: 1024px)
-             and (orientation: landscape)
-             and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
 
     <!-- Lungo - Stylesheets -->
     <link rel="stylesheet" href="components/lungo/lungo.css">
@@ -59,7 +28,7 @@
                 <a href="#" data-icon="search"></a>
             </nav>
             <nav class="right">
-                <a href="#downloads" data-router="section" data-label="Descargas" class="button" data-count="1"></a>
+                <a href="#downloads" id="down_buttom" data-router="section" data-label="Descargas" class="button" data-count="0"></a>
             </nav>
         </header>
         
@@ -92,8 +61,21 @@
                 <a href="#" data-icon="folder"></a>
             </nav>
         </header>
-        <footer></footer>
-        <article class="active"></article>
+        <!--<footer></footer>-->
+        <article class="active list indented scroll">
+            <ul id="localVideoList">
+                <!-- Results Here -->
+                <!--<li class="thumb video_result" style="word-wrap:break-word;overflow:hidden;">
+                    <div style="display:inline-block;float:left;">
+                        <img style="margin-bottom:1px;" src="#" />
+                    </div>
+                    <div style="display:inline-block;float:left;width:70%;">
+                        <strong>holaqjkhkjjhgsdfasdfasdfasdfasdfasdfasdfasdfasdfsadfasdfasdfasdfasdflkjljhiuglghgdgfsfgdagfdmhgfmh,g,tdfjrd</strong>
+                        <small>lo que sea</small>
+                    </div>
+                </li>-->
+            </ul>
+        </article>
     </section>
 
     <!-- Lungo - Dependencies -->
@@ -104,6 +86,8 @@
     <script type="text/javascript" src="cordova-2.6.0.js"></script>
     <script type="text/javascript" src="js/webintent.js"></script>
     <script type="text/javascript" src="js/DownloadManager.js"></script>
+    <script type="text/javascript" src="js/thumbnailer.js"></script>
+    <script type="text/javascript" src="js/video.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
 
     <!-- App Dependences -->

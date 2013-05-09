@@ -123,104 +123,121 @@ public class Downloader {
 					if (!dir.exists()) {
 						dir.mkdirs();
 					}
+					
 					File file = new File(dirName, fileName);
-					if (overwrite == true || !file.exists()) {
-						
-						intent = new Intent ();
-						intent.putExtra("cancel_download", 1);
-						intent.addFlags (Intent.FLAG_ACTIVITY_NEW_TASK);
-						pend = PendingIntent.getActivity(cordova.getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-						
-						mNotifyManager = (NotificationManager) cordova.getActivity().getSystemService(Activity.NOTIFICATION_SERVICE);
-						mBuilder = new NotificationCompat.Builder(cordova.getActivity())
-							.setSmallIcon(R.drawable.ic_stat_notification)
-							.setContentTitle(notificationTitle)
-							/*.setSubText("Tap to CANCEL")*/
-							.setTicker(ticker)
-							.setContentIntent(pend)
-							.setContentText("0% - " + fileName);
-						
-						mNotificationId = new Random().nextInt(10000);
-						
-						URL url = new URL(fileUrl);
-						HttpURLConnection ucon = (HttpURLConnection) url.openConnection();
-						ucon.setRequestMethod("GET");
-						ucon.connect();
-						InputStream is = ucon.getInputStream();
-						byte[] buffer = new byte[1024];
-						int readed = 0, progress = 0, totalReaded = 0, fileSize = ucon.getContentLength();
-						
-						// First Notification (id to Javascript) (not necessary necessary): 
-						informProgress(id, true, fileSize, 0, dirName, fileName, callbackContext);
-						
-						FileOutputStream fos = new FileOutputStream(file);
-						showToast(startToast,"short");
-						int step = 0;
-						while ((readed = is.read(buffer)) > 0 && downloading_ids.isId(id)) {
-							fos.write(buffer, 0, readed);
-							totalReaded += readed;
-							int newProgress = (int) (totalReaded*100/fileSize);
-							if (newProgress != progress & newProgress > step) {
-								if (useNotificationBar) {
-									mBuilder.setProgress(100, newProgress, false);
-									mBuilder.setContentText(step + "% - " + fileName);
-									mBuilder.setContentIntent(pend);
-									mNotifyManager.notify(mNotificationId, mBuilder.build());
-								}
-								informProgress(id, true, fileSize, step, dirName, fileName, callbackContext);
-								step = step + 1;
+					if (file.exists() && !overwrite) {
+						String temp_filename; 
+						int i;
+						for (i=1;;i++) { // test.txt -> test_1.txt -> test_2.tx -> ... while(file.exists())
+							temp_filename = fileName.substring(0, fileName.lastIndexOf('.'))+"_"+String.valueOf(i)+fileName.substring(fileName.lastIndexOf('.'));
+							file = new File(dirName, temp_filename);
+							if (!file.exists()) {
+								fileName = temp_filename;
+								break;
 							}
 						}
-						// Download canceled??
-						if (!downloading_ids.isId(id)) {
-							showToast(cancelToast,"short");
-							
-							fos.flush();
-							fos.close();
-							is.close();
-							ucon.disconnect();
-							
+					}
+					else if (file.exists() && overwrite) {
+						file.getCanonicalFile().delete(); //Delete
+						file = new File(dirName, fileName); //Declare the same
+					}
+					
+					intent = new Intent ();
+					intent.putExtra("cancel_download", 1);
+					intent.addFlags (Intent.FLAG_ACTIVITY_NEW_TASK);
+					pend = PendingIntent.getActivity(cordova.getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+					
+					mNotifyManager = (NotificationManager) cordova.getActivity().getSystemService(Activity.NOTIFICATION_SERVICE);
+					mBuilder = new NotificationCompat.Builder(cordova.getActivity())
+						.setSmallIcon(R.drawable.ic_stat_notification)
+						.setContentTitle(notificationTitle)
+						/*.setSubText("Tap to CANCEL")*/
+						.setTicker(ticker)
+						.setContentIntent(pend)
+						.setContentText("0% - " + fileName);
+					
+					mNotificationId = new Random().nextInt(10000); 
+					
+					URL url = new URL(fileUrl);
+					HttpURLConnection ucon = (HttpURLConnection) url.openConnection();
+					ucon.setRequestMethod("GET");
+					ucon.connect();
+					InputStream is = ucon.getInputStream();
+					byte[] buffer = new byte[1024];
+					int readed = 0, progress = 0, totalReaded = 0, fileSize = ucon.getContentLength();
+					
+					// First Notification (id to Javascript) (not necessary necessary): 
+					informProgress(id, true, fileSize, 0, dirName, fileName, callbackContext);
+					
+					FileOutputStream fos = new FileOutputStream(file);
+					showToast(startToast,"short");
+					int step = 0;
+					while ((readed = is.read(buffer)) > 0 && downloading_ids.isId(id)) {
+						fos.write(buffer, 0, readed);
+						totalReaded += readed;
+						int newProgress = (int) (totalReaded*100/fileSize);
+						if (newProgress != progress & newProgress > step) {
 							if (useNotificationBar) {
-								mBuilder.setContentText("Download of \"" + fileName + "\" canceled").setProgress(0,0,false);
-								mNotifyManager.notify(mNotificationId, mBuilder.build());
-								
-								try {
-									Thread.sleep(1000);
-				                } catch (InterruptedException e) {
-				                	Log.d("PhoneGapLog", "Downloader Plugin: Thread sleep error: " + e);
-				                }
-								
-								mNotifyManager.cancel(mNotificationId);
-							}
-							
-							
-							callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, "Download properly canceled"));
-						} else {
-							// Download Normal END (continue)
-							if (useNotificationBar) {
-								mBuilder.setContentText("Download of \"" + fileName + "\" completed").setProgress(0,0,false);
+								mBuilder.setProgress(100, newProgress, false);
+								mBuilder.setContentText(step + "% - " + fileName);
+								mBuilder.setContentIntent(pend);
 								mNotifyManager.notify(mNotificationId, mBuilder.build());
 							}
-							showToast(endToast,"short");
-							informProgress(id, false, fileSize, step, dirName, fileName, callbackContext);
-							downloading_ids.del(id);
+							informProgress(id, true, fileSize, step, dirName, fileName, callbackContext);
+							step = step + 1;
 						}
+					}
+					// Download canceled??
+					if (!downloading_ids.isId(id)) {
+						showToast(cancelToast,"short");
 						
 						fos.flush();
 						fos.close();
 						is.close();
 						ucon.disconnect();
 						
-						mNotifyManager.cancel(mNotificationId);
-					} else if (overwrite == false) {
-						showToast("File is already downloaded.","short");
+						if (useNotificationBar) {
+							mBuilder.setContentText("Download of \"" + fileName + "\" canceled").setProgress(0,0,false);
+							mNotifyManager.notify(mNotificationId, mBuilder.build());
+							
+							try {
+								Thread.sleep(1000);
+			                } catch (InterruptedException e) {
+			                	Log.d("PhoneGapLog", "Downloader Plugin: Thread sleep error: " + e);
+			                }
+							
+							mNotifyManager.cancel(mNotificationId);
+						}
+						
+						// Delete file:
+						file.getCanonicalFile().delete();
+						
+						
+						callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, "Download properly canceled"));
+					} else {
+						// Download Normal END (continue)
+						if (useNotificationBar) {
+							mBuilder.setContentText("Download of \"" + fileName + "\" completed").setProgress(0,0,false);
+							mNotifyManager.notify(mNotificationId, mBuilder.build());
+						}
+						showToast(endToast,"short");
+						informProgress(id, false, fileSize, step, dirName, fileName, callbackContext);
+						downloading_ids.del(id);
 					}
+					
+					fos.flush();
+					fos.close();
+					is.close();
+					ucon.disconnect();
+					
+					mNotifyManager.cancel(mNotificationId);
+					
 					
 					if(!file.exists()) {
 						showToast("Download went wrong, please try again or contact the developer.","long");
 						Log.e("PhoneGapLog", "Downloader Plugin: Error: Download went wrong.");
 					}
-					callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
+					//callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
 				} catch (FileNotFoundException e) {
 					showToast("File does not exists or cannot connect to webserver, please try again or contact the developer.","long");
 					Log.e("PhoneGapLog", "Downloader Plugin: Error: " + PluginResult.Status.ERROR);
@@ -257,7 +274,7 @@ public class Downloader {
 		});
 	}
 	
-	private void informProgress(	
+	private void informProgress(
 			String id,
 			boolean isDownloading,
 			int fileSize,

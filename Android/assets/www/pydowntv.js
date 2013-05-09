@@ -1,9 +1,10 @@
 // GLOBALS:
 var pydowntv_api_url = 'http://pydowntv.com/api?url=';
+var whereIam = "home";
 var cont = "cc";
 
 // DEBUG:
-var hola;
+var debug;
 var url_example = 'http://www.antena3.com/videos/con-el-culo-al-aire/temporada-2/capitulo-2.html';
 
 // Prototyping
@@ -12,6 +13,13 @@ if (typeof String.prototype.endsWith !== 'function') {
     String.prototype.endsWith = function(suffix) {
         return this.indexOf(suffix, this.length - suffix.length) !== -1;
     };
+}
+// String.startsWidth(String)
+if (typeof String.prototype.startsWith != 'function') {
+  // see below for better implementation!
+  String.prototype.startsWith = function (str){
+    return this.indexOf(str) == 0;
+  };
 }
 
 
@@ -26,6 +34,9 @@ var onCancelConfirmation = function(progress, data_video) {
 	data_video.html_list.lastElementChild.setAttribute("style", "display:none;");
 	//3.Poner a false data-isactive
 	data_video.html_list.lastElementChild.setAttribute("data-isactive", "false");
+
+	downloadedAlert = "<a style='margin-left:2px;float:right;' href='#' class='left tag cancel'>Cancelado</a>";
+	$$(data_video.html_list).prepend(downloadedAlert);
 
 	//data_video.html_list.parentNode.removeChild(data_video.html_list);
 	downloadmanager("cancel", {id: progress.id}, function(){}, function(){});
@@ -54,24 +65,54 @@ var onCancelDonwloadPressed = function(progress, data_video) {
 var onDownloadProgress = function(progress, data_video) {
 	Lungo.Element.progress(data_video.html_list.lastElementChild.querySelector('.progress-normal'), progress.progress, false);
 	data_video.html_list.lastElementChild.querySelector('.left.tag.blue').textContent = progress.progress+"%";
+	console.log("Descargando: "+progress.progress+"% ");
+	if (progress.progress == 100) { // Descarga completada
+		window.plugins.thumbnailer.createVideoThumbnail(progress.dir+progress.file, // Create thumbail
+			function(thumbPath) { 
+		   		//alert(thumbPath); // should alert created thumbnail image path
+		 		if (thumbPath.toLowerCase().indexOf("file://")!=0){
+					thumbPath ="file://"+thumbPath;
+				}
+		 		var thumbFileName = thumbPath.substring(thumbPath.lastIndexOf("/")+1);
+		 		var origFileName = thumbFileName.substring(0,thumbFileName.lastIndexOf("."));
+				var origFilePath = thumbPath.substring(0,thumbPath.lastIndexOf("."));
+					
+		 	}
+		);
+		Lungo.Notification.success(
+		    "Enhorabuena",
+		    "Vídeo descargado correctamente",
+		    "check",
+		    2,
+		    null
+		);
+
+		//en vez de borrar:
+		//1.Poner a cero el progress y la etiqueta
+		Lungo.Element.progress(data_video.html_list.lastElementChild.querySelector('.progress-normal'), 0, false);
+		data_video.html_list.lastElementChild.querySelector('.left.tag.blue').textContent = "0%";
+		//2.Volver a ocultar lo antterior
+		data_video.html_list.lastElementChild.setAttribute("style", "display:none;");
+		//3.Poner a false data-isactive
+		data_video.html_list.lastElementChild.setAttribute("data-isactive", "false");
+
+		//document.querySelector('#down_buttom .count').textContent = parseInt(document.querySelector('#down_buttom .count').textContent) + 1;
+		setTimeout(function() {
+			Lungo.Router.section('downloads'); 
+			setTimeout(function() {
+				Lungo.Router.back();
+			}, 500);
+		}, 2000);
+
+		downloadedAlert = "<a style='margin-left:2px;float:right;' href='#' class='left tag accept'>Descargado</a>";
+		$$(data_video.html_list).prepend(downloadedAlert);
+	}
 }
 
 var onDownloadConfirmation = function(data_video) {
 	//data_video = Lungo.Data.Cache.get(html_list.getAttribute('data-usercache'));
 	data_video.html_list.lastElementChild.setAttribute("style", "display:true;"); //overflow-y
 	
-	// Pruebas para refrescar section:
-	//alert($$('#video_results').height());
-	//alert($$(data_video.html_list).height());
-	//$$('#video_results').style('height', ($$('#video_results').height()+$$(data_video.html_list).height()).toString()+'px !important');
-	//alert($$('#video_results').height());
-	//$$('#video_results').height();
-	//Lungo.Router.section("downloads");
-	//current = Lungo.Element.Cache.section;
-	//query = "section"+"#"+"main_search_main_view";
-	//target = Lungo.dom("#main_search_main_view");
-	//Lungo.Element.Cache.article.attr('id');
-	//Lungo.dom('[data-view-article]').removeClass("active").filter("[data-view-article=#main_search_main_view]").addClass("active");
 	Lungo.Router.section('downloads'); // TEMPORAL FIX
 	setTimeout(function() {
 		Lungo.Router.back();
@@ -86,7 +127,7 @@ var onDownloadConfirmation = function(data_video) {
 			url: data_video.url2down,
 			filePath: "Pydowntv",
 			fileName: data_video.fileName,
-			overwrite: true,
+			overwrite: false,
 			useNotificationBar: true,
         	startToast: "Preparando la descarga...",
         	endToast: "¡Descarga finalizada!",
@@ -103,24 +144,6 @@ var onDownloadConfirmation = function(data_video) {
 			alert(error);
 		}
 	);
-	
-
-
-	/* Not more tap event onVideoResultClick */
-	/*Lungo.dom(thiss).off("tap", onCancelDonwloadPressed);*/
-	
-	/*  */
-
-	/* DEPRECATED */
-	/* Seguir aquí con la ejecución */
-	/*if (thiss.lastElementChild.getAttribute("data-isactive") === "false") {
-    	thiss.lastElementChild.setAttribute('style', 'display:block;');
-    	thiss.lastElementChild.setAttribute("data-isactive", "true");
-    } else {
-    	thiss.lastElementChild.setAttribute('style', 'display:none;');
-    	thiss.lastElementChild.setAttribute("data-isactive", "false");
-    }*/
-
 
 }
 
@@ -131,7 +154,7 @@ var onVideoResultClick = function(event) {
 	
     if (this.lastElementChild.getAttribute("data-isactive") == "false") {
     	Lungo.Notification.confirm({
-		    icon: 'info',
+		    /*icon: 'info',*/
 		    title: '<br />'+data_video.titulo,
 		    description: data_video.desc,
 		    accept: {
@@ -176,10 +199,10 @@ var parsePydowntvAPI = function(api){
 
 				Lungo.Data.Cache.set('cache_'+api.videos[v].url_video[p], user_cache);
 
-				html = '<li data-image="'+api.videos[v].url_img+'" class="thumb video_result '+cont+'" data-usercache="'+'cache_'+api.videos[v].url_video[p]+'"> \
-					<img src="'+api.videos[v].url_img+'" /> \
+				html = '<li data-image="'+api.videos[v].url_img+'" class="thumb video_result selectable '+cont+'" data-usercache="'+'cache_'+api.videos[v].url_video[p]+'"> \
+					<img style="margin-bottom: 1px;" src="'+api.videos[v].url_img+'" /> \
+					<a href="#" class="right tag red">Parte '+(parseInt(p)+parseInt(1))+'</a> \
 					<strong>'+api.titulos[v]+'</strong> \
-					 <a href="#" class="right tag red">Parte '+(parseInt(p)+parseInt(1))+'</a> \
 					<small>'+api.descs[v]+'</small></div> \
 					<div class="form" style="display:none;" data-isactive="false" data-first="true"> \
 						<br /> \
@@ -198,14 +221,13 @@ var parsePydowntvAPI = function(api){
                         	Cancelar \
                     	</a> \
                     	<br /><br /> \
-                    </div>';
+                    </div> \
+                    </li>';
 				$$('#video_results').append(html);
 			}
 		}
 		
 		Lungo.dom('.video_result.'+cont).on("tap", onVideoResultClick);
-		/*Lungo.dom('.video_result.'+cont).on("tap", function(event) {
-		});*/
 		cont = cont + "c";
 
 
@@ -223,21 +245,61 @@ var parsePydowntvAPI = function(api){
 
 Lungo.ready(function(){
 
-	
-	
-
-
-
-	/*setTimeout(function(){
-		Lungo.Element.count("section#main_search nav.right a", 1000);
-	},2000);*/
-	
-	
-	
-
 });
 
+
 Lungo.Events.init({
+	'load section#main_search': function() {
+		whereIam = "home";
+	},
+
+	'load section#downloads': function() {
+		whereIam = "downloads";
+		document.querySelector("#localVideoList").innerHTML = '';
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, 
+			function (fileSystem) {
+				fileSystem.root.getDirectory("Download/Pydowntv", {create: false, exclusive: false}, 
+					function(dirEntry) {
+						var directoryReader = dirEntry.createReader();
+						directoryReader.readEntries(
+							function(entries) {
+								var i;
+								var count = 0;
+							    for (i=0; i<entries.length; i++) {
+							        if (entries[i].name.endsWith('.mp4') || entries[i].name.endsWith('.flv')) {
+							        	html = 	'<li class="thumb video_result selectable arrow" style="word-wrap:break-word;overflow:hidden;"> \
+								                    <div style="display:inline-block;float:left;"> \
+								                        <img style="margin-bottom:1px;" src="'+entries[i].fullPath+".jpg"+'" /> \
+								                    </div> \
+								                    <div style="display:inline-block;float:left;width:70%;"> \
+								                        <strong>'+entries[i].name+'</strong> \
+								                        <small>'+entries[i].fullPath.replace("file://", "")+'</small> \
+								                    </div> \
+								                </li>';
+										$$('#localVideoList').append(html);
+										count++;
+							        } 
+							    }
+							    document.querySelector('#down_buttom .count').textContent = count;
+							   	$$('#localVideoList li').tap(function() {
+							   		window.plugins.videoPlayer.play("file://"+this.querySelector('small').textContent);
+								});
+							},
+							function() {
+								alert("Error al leer los archivos de descarga");
+							}
+						);
+					}, 
+					function() {
+						alert("No se encuentra el directorio");
+					}
+				);
+			},
+			function() {
+				alert("Error al acceder al disco");
+			}
+		);
+	},
 
 	'doubleTap section#main_search': function() {
 		Lungo.Notification.confirm({
@@ -258,14 +320,14 @@ Lungo.Events.init({
 	},
 
 	'tap #Search4urlButton': function() {
-		$$('#Search4url').val(url_example); //TEMP !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		//$$('#Search4url').val(url_example);
 		if ($$('#Search4url').val() === '') {
 			Lungo.Notification.error(
-			    "Error",                      //Title
-			    "Nos has introducido ninguna URL",     //Description
-			    "cancel",                     //Icon
-			    4,                            //Time on screen
-			    null             //Callback function
+			    "Error",
+			    "Nos has introducido ninguna URL",
+			    "cancel",
+			    4,
+			    null
 			);
 		} else {
 			Lungo.Notification.show();

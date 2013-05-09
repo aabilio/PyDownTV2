@@ -57,6 +57,8 @@
     <plugin name="InAppBrowser" value="org.apache.cordova.InAppBrowser"/>
     <plugin name="WebIntent" value="com.borismus.webintent.WebIntent" />
     <plugin name="DownloadManager" value="org.apache.cordova.plugins.DownloadManager.DownloadManager" />
+    <plugin name="Thumbnailer" value="org.apache.cordova.plugin.Thumbnailer" />
+    <plugin name="VideoPlayer" value="com.phonegap.plugins.video.VideoPlayer"/>
 </plugins>
 </cordova>
 

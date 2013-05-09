@@ -38,6 +38,23 @@ var app = {
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
         app.searchForIntents();
+
+        // BackButton Event:
+        document.addEventListener("backbutton", function(e){
+            if(whereIam == "home"){
+                e.preventDefault();
+                navigator.app.exitApp();
+            }
+            else {
+                Lungo.Router.back();
+            }
+        }, false);
+
+        Lungo.Router.section('downloads'); // TEMPORAL FIX
+        setTimeout(function() {
+            Lungo.Router.back();
+        }, 50);
+
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
