@@ -1,3 +1,23 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+
 // GLOBALS:
 var pydowntv_api_url = 'http://pydowntv.com/api?url=';
 var whereIam = "home";
@@ -23,7 +43,7 @@ if (typeof String.prototype.startsWith != 'function') {
 }
 
 
-// Pydowntv logic
+// Pydowntv logic:
 
 var onCancelConfirmation = function(progress, data_video) {
 	//en vez de borrar:
@@ -302,7 +322,7 @@ Lungo.Events.init({
 	},
 
 	'doubleTap section#main_search': function() {
-		Lungo.Notification.confirm({
+		/*Lungo.Notification.confirm({
 		    icon: 'user',
 		    title: 'Prueba Doblre Tap',
 		    description: '¿Funciona bien la prueba?',
@@ -316,7 +336,7 @@ Lungo.Events.init({
 		        label: 'No (estaría yo aquí! :S)',
 		        callback: function(){  }
 		    }
-		});
+		});*/
 	},
 
 	'tap #Search4urlButton': function() {
