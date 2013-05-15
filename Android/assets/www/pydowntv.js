@@ -1,25 +1,24 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
+    This file is part of pydowntv.
+
+    pydowntv is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pydowntv is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with pydowntv. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 
 // GLOBALS:
 var pydowntv_api_url = 'http://pydowntv.com/api?url=';
+var pydowntv_mt_pasarela = 'http://www.pydowntv.com/mitele?urlOrig=';
 var whereIam = "home";
 var cont = "cc";
 
@@ -195,7 +194,7 @@ var onVideoResultClick = function(event) {
     }
 }
 
-var parsePydowntvAPI = function(api){
+var parsePydowntvAPI = function(api, urlOrig){
 	//Lungo.Notification.hide();
 	if (api.exito === true) {
 		Lungo.Notification.success(
@@ -209,6 +208,9 @@ var parsePydowntvAPI = function(api){
 		
 		for (v=0; v<api.num_videos; v++) {
 			for (p=0; p<api.videos[v].partes; p++) {
+				if (urlOrig.indexOf("mitele.es") != -1) {
+					api.videos[v].url_video[p] = pydowntv_mt_pasarela + urlOrig;
+				}
 				var user_cache = {
 					url_img: api.videos[v].url_img,
 					titulo: api.titulos[v],
@@ -351,7 +353,9 @@ Lungo.Events.init({
 			);
 		} else {
 			Lungo.Notification.show();
-			Lungo.Service.get(pydowntv_api_url+$$('#Search4url').val(), null, parsePydowntvAPI, "json");
+			Lungo.Service.get(pydowntv_api_url+$$('#Search4url').val(), null, function(api) {
+				parsePydowntvAPI(api, $$('#Search4url').val());
+			}, "json");
 
 		}
 	},
