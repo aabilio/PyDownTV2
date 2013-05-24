@@ -136,7 +136,9 @@ class EITB(Canal.Canal):
                 const = "9f8617ac59091bcfd501ae5188e4762ffddb9925"
                 publisherID = "102076681001"
                 videoID = self.url.split("/")[-1]
-                
+                if not videoID.isdigit():
+                    videoID = [n for n in self.url.split("/") if n.isdigit() and len(n)>5][1]
+
                 try:
                     rtmpdata = self.get_data(publisherID, playerID, const, videoID, playerKey)#['renditions']
                     videos_data = rtmpdata['renditions']

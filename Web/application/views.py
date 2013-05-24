@@ -166,7 +166,7 @@ class Canales(object):
     
     def isTV3(self):
         '''return True si la URL pertenece a Televisió de Catalunya'''
-        urls = ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat", "esport3.cat"]
+        urls = ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat", "esport3.cat", "8tv.cat"]
         for url in urls:
             if self._url.find(url) != -1: return True
         return False
@@ -347,15 +347,15 @@ def home(urlOrig=None):
         #return render_template("api.html", messages=ErrorDesconocido)
     
     # Guardar Registro antes de renderizar: ##.decode('iso-8859-1').encode('utf8')
-    try: 
-        reg = RegistroDescargas(
-                                urlOrig = urlOrig,
-                                urlImg = info["videos"][0]["url_img"],
-                                vidTit = info["titulos"][0].decode('utf8')#,
-                                #vidDesc = info["descs"][0]
-                                )
-        reg.put()
-    except: pass #TODO: Mejorar esto (codificación...)
+    # try: 
+    #     reg = RegistroDescargas(
+    #                             urlOrig = urlOrig,
+    #                             urlImg = info["videos"][0]["url_img"],
+    #                             vidTit = info["titulos"][0].decode('utf8')#,
+    #                             #vidDesc = info["descs"][0]
+    #                             )
+    #     reg.put()
+    # except: pass #TODO: Mejorar esto (codificación...)
 
     # Cambios en URLs debido a localizaciones:
     # Desgeo URLs de grupo_a3
@@ -485,15 +485,15 @@ def agranel(urlOrig=None): #TODO: Hacer HILOS!!!
             #return redirect(url_for('agranel'))
         
         # Guardar Registro antes de renderizar: ##.decode('iso-8859-1').encode('utf8')
-        try: 
-            reg = RegistroDescargas(
-                                    urlOrig = urlsOrig[i],
-                                    urlImg = info["videos"][0]["url_img"],
-                                    vidTit = info["titulos"][0].decode('utf8')#,
-                                    #vidDesc = info["descs"][0]
-                                    )
-            reg.put()
-        except: pass #TODO: Mejorar esto (codificación...)
+        # try: 
+        #     reg = RegistroDescargas(
+        #                             urlOrig = urlsOrig[i],
+        #                             urlImg = info["videos"][0]["url_img"],
+        #                             vidTit = info["titulos"][0].decode('utf8')#,
+        #                             #vidDesc = info["descs"][0]
+        #                             )
+        #     reg.put()
+        # except: pass #TODO: Mejorar esto (codificación...)
         
         for vid in info['videos']: vids.append(vid)
         for tit in info['titulos']: tits.append(tit)
@@ -731,15 +731,15 @@ def embed(urlOrig=None):
         #return render_template("api.html", messages=ErrorDesconocido)
     
     # Guardar Registro antes de renderizar: ##.decode('iso-8859-1').encode('utf8')
-    try: 
-        reg = RegistroDescargas(
-                                urlOrig = urlOrig,
-                                urlImg = info["videos"][0]["url_img"],
-                                vidTit = info["titulos"][0].decode('utf8')#,
-                                #vidDesc = info["descs"][0]
-                                )
-        reg.put()
-    except: pass #TODO: Mejorar esto (codificación...)
+    # try: 
+    #     reg = RegistroDescargas(
+    #                             urlOrig = urlOrig,
+    #                             urlImg = info["videos"][0]["url_img"],
+    #                             vidTit = info["titulos"][0].decode('utf8')#,
+    #                             #vidDesc = info["descs"][0]
+    #                             )
+    #     reg.put()
+    # except: pass #TODO: Mejorar esto (codificación...)
     
     ####################### url2downloader:
     jdownloader = ""

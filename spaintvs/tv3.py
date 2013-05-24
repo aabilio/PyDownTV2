@@ -26,7 +26,11 @@ import Utiles
 import Descargar
 import Error
 
-url_validas = ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat", "esport3.cat"]
+import re
+import httplib
+from pyamf import remoting
+
+url_validas = ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat", "esport3.cat", "8tv.cat"]
 
 class TV3(Canal.Canal):
     '''
@@ -43,8 +47,25 @@ class TV3(Canal.Canal):
     URL_TOKEN_START = "http://www.tv3.cat/su/tvc/tvcConditionalAccess.jsp?ID="
     URL_TOKEN_END   = "&QUALITY=H&FORMAT=MP4"
     URL_TOKEN_END2  = "&QUALITY=H&FORMAT=MP4GES"
+
+    # Brightcove vars:
+    Publisher_ID = "1589608506001"
+    Player_ID = "1654948606001"
+    Const = "9f8617ac59091bcfd501ae5188e4762ffddb9925"
     
+    def __init__(self, url="", opcs=None):
+        Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
         
+    # Métodos propios del canal, start the party!
+    # Attributos disponibles:
+    #    - self.url (url recibida)
+    #    - self.opcs (diccionario de opciones) Ver Módulo Canal "_default_opcs" para opciones
+    # Métodos disponibles de clase Canal:
+    #    - log() para mostrar por pantalla (está disponible si self.opcs["log"] es True)
+    #    - self.debug() mostrar información de debug (está disponible si self.opcs["debug"] es True)
+    # Comunicación de errores con nivel de aplicación:
+    #    - lanzar la excepción: raise Error.GeneralPyspainTVsError("mensaje")
+
     def __catradio(self):
         '''Procesa los audios de catradio'''
         # Primero nos quedamos con el ID
@@ -61,19 +82,40 @@ class TV3(Canal.Canal):
     def __searchID(self, url):
         r=[n for n in url.split("/") if n.isdigit() and len(n)>5]
         return r[0] if len(r)==1 else None
+
+    def __build_amf_request(self, videoPlayer):
+        env = remoting.Envelope(amfVersion=3)
+        env.bodies.append(
+            (
+                "/1", 
+                remoting.Request(
+                    target="com.brightcove.player.runtime.PlayerMediaFacade.findMediaById", 
+                    body=[self.Const, self.Player_ID, videoPlayer, self.Publisher_ID],
+                    envelope=env
+                )
+            )
+        )
+        return env
     
-    def __init__(self, url="", opcs=None):
-        Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
-        
-    # Métodos propios del canal, start the party!
-    # Attributos disponibles:
-    #    - self.url (url recibida)
-    #    - self.opcs (diccionario de opciones) Ver Módulo Canal "_default_opcs" para opciones
-    # Métodos disponibles de clase Canal:
-    #    - log() para mostrar por pantalla (está disponible si self.opcs["log"] es True)
-    #    - self.debug() mostrar información de debug (está disponible si self.opcs["debug"] es True)
-    # Comunicación de errores con nivel de aplicación:
-    #    - lanzar la excepción: raise Error.GeneralPyspainTVsError("mensaje")
+    def __get_info(self, videoPlayer):
+        conn = httplib.HTTPConnection("c.brightcove.com")
+        envelope = self.__build_amf_request(videoPlayer)
+        conn.request(
+                     "POST", 
+                     "/services/messagebroker/amf?playerKey=AQ~~,AAAAF8Q-iyk~,FDoJSqZe3TSVeJrw8hVEauWQtrf-1uI7", 
+                     str(remoting.encode(envelope).read()),
+                     {'content-type': 'application/x-amf'}
+                     )
+        response = conn.getresponse().read()
+        response = remoting.decode(response).bodies[0][1].body
+        return response
+
+    def __tv8(self):
+        html = Descargar.get(self.url)
+        VideoPlayer = re.findall("<param.*name=\"@videoPlayer\".*value=\"(.*)\"", html)[0]
+        info = self.__get_info(VideoPlayer)
+        print info
+
 
     def getInfo(self):
         '''
@@ -114,6 +156,9 @@ class TV3(Canal.Canal):
             raise Error.GeneralPyspainTVsError(u"Los audios aún no están soportados. Lo estarán muy pronto ;)")
             #self.info(u"[INFO] Audios de catradio")
             #url, name = self.__catradio()
+        if self.url.find("8tv.cat") != -1:
+            return self.__tv8()
+
         ID = self.__searchID(self.url)
         if ID is None or self.url.find("324.cat") != -1 or self.url.find("3cat24.cat") != -1: #324cat
             html = Descargar.get(self.url)

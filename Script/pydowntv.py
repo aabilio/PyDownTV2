@@ -47,7 +47,7 @@ _url_canales = {
                "eitb": ["eitb.tv"],
                "rtvcyl": ["rtvcyl.es"],
                "rtvcm": ["rtvcm.es"],
-               "tv3": ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat", "esport3.cat"],
+               "tv3": ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat", "esport3.cat", "8tv.cat"],
                "giraldatv": ["giraldatv.es"],
                "rtvv": ["rtvv.es"],
                "intereconomia": ["intereconomia.com"],

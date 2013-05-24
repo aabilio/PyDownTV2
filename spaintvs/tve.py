@@ -31,6 +31,9 @@ import Utiles
 import Descargar
 import Error
 
+from base64 import b64decode as decode
+import re
+
 import logging
 
 url_validas = ["rtve.es"]
@@ -206,21 +209,73 @@ class TVE(Canal.Canal):
             return self.__ClanTV(sourceHTML, videoID)
 
         # -- Método 1 Octubre 2012:
-        self.debug(u"Probando método de 1 de uno de Octubre de 2012")
-        url = "http://www.rtve.es/ztnr/consumer/xl/video/alta/" + videoID + "_es_292525252525111"
-        self.debug(url)
+        # self.debug(u"Probando método de 1 de uno de Octubre de 2012")
+        # url = "http://www.rtve.es/ztnr/consumer/xl/video/alta/" + videoID + "_es_292525252525111"
+        # self.debug(url)
         
-        user_agent="Mozilla"
-        opener = urllib2.build_opener(NoRedirectHandler())
-        urllib2.install_opener(opener)
-        headers = { 'User-Agent' : user_agent }
-        req = urllib2.Request(url, None, headers)
-        u = urllib2.urlopen(req)
-        try:
-            urlVideo = u.info().getheaders("Location")[0]
-        except:
-            raise Error.GeneralPyspainTVsError("No se encuentra Location")
-        u.close()
+        # user_agent="Mozilla"
+        # opener = urllib2.build_opener(NoRedirectHandler())
+        # urllib2.install_opener(opener)
+        # headers = { 'User-Agent' : user_agent }
+        # req = urllib2.Request(url, None, headers)
+        # u = urllib2.urlopen(req)
+        # try:
+        #     urlVideo = u.info().getheaders("Location")[0]
+        # except:
+        #     raise Error.GeneralPyspainTVsError("No se encuentra Location")
+        # u.close()
+        # if urlVideo != "":
+        #     url_video = urlVideo.replace("www.rtve.es", "media5.rtve.es")
+        #     titulo = sourceHTML.split("<title>")[1].split("</")[0].replace("RTVE.es", "").replace("-", "").strip()
+        #     filename = titulo + ".mp4"
+        #     filename = Utiles.formatearNombre(filename)
+        #     #sourceHTML = sourceHTML.split("<div id=\"video")[1].split("flashvars")[0] # Me quedo solo con la parte del vídeo principal
+        #     url_img = sourceHTML.split("\"thumbnail\" content=\"")[1].split("\"")[0]
+        # else:
+        #     raise Error.GeneralPyspainTVsError("No se pudo encontrar el enlace de descarga")
+        # -- Método 1 Octubre 2012 FIN
+
+        # -- Método 24 Mayo 2013
+        self.debug(u"Probando método de 24 de uno de Mayo de 2013")
+        manager = "anubis"
+        tipo = "videos"
+        url = "http://www.rtve.es/ztnr/movil/thumbnail/%s/%s/%s.png" % (manager, tipo, videoID)
+
+        self.debug(u"Probando url:", url)
+        tmp_ = decode(Descargar.get(url))
+        tmp = re.findall(".*tEXt(.*)#[\x00]*([0-9]*).*", tmp_)[0]
+        tmp = [n for n in tmp]
+        cyphertext = tmp[0]
+        key = tmp[1]
+        tmp = tmp = [0 for n in range(500)]
+
+        # Créditos para: http://sgcg.es/articulos/2012/09/11/nuevos-cambios-en-el-mecanismo-para-descargar-contenido-multimedia-de-rtve-es-2/
+        intermediate_cyphertext = ""
+        increment = 1
+        text_index = 0
+        while text_index < len(cyphertext):
+            text_index = text_index + increment
+            try: intermediate_cyphertext = intermediate_cyphertext + cyphertext[text_index-1]
+            except: pass
+            increment = increment + 1
+            if increment == 5: increment = 1
+
+        plaintext = ""
+        key_index = 0
+        increment = 4
+        while key_index < len(key):
+            key_index = key_index + 1
+            text_index = int(key[key_index-1]) * 10
+            key_index = key_index + increment
+            try: text_index = text_index + int(key[key_index-1])
+            except: pass
+            text_index = text_index + 1
+            increment = increment + 1
+            if increment == 5: increment = 1
+            try: plaintext = plaintext + intermediate_cyphertext[text_index-1]
+            except: pass
+
+        urlVideo = plaintext
         if urlVideo != "":
             url_video = urlVideo.replace("www.rtve.es", "media5.rtve.es")
             titulo = sourceHTML.split("<title>")[1].split("</")[0].replace("RTVE.es", "").replace("-", "").strip()
@@ -230,7 +285,9 @@ class TVE(Canal.Canal):
             url_img = sourceHTML.split("\"thumbnail\" content=\"")[1].split("\"")[0]
         else:
             raise Error.GeneralPyspainTVsError("No se pudo encontrar el enlace de descarga")
-        # -- Método 1 Octubre 2012 FIN
+
+
+        # -- Método 24 Mayo 2013 FIN
         
         desc = None
         try: #obtener descripción del video
