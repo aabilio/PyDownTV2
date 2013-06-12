@@ -289,11 +289,12 @@ def home(urlOrig=None):
         return '''Hemos detectado un posible abuso del servicio. Para más información ponte en contacto con aabilio@pydowntv.com''', 404
     
     # Obtener los últimos vídeos descargados:
-    try:
-        last = RegistroDescargas.gql("order by date DESC LIMIT 4")
-    except:
-        last = None
-    
+    #try:
+    #    last = RegistroDescargas.gql("order by date DESC LIMIT 4")
+    #except:
+    #    last = None
+    last=None
+
     if urlOrig is None:
         if request.method == "GET": # La URL se pasa por parámetro http://web.pydowntv.com/?url=""
             try:
@@ -421,11 +422,12 @@ def agranel(urlOrig=None): #TODO: Hacer HILOS!!!
         return '''Hemos detectado un posible abuso del servicio. Para más información ponte en contacto con aabilio@pydowntv.com''', 404
     
     # Obtener los últimos vídeos descargados:
-    try:
-        last = RegistroDescargas.gql("order by date DESC LIMIT 4")
-    except:
-        last = None
-    
+    #try:
+    #    last = RegistroDescargas.gql("order by date DESC LIMIT 4")
+    #except:
+    #    last = None
+    last=None
+
     if urlOrig is None:
         if request.method == "GET": # La URL se pasa por parámetro http://web.pydowntv.com/?url=""
             try:
@@ -673,11 +675,12 @@ def embed(urlOrig=None):
             return render_template('embed.html')
 
     # Obtener los últimos vídeos descargados:
-    try:
-        last = RegistroDescargas.gql("order by date DESC LIMIT 4")
-    except:
-        last = None
-    
+    #try:
+    #    last = RegistroDescargas.gql("order by date DESC LIMIT 4")
+    #except:
+    #    last = None
+    last=None
+
     if urlOrig is None:
         if request.method == "GET": # La URL se pasa por parámetro http://web.pydowntv.com/?url=""
             try:
@@ -800,47 +803,6 @@ def rest_url_home(url):
 def rest_url_api(url):
     '''http://web.pydowntv.com/api/http://www.antena3.com/....html'''
     return api(url)
-
-
-#@login_required
-#def list_examples():
-#    """List all examples"""
-#    examples = ExampleModel.all()
-#    form = ExampleForm()
-#    if form.validate_on_submit():
-#        example = ExampleModel(
-#            example_name = form.example_name.data,
-#            example_description = form.example_description.data,
-#            added_by = users.get_current_user()
-#        )
-#        try:
-#            example.put()
-#            example_id = example.key().id()
-#            flash(u'Example %s successfully saved.' % example_id, 'success')
-#            return redirect(url_for('list_examples'))
-#        except CapabilityDisabledError:
-#            flash(u'App Engine Datastore is currently in read-only mode.', 'info')
-#            return redirect(url_for('list_examples'))
-#    return render_template('list_examples.html', examples=examples, form=form)
-#
-#
-#@login_required
-#def delete_example(example_id):
-#    """Delete an example object"""
-#    example = ExampleModel.get_by_id(example_id)
-#    try:
-#        example.delete()
-#        flash(u'Example %s successfully deleted.' % example_id, 'success')
-#        return redirect(url_for('list_examples'))
-#    except CapabilityDisabledError:
-#        flash(u'App Engine Datastore is currently in read-only mode.', 'info')
-#        return redirect(url_for('list_examples'))
-#
-#
-#@admin_required
-#def admin_only():
-#    """This view requires an admin account"""
-#    return 'Super-seekrit admin page.'
 
 
 def warmup():
