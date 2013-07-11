@@ -56,9 +56,10 @@ class DisneyChannel(Canal.Canal):
         parts_urls = []
         filenames = []
         parts = list(doc.findall("./multimedias/multimedia"))
-        parts += list(doc.findall("./multimedias/relacionados"))
+        parts += list(doc.findall("./multimedias/relacionados/multimedia"))
         for (i, part) in enumerate(parts, 1):
-            part_url = base_http_url + video_info.find("./archivoMultimedia/archivo").text
+            print(part)
+            part_url = base_http_url + part.find("./archivoMultimedia/archivo").text
             ext = part_url.rpartition('.')[2]
             try:
                 filename = "%s-%s %s.%s" % (titulo, i, serie, ext)
