@@ -73,7 +73,8 @@
 	<script>
 		$(document).ready(function() {
 			$('#sendRequestButton').click(function(){
-                 $('#normalSearchImg').hide();
+                $('#normalSearchImg').hide();
+                TukTuk.Modal.loading();
             }); 
 			$('.listadoEnlaces').click(function() {
 				$('#divListadoEnlaces').toggle();

@@ -52,6 +52,17 @@
             margin: 0px 0px 0px 0px;
             padding: 0px 0px 0px 0px;
         }
+
+        form button, form button {
+            -webkit-border-radius: 0px 0px 0px 0px !important;
+            -moz-border-radius: 0px 0px 0px 0px !important;
+            -ms-border-radius: 0px 0px 0px 0px !important;
+            -o-border-radius: 0px 0px 0px 0px !important;
+            border-radius: 0px 0px 0px 0px !important;
+        }
+        section.landing .form button {
+            border-radius: 0px 0px 0px 0px !important;
+        }
     </style>
 
     <script type="text/javascript">
@@ -63,6 +74,12 @@
                 }, 4000);
             });
         });
+    </script>
+
+    <script language="javascript" type="text/javascript">
+        function resizeIframe(obj) {
+            obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+        }
     </script>
 
     <script type="text/javascript">
@@ -80,17 +97,18 @@
 
 <body>
     <section class="landing text center color white">
-        <div class="row">
-            <div class="column_8 form">
-                <form action="http://web.pydowntv.com/embed" method="post" id="searchUrlOrig" target="_blank">
-                    <input name="urlOrig" type="text" id="sendRequestInput" class="large float left" placeholder="PyDownTV">
-                    <button style="color: black;" id="sendRequestButton" name="submit" onclick="$('#loading').show();" type="submit" class="button large float">
-                        <div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" />Buscando...</div>
-                        Buscar!
+        <div class="row" style="width: 100%;">
+            <div class="column_12 form" style="width: 100%;">
+                <form action="{{ url_for('home') }}" method="post" id="searchUrlOrig">
+                    <input style="margin: 0; font-size: 1.6em;" name="urlOrig" type="text" id="sendRequestInput" class="large on-left" placeholder="Introduce AQUÍ la URL del vídeo a descargar...">
+                    <button style="color: black; margin-top: 0; padding-top: 2px;" id="sendRequestButton" name="submit" onclick="$('#loading').show();" type="submit" class="button large on-right">
+                        <div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" /></div>
+                        <span id="normalSearchImg" class="icon search"></span>
                     </button>
                 </form>
             </div>
         </div>
     </section>
+        
 </body>
 </html>

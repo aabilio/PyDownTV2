@@ -58,7 +58,7 @@ class DisneyChannel(Canal.Canal):
         parts = list(doc.findall("./multimedias/multimedia"))
         parts += list(doc.findall("./multimedias/relacionados/multimedia"))
         for (i, part) in enumerate(parts, 1):
-            print(part)
+            self.debug(unicode(part))
             part_url = base_http_url + part.find("./archivoMultimedia/archivo").text
             ext = part_url.rpartition('.')[2]
             try:
