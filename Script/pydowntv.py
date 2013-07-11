@@ -55,7 +55,8 @@ _url_canales = {
                "plus": ["canalplus.es", "plus.es"],
                "vtelevision": ["vtelevision.es"],
                "riasbaixas": ["canalriasbaixas.com"],
-               "abc": ["abc.es"]
+               "abc": ["abc.es"],
+               "disneychannel": ["replay.disneychannel.es"],
                }
 _mod_tv = {
            "rtve": {"mod":tve.TVE,"comentario":"[INFO] Radio Televión Española", "urls":_url_canales["rtve"]},
@@ -81,7 +82,8 @@ _mod_tv = {
            "plus": {"mod":plus.Plus,"comentario":"[INFO] Canal Plus","urls":_url_canales["plus"]},
            "vtelevision": {"mod":vtelevision.V,"comentario":"[INFO] V Televisión","urls":_url_canales["vtelevision"]},
            "riasbaixas": {"mod":riasbaixas.RiasBaixas,"comentario":"[INFO] Rias Baixas TV","urls":_url_canales["riasbaixas"]},
-           "abc": {"mod":abc.ABC,"comentario":"[INFO] ABC Multimedia","urls":_url_canales["abc"]}
+           "abc": {"mod":abc.ABC,"comentario":"[INFO] ABC Multimedia","urls":_url_canales["abc"]},
+           "disneychannel": {"mod":disneychannel.DisneyChannel, "comentario":"[INFO] Disney Channel Replay","urls":_url_canales["disneychannel"]},
            #"nombre" : {"mod":rutaAlaClase, "comentario":"infoParaImprimir", "urls":_url_canales["canal"]}
            }
 # Fin de edición
