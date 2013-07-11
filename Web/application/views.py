@@ -226,6 +226,15 @@ class Canales(object):
         for url in urls:
             if self._url.find(url) != -1: return True
         return False
+
+    def isDisneChannel(self):
+        '''return True si la URL pertenece a Disney Channel (Replay)'''
+        urls = ["replay.disneychannel.es"]
+        for url in urls:
+            if self._url.find(url) != -1: return True
+        return False
+
+        
     
 def qCanal(url, opcs):
     '''
@@ -259,6 +268,7 @@ def qCanal(url, opcs):
     elif canal.isVtelevision(): return vtelevision.V(url, opcs)
     elif canal.isRiasBaixas(): return riasbaixas.RiasBaixas(url, opcs)
     elif canal.isABC(): return abc.ABC(url, opcs)
+    elif canal.isDisneChannel(): return disneychannel.DisneyChannel(url, opcs)
     else: return None
 
 def compURL(url):

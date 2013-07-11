@@ -48,10 +48,10 @@ class DisneyChannel(Canal.Canal):
 
         base_http_url = doc.find("./url/urlHttpVideo").text
         video_info = doc.find("./multimedias/multimedia")
-        img = self.URL_DISNEY_CHANNEL + video_info.find("./archivoMultimediaMaxi/archivo").text
-        titulo = video_info.find("./nombre").text
+        img = self.URL_DISNEY_CHANNEL + "/" + video_info.find("./archivoMultimediaMaxi/archivo").text
+        titulo = video_info.find("./nombre").text.encode('utf8')
         serie = video_info.find("./seccion").text
-        desc = video_info.find("./descripcion").text
+        desc = video_info.find("./descripcion").text.encode('utf8')
 
         parts_urls = []
         filenames = []
@@ -60,7 +60,10 @@ class DisneyChannel(Canal.Canal):
         for (i, part) in enumerate(parts, 1):
             part_url = base_http_url + video_info.find("./archivoMultimedia/archivo").text
             ext = part_url.rpartition('.')[2]
-            filename = "%s-%s %s.%s" % (titulo, i, serie, ext)
+            try:
+                filename = "%s-%s %s.%s" % (titulo, i, serie, ext)
+            except:
+                filename = "Video-Disney-Chanel_%s.%s" % (i, ext)
             filename_clean = Utiles.formatearNombre(filename)
             parts_urls.append(part_url)
             filenames.append(filename_clean)
