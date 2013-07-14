@@ -84,8 +84,17 @@ class Descargar(object):
         printt(u"\n[INFO] Presiona \"Ctrl + C\" para cancelar\n")
         
         # TODO: mejorar esto!
-        args = self.__COMANDO_RTMPD.split() if self.__COMANDO_RTMPD is not None else self.__COMANDO_MENCO.split()
-        
+        old_args = self.__COMANDO_RTMPD.split() if self.__COMANDO_RTMPD is not None else self.__COMANDO_MENCO.split()
+        args = []
+        # Clean the command args
+        for arg in old_args:
+            new_arg = arg
+            first_char = arg[0]
+            # The arguments cannot be enclosed in ' or " when passing them to subprocess
+            if first_char in ['\'', '"'] and first_char == arg[-1]:
+                new_arg = arg[1:-1]
+            args.append(new_arg)
+
         try:
             printt(u"\nLanzando rtmpdump...\n")
             out = subprocess.call(args)
