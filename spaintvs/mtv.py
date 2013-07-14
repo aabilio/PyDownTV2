@@ -92,7 +92,7 @@ class MTV(Canal.Canal):
         html = Descargar.get(self.url)
         html = html.replace("\n", "").replace("\t", "")
         try: #ES
-            uri = html.split("var uri = \"")[1].split("\"")[0]
+            uri = html.split("data-contenturi=\"")[1].split("\"")[0]
         except: #COM
             com = True
             uri = html.split(".videoUri = \"")[1].split("\"")[0]
