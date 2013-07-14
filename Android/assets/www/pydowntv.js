@@ -41,6 +41,17 @@ if (typeof String.prototype.startsWith != 'function') {
   };
 }
 
+function addNewStyle(newStyle) {
+    var styleElement = document.getElementById('styles_js');
+    if (!styleElement) {
+        styleElement = document.createElement('style');
+        styleElement.type = 'text/css';
+        styleElement.id = 'styles_js';
+        document.getElementsByTagName('head')[0].appendChild(styleElement);
+    }
+    styleElement.appendChild(document.createTextNode(newStyle));
+}
+
 
 // Pydowntv logic:
 
@@ -222,33 +233,38 @@ var parsePydowntvAPI = function(api, urlOrig){
 				Lungo.Data.Cache.set('cache_'+api.videos[v].url_video[p], user_cache);
 
 				html = '<li data-image="'+api.videos[v].url_img+'" class="thumb video_result selectable '+cont+'" data-usercache="'+'cache_'+api.videos[v].url_video[p]+'"> \
-					<img style="margin-bottom: 1px;" src="'+api.videos[v].url_img+'" /> \
-					<a href="#" class="right tag red">Parte '+(parseInt(p)+parseInt(1))+'</a> \
-					<strong>'+api.titulos[v]+'</strong> \
-					<small>'+api.descs[v]+'</small></div> \
-					<div class="form" style="display:none;" data-isactive="false" data-first="true"> \
-						<br /> \
-						<span>Progreso:</span>\
-                        <div class="progress-normal" data-progress="0%"> \
-                            <div class="progress"> \
-                                <span class="bar"> \
-                                    <span class="value" style="width: 0%"></span> \
-                                </span> \
-                            </div> \
-                        </div> \
-                        <a href="#" class="left tag blue"> \
-                        	0%\
-                    	</a> \
-                        <a href="#" class="button small cancel right"> \
-                        	Cancelar \
-                    	</a> \
-                    	<br /><br /> \
-                    </div> \
+					<img class="img" style="margin-bottom: 1px;" src="'+api.videos[v].url_img+'" /> \
+					<div class="info"> \
+						<a href="#" class="right tag red">Parte '+(parseInt(p)+parseInt(1))+'</a> \
+						<strong>'+api.titulos[v]+'</strong> \
+						<small>'+api.descs[v]+'</small></div> \
+						<div class="form" style="display:none;" data-isactive="false" data-first="true"> \
+							<span>Progreso:</span>\
+	                        <div class="progress-normal" data-progress="0%"> \
+	                            <div class="progress"> \
+	                                <span class="bar"> \
+	                                    <span class="value" style="width: 0%"></span> \
+	                                </span> \
+	                            </div> \
+	                        </div> \
+	                        <a href="#" class="left tag blue"> \
+	                        	0%\
+	                    	</a> \
+	                        <a href="#" class="button small cancel right"> \
+	                        	Cancelar \
+	                    	</a> \
+	                    </div> \
+	                </div> \
                     </li>';
 				$$('#video_results').append(html);
 			}
 		}
 		
+		setTimeout(function() { 
+			px = document.querySelector(".video_result .img").scrollHeight + 1;
+			addNewStyle('.video_result { height: ' + px + 'px !important; }');
+		},3000);
+
 		Lungo.dom('.video_result.'+cont).on("tap", onVideoResultClick);
 		cont = cont + "c";
 
@@ -266,13 +282,23 @@ var parsePydowntvAPI = function(api, urlOrig){
 };
 
 Lungo.ready(function(){
+	//alert("pongo loas imagenes");
+	//document.querySelector('.video_result').style.height = document.querySelector('.video_result .img').scrollHeight + 1 + "px";
+});
 
+$$('.video_result .img').ready(function() {
+	//alert("pongo loas imagenes");
+	//document.querySelector('.video_result').style.height = document.querySelector('.video_result .img').scrollHeight + 1 + "px";
 });
 
 
 Lungo.Events.init({
 	'load section#main_search': function() {
 		whereIam = "home";
+	},
+
+	'ready section#main_search': function() {
+
 	},
 
 	'load section#downloads': function() {
@@ -356,6 +382,7 @@ Lungo.Events.init({
 			Lungo.Service.get(pydowntv_api_url+$$('#Search4url').val(), null, function(api) {
 				parsePydowntvAPI(api, $$('#Search4url').val());
 			}, "json");
+			//parsePydowntvAPI({"videos": [{"url_video": ["http://replay.disneychannel.es/antena3tv/mp_seriesh1/2013/06/13/00003/001.mp4"], "rtmpd_cmd": null, "partes": 1, "tipo": "http", "mensaje": null, "menco_cmd": null, "url_publi": null, "url_img": "http://replay.disneychannel.es/clipping/2013/06/13/00003/8.jpg", "otros": null, "filename": ["Video-Disney-Chanel_1.mp4"]}], "descs": ["El  Capit\u00e1n Garfio se apunta con Jake, Izzy y Cubby a una carrera."], "titulos": ["\u00a1La Roca de la Ronda!"], "exito": true, "mensaje": "URL obtenido correctamente", "num_videos": 1}, "http://replay.disneychannel.es/jake-y-los-piratas-de-nunca-jamas/la-roca-de-la-ronda.html");
 
 		}
 	},
