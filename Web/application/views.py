@@ -82,7 +82,7 @@ class Canales(object):
 
     def isTelecinco(self):
         '''return True si la URL pertenece al Grupo de Telecinco'''
-        urls = ["telecinco.es", "divinity.es"]
+        urls = ["telecinco.es", "divinity.es", "mitelekids.es"]
         for url in urls:
             if self._url.find(url) != -1: return True
         return False

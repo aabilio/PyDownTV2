@@ -26,6 +26,10 @@ import Utiles
 import Descargar
 import Error
 
+import re
+try: import simplejson as json
+except: import json
+
 url_validas = ["cuatro.com"]
 
 class Cuatro(Canal.Canal):
@@ -125,6 +129,42 @@ class Cuatro(Canal.Canal):
             url2down = streamComunes.split("document.write(\'<video id=")[1].split("src=\"")[1].split("\"")[0]
             ext= "." + url2down.split(".")[-1]
             name += ext
+        elif streamHTML.find("MSV.embedData") != -1:
+            #rx=re.compile(r"MSV\.embedData\[(.*)\]", re.MULTILINE|re.DOTALL)
+            rx=re.compile(r'/mdsvideo/popup\.html\?(.*)"')
+            videos = rx.findall(streamHTML)
+            if not videos: Error.GeneralPyspainTVsError("Telecinco.es. No se encuentra contenido.")
+            ret =   {
+                    "exito" : True,
+                    "num_videos" : len(videos),
+                    "mensaje"   : u"URL obtenido correctamente",
+                    "videos": [],
+                    "titulos": [],
+                    "descs": []
+                    }
+            for js in videos:
+                vid = {
+                "url_video" : None,
+                "url_img"   : None,
+                "filename"  : None,
+                "tipo"      : "http",
+                "partes"    : 1,
+                "rtmpd_cmd" : None,
+                "menco_cmd" : None,
+                "url_publi" : None,
+                "otros"     : None,
+                "mensaje"   : None
+                }
+                stream = Descargar.getHtmlUtf8(self.URL_JSON + js + "&imageContentId=" + Utiles.recortar(js, 'contentId=', '&'))
+                info = json.loads(stream[1:-1])
+                vid['url_video'] = [info['sources'][0]['src']]
+                vid['url_img'] = info['poster']
+                try: vid['filename'] = Utiles.formatearNombre(info['nielsen']['title']+'.mp4')
+                except: vid['filename'] = 'VideosDeTelecinco.mp4'
+                ret['videos'].append(vid)
+                ret['titulos'].append(unicode(info['nielsen']['title']).encode('utf8'))
+                ret['descs'].append(u'Cat.: %s. Subcat.: %s. %s'.encode('utf8') % (info['nielsen']['category'].encode('utf8'),info['nielsen']['subcategory'].encode('utf8'),info['nielsen']['title'].encode('utf8')))
+            return ret   
         else:
             raise Error.GeneralPyspainTVsError("Cuatro.com: No se encuentra contenido")
         

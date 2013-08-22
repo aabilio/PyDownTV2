@@ -26,6 +26,7 @@ import Utiles
 import Descargar
 import Error
 
+import xml.etree.ElementTree
 from base64 import b64decode as p#simple ofus
 import aes
 
@@ -188,21 +189,30 @@ class MiTele(Canal.Canal):
         
         # Obtener nombre:
         if type(url) == str:
-            name = streamHTML.split("<title>")[1].split("<")[0] + "." + url.split(".")[-1].split("?")[0]
+            tit_vid = name = streamHTML.split("<title>")[1].split("<")[0] + "." + url.split(".")[-1].split("?")[0]
         else: # De momento: suponemos que son mp4.
-            name = streamHTML.split("<title>")[1].split("<")[0] + ".mp4"
-        if name:
-            name = Utiles.formatearNombre(name)
+            tit_vid = name = streamHTML.split("<title>")[1].split("<")[0] + ".mp4"
         
         try:
-            tit_vid = name = htmlBackup.split("<div class=\"Destacado-text\">")[1].split("<h2>")[1].split("</h2>")[0]
-            name = Utiles.formatearNombre(name + ".mp4")
-        except:   
+            print "llego aqui"
+            xmltree = xml.etree.ElementTree.fromstring(streamXML)
+            print "llego aqui"
+            video_title = xmltree.find('./video/info/title').text
+            video_sub_title = xmltree.find('./video/info/sub_title').text
+            video_category = xmltree.find('./video/info/category').text
+            video_sub_category = xmltree.find('./video/info/subcategory').text
+
+            tit_vid = name = "%s (%s) %s %s" % (video_title, video_sub_title, video_category, video_sub_category)
+        except:
             name = name.replace("VERPROGRAMAS", "").replace("Veronline", "")
             name = name.replace("VERSERIES", "").replace("Veronline", "")
             tit_vid = tit_vid.replace("VER PROGRAMAS", "").replace("Ver online", "")
             tit_vid = tit_vid.replace("VER SERIES", "").replace("Ver online", "").replace("|", "").strip()
-        
+
+        try:
+            name = Utiles.formatearNombre(name + ".mp4")
+        except:
+            name = "Video_de_mitele.mp4"
        
         desc = None        
         try:

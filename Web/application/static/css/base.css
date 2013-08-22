@@ -111,3 +111,10 @@ section.landing .form button {
 	-moz-border-radius: 8px 8px 8px 8px;
 	-webkit-border-radius: 8px 8px 8px 8px;
 }
+
+#banner {
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+}

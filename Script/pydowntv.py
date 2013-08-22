@@ -35,7 +35,7 @@ _url_canales = {
                "rtve": ["rtve.es"],
                "grupo_a3": ["antena3.com", "lasexta.com", "lasextadeportes.com", "lasextanoticias.com"],
                "cuatro": ["cuatro.com"],
-               "telecinco": ["telecinco.es", "divinity.es"],
+               "telecinco": ["telecinco.es", "divinity.es", "mitelekids.es"],
                "mitele": ["mitele.es"],
                "crtvg": ["crtvg.es"],
                "rtpa": ["rtpa.es"],

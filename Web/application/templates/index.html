@@ -130,6 +130,7 @@
   			$('#sendRequestButton').html('<div id="loading" style="display:none;"><img src="/static/img/load.gif" alt="" /></div><span id="normalSearchImg" class="icon search"></span>');
 		}, 5000);
 	</script>
+	{% set cont_video = 0 %} {# Temporal para varios videos de Telecinco (referrer killer) #}
 	{% for vid in videos %}
 	<section id="resultados" class="bck darkest landing text center color white" style="padding: 25px 0;">
 		<div class="row text center margin_bottom">
@@ -172,15 +173,16 @@
 							<script>
 								document.getElementById('url_kill_referrer').innerHTML = ReferrerKiller.linkHtml( '{{ url_for('mitele', urlOrig=urlOrig) }}', "{{ tit }}", { target: 'destiny' }, { verticalAlign: 'bottom' } );
 							</script>
-						{% elif urlOrig.find("divinity.es") != -1 or urlOrig.find("cuatro.com") != -1 or urlOrig.find("telecinco.es") != -1 %}
-							<li class="text bold color theme" style="color: #ee6557;"><span id="url_kill_referrer"></span></li>
+						{% elif urlOrig.find("divinity.es") != -1 or urlOrig.find("cuatro.com") != -1 or urlOrig.find("telecinco.es") != -1  or urlOrig.find("mitelekids.es") != -1 %}
+							<li class="text bold color theme" style="color: #ee6557;"><span id="url_kill_referrer_{{ cont_video }}"></span></li>
 							<script>
-								document.getElementById('url_kill_referrer').innerHTML = ReferrerKiller.linkHtml( '{{ parte }}', '{{ tit }}', { target: 'destiny' }, { verticalAlign: 'bottom' } );
+								document.getElementById('url_kill_referrer_{{ cont_video }}').innerHTML = ReferrerKiller.linkHtml( '{{ parte }}', '{{ tit }}', { target: 'destiny' }, { verticalAlign: 'bottom' } );
 							</script>
 						{% else %}
 							<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a  href="{{ parte }}" style="text-decoration: underline;"><h5>{{ tit }}</h5></a></li>
 						{% endif %}
 					{% endfor %}
+					{% set cont_video = cont_video + 1 %} {# Temporal para videos de T5 (Referrer killer) #}
 				</ol>
 				
 				{% if vid['tipo'] == 'rtmp' %}

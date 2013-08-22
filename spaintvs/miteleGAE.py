@@ -26,7 +26,7 @@ import Utiles
 import Descargar
 import Error
 
-
+import xml.etree.ElementTree
 from base64 import b64decode as p #simple ofus
 import aes
 
@@ -60,7 +60,7 @@ class MiTele(Canal.Canal):
         '''
         self.debug(u"Probando el que era el Método 3")
         AES = aes.AES() 
-        #tokenizer = self.TOKENIZER
+        tokenizer = self.TOKENIZER
         server_time = Descargar.get(self.URL_TIME).strip()
         toEncode = server_time+";"+ID+";"+startTime+";"+endTime
         data = AES.encrypt(toEncode, p('eG84NWtUK1FIejNmUk1jSE1YcDljQQ=='), 256)
@@ -73,7 +73,7 @@ class MiTele(Canal.Canal):
         
         try:
             #data = Descargar.doPOST(self.URL_POST, tokenizer, post_args, doseq=True)
-            data = Descargar.doPOST("aabilio.me", "/pydowntv/mitele.php", post_args, doseq=True)
+            data = Descargar.doPOST("aabilio.hl161.dinaserver.com", "/pydowntv/mitele.php", post_args, doseq=True)
         except Exception, e:
             raise Error.GeneralPyspainTVsError("mitele.es: Error en Tokenizer: "+e.__str__())
 
@@ -188,20 +188,28 @@ class MiTele(Canal.Canal):
         
         # Obtener nombre:
         if type(url) == str:
-            name = streamHTML.split("<title>")[1].split("<")[0] + "." + url.split(".")[-1].split("?")[0]
+            tit_vid = name = streamHTML.split("<title>")[1].split("<")[0] + "." + url.split(".")[-1].split("?")[0]
         else: # De momento: suponemos que son mp4.
-            name = streamHTML.split("<title>")[1].split("<")[0] + ".mp4"
-        if name:
-            name = Utiles.formatearNombre(name)
+            tit_vid = name = streamHTML.split("<title>")[1].split("<")[0] + ".mp4"
         
         try:
-            tit_vid = name = htmlBackup.split("<div class=\"Destacado-text\">")[1].split("<h2>")[1].split("</h2>")[0]
-            name = Utiles.formatearNombre(name + ".mp4")
-        except:   
+            xmltree = xml.etree.ElementTree.fromstring(streamXML)
+            video_title = xmltree.find('./video/info/title').text.encode('utf8')
+            video_sub_title = xmltree.find('./video/info/sub_title').text.encode('utf8')
+            video_category = xmltree.find('./video/info/category').text.encode('utf8')
+            video_sub_category = xmltree.find('./video/info/subcategory').text.encode('utf8')
+
+            tit_vid = name = "%s (%s) - %s - %s" % (video_title, video_sub_title, video_category, video_sub_category)
+        except:
             name = name.replace("VERPROGRAMAS", "").replace("Veronline", "")
             name = name.replace("VERSERIES", "").replace("Veronline", "")
             tit_vid = tit_vid.replace("VER PROGRAMAS", "").replace("Ver online", "")
             tit_vid = tit_vid.replace("VER SERIES", "").replace("Ver online", "").replace("|", "").strip()
+
+        try:
+            name = Utiles.formatearNombre(name + ".mp4")
+        except:
+            name = "Video_de_mitele.mp4"
         
         desc = None        
         try:
