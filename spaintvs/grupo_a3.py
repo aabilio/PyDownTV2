@@ -39,6 +39,7 @@ class GrupoA3(Canal.Canal):
     URL_DE_ANTENA3  = "http://www.antena3.com/"
     URL_DE_LASEXTA = "http://www.lasexta.com/"
     URL_DE_DESCARGA = "http://desprogresiva.antena3.com/"
+    URL_DE_DESCARGA_LA_SEXTA = "http://deslasexta.antena3.com/"
     URL_DE_F1 = "http://www.antena3.com/gestorf1/xml_visor/"
     URL_VISOR_F1 = "http://www.antena3.com/gestorf1/static_visor/"
 
@@ -336,7 +337,8 @@ class GrupoA3(Canal.Canal):
                 video["partes"] += 1
                 #video["mensaje"] = unicode(i.split(">")[1].split("<")[0].capitalize())
                 endurl = b.split("<url>")[1].split("<")[0]
-                video["url_video"].append(endurl.replace(endurl.split("mp_")[0],"http://desprogresiva.antena3.com/"))
+                #video["url_video"].append(endurl.replace(endurl.split("mp_")[0],"http://desprogresiva.antena3.com/"))
+                video["url_video"].append(endurl.replace(endurl.split("mp_")[0],self.URL_DE_DESCARGA_LA_SEXTA))
                 ext = "." + video["url_video"][-1].split(".")[-1]
                 tit = b.split("<title>")[1].split("<")[0] + ext
                 tit = Utiles.formatearNombre(tit)
