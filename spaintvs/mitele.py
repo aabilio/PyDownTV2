@@ -98,9 +98,9 @@ class MiTele(Canal.Canal):
                 #url = [R, "-a", A, "-f", F, "-W", W, "-p", P, "-y", Y]
             elif data.find("file") != -1:
                 try:
-                    url = data.split("<url><file>")[1].split("</file></url>")[0].replace("&amp;", "&")
+                    url = data.split("<url><file>")[1].split("</file></url>")[0].replace("&amp;", "&").replace(" ", "")
                 except IndexError:
-                    url = data.split("<file geoblocked=\"true\">")[1].split("</file></url>")[0].replace("&amp;", "&")
+                    url = data.split("<file geoblocked=\"true\">")[1].split("</file></url>")[0].replace("&amp;", "&").replace(" ", "")
             else:
                 return None
             return url
@@ -194,9 +194,7 @@ class MiTele(Canal.Canal):
             tit_vid = name = streamHTML.split("<title>")[1].split("<")[0] + ".mp4"
         
         try:
-            print "llego aqui"
             xmltree = xml.etree.ElementTree.fromstring(streamXML)
-            print "llego aqui"
             video_title = xmltree.find('./video/info/title').text
             video_sub_title = xmltree.find('./video/info/sub_title').text
             video_category = xmltree.find('./video/info/category').text

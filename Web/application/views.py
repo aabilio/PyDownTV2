@@ -656,7 +656,7 @@ def mitele(urlOrig=None):  #Ahora ya no se pasa por aquí
             urlOrig = request.form['urlOrig']
     try:
         response = redirect(miteleGAE.MiTele(urlOrig, opcs).getInfo()['videos'][0]['url_video'][0])
-        response.headers['Referer'] = "http://marka.com"
+        response.headers['Referer'] = "http://asdas.com"
         response.headers['User-Agent'] = "Mozilla/5.0 (Linux; U; Android 2.3.5; en-us; HTC Vision Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"
         return response
     except:

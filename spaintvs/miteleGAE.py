@@ -98,9 +98,9 @@ class MiTele(Canal.Canal):
                 #url = [R, "-a", A, "-f", F, "-W", W, "-p", P, "-y", Y]
             elif data.find("file") != -1:
                 try:
-                    url = data.split("<url><file>")[1].split("</file></url>")[0].replace("&amp;", "&")
+                    url = data.split("<url><file>")[1].split("</file></url>")[0].replace("&amp;", "&").replace(" ", "")
                 except IndexError:
-                    url = data.split("<file geoblocked=\"true\">")[1].split("</file></url>")[0].replace("&amp;", "&")
+                    url = data.split("<file geoblocked=\"true\">")[1].split("</file></url>")[0].replace("&amp;", "&").replace(" ", "")
             else:
                 return None
             return url
