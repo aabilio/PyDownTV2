@@ -197,7 +197,7 @@ def doPOST(url, path, post_args, doseq=True, headers=None):
     Post = urllib.urlencode(post_args, doseq=doseq)
     headers = {
                 "User-Agent": "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0)", 
-                "Host": "token.mitele.es", 
+                #"Host": "token.mitele.es", 
                 #"Accept-Encoding": "gzip", 
                 "Accept-Charset": "ISO-8859-1,UTF-8;q=0.7,*;q=0.7", 
                 "Referer": "http://static1.tele-cinco.net/comun/swf/playerMitele.swf",

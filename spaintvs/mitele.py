@@ -27,7 +27,7 @@ import Descargar
 import Error
 
 import xml.etree.ElementTree
-from base64 import b64decode as p#simple ofus
+from base64 import b64decode as p #simple ofus
 import aes
 
 url_validas = ["mitele.es"]
@@ -45,7 +45,7 @@ class MiTele(Canal.Canal):
     
     def __init__(self, url="", opcs=None):
         Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
-
+        
     def __getUrl2down(self, ID, startTime, endTime):
         '''
             Tercer método implementado:
@@ -66,14 +66,15 @@ class MiTele(Canal.Canal):
         data = AES.encrypt(toEncode, p('eG84NWtUK1FIejNmUk1jSE1YcDljQQ=='), 256)
         post_args = {
                     'hash' : data,
-                    'id' : ID,
+                    'id' : ID.replace(" ",""),
                     'startTime' : '0',
                     'endTime': '0'
                     }
-
+        self.debug(u"Token: %s" % post_args)
+        
         try:
             data = Descargar.doPOST(self.URL_POST, tokenizer, post_args, doseq=True)
-            #data = Descargar.doPOST("linfox.es", "/pydowntv/mitele.php", post_args, doseq=True)
+            #data = Descargar.doPOST("aabilio.hl161.dinaserver.com", "/pydowntv/mitele2.php", post_args, doseq=True)
         except Exception, e:
             raise Error.GeneralPyspainTVsError("mitele.es: Error en Tokenizer: "+e.__str__())
 
@@ -101,6 +102,8 @@ class MiTele(Canal.Canal):
                     url = data.split("<url><file>")[1].split("</file></url>")[0].replace("&amp;", "&").replace(" ", "")
                 except IndexError:
                     url = data.split("<file geoblocked=\"true\">")[1].split("</file></url>")[0].replace("&amp;", "&").replace(" ", "")
+            elif data.find("tokenizedUrl"):
+                url = data.split('"tokenizedUrl":"')[1].split('"')[0].replace(" ", "").replace("\/", "/")
             else:
                 return None
             return url
@@ -138,13 +141,12 @@ class MiTele(Canal.Canal):
             "videos", "mesajes" y "descs" deben ser listas de cadenas (si no son None)
             "url_video", "filename", "rtmp_cmd", "menco_cmd" (de "videos") deben ser listas de cadenas (si no son None)
         '''
-
+        
         tit_vid = None
         # Obtener HTML y XML:
         try:
             streamHTML = htmlBackup = Descargar.getHtml(self.url).decode('string-escape')
             html = streamHTML
-            #streamHTML = htmlBackup = self.toUtf(streamHTML)
             tit_vid = streamHTML.split("<title>")[1].split("<")[0]
             streamHTML = streamHTML.replace(" ", "")
             streamXML = Descargar.getHtml(streamHTML.split("{\"host\":\"")[1].split("\"")[0].replace("\/", "/"))
@@ -195,12 +197,12 @@ class MiTele(Canal.Canal):
         
         try:
             xmltree = xml.etree.ElementTree.fromstring(streamXML)
-            video_title = xmltree.find('./video/info/title').text
-            video_sub_title = xmltree.find('./video/info/sub_title').text
-            video_category = xmltree.find('./video/info/category').text
-            video_sub_category = xmltree.find('./video/info/subcategory').text
+            video_title = xmltree.find('./video/info/title').text.encode('utf8')
+            video_sub_title = xmltree.find('./video/info/sub_title').text.encode('utf8')
+            video_category = xmltree.find('./video/info/category').text.encode('utf8')
+            video_sub_category = xmltree.find('./video/info/subcategory').text.encode('utf8')
 
-            tit_vid = name = "%s (%s) %s %s" % (video_title, video_sub_title, video_category, video_sub_category)
+            tit_vid = name = "%s (%s) - %s - %s" % (video_title, video_sub_title, video_category, video_sub_category)
         except:
             name = name.replace("VERPROGRAMAS", "").replace("Veronline", "")
             name = name.replace("VERSERIES", "").replace("Veronline", "")
@@ -211,7 +213,7 @@ class MiTele(Canal.Canal):
             name = Utiles.formatearNombre(name + ".mp4")
         except:
             name = "Video_de_mitele.mp4"
-       
+        
         desc = None        
         try:
             desc = htmlBackup.split("<div class=\"Destacado-text\">")[1].split("<p class=\"text\">")[1].split("</p>")[0]

@@ -66,14 +66,15 @@ class MiTele(Canal.Canal):
         data = AES.encrypt(toEncode, p('eG84NWtUK1FIejNmUk1jSE1YcDljQQ=='), 256)
         post_args = {
                     'hash' : data,
-                    'id' : ID,
+                    'id' : ID.replace(" ",""),
                     'startTime' : '0',
                     'endTime': '0'
                     }
+        self.debug(u"Token: %s" % post_args)
         
         try:
             #data = Descargar.doPOST(self.URL_POST, tokenizer, post_args, doseq=True)
-            data = Descargar.doPOST("aabilio.hl161.dinaserver.com", "/pydowntv/mitele.php", post_args, doseq=True)
+            data = Descargar.doPOST("aabilio.hl161.dinaserver.com", "/pydowntv/mitele2.php", post_args, doseq=True)
         except Exception, e:
             raise Error.GeneralPyspainTVsError("mitele.es: Error en Tokenizer: "+e.__str__())
 
@@ -101,6 +102,8 @@ class MiTele(Canal.Canal):
                     url = data.split("<url><file>")[1].split("</file></url>")[0].replace("&amp;", "&").replace(" ", "")
                 except IndexError:
                     url = data.split("<file geoblocked=\"true\">")[1].split("</file></url>")[0].replace("&amp;", "&").replace(" ", "")
+            elif data.find("tokenizedUrl"):
+                url = data.split('"tokenizedUrl":"')[1].split('"')[0].replace(" ", "").replace("\/", "/")
             else:
                 return None
             return url
