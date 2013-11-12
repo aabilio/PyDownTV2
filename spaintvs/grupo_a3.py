@@ -397,7 +397,10 @@ class GrupoA3(Canal.Canal):
         self.debug(unicode(url))
         #jj = json.loads(self.__get(Utiles.url_fix(url)))
         jj = json.loads(Descargar.get(Utiles.url_fix(url)))
-        url2down = jj['resultObject']['es']
+        try:
+            url2down = jj['resultObject']['es']
+        except:
+            raise Error.GeneralPyspainTVsError(unicode(jj['resultDes']))
 
         if url2down is None:
             raise Error.GeneralPyspainTVsError(u"[Atresplayer] No se han podido obtener enlaces para URL proporcionada")
