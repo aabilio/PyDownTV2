@@ -23,13 +23,17 @@ __author__="aabilio"
 __date__ ="$12-oct-2012 11:03:38$"
 
 import re
+try: import simplejson as json
+except: import json
+from hashlib import md5 
 
 import Canal
 import Descargar
 import Utiles
 import Error
 
-url_validas = ["antena3.com", "lasexta.com", "lasextadeportes.com", "lasextanoticias.com"]
+
+url_validas = ["antena3.com", "lasexta.com", "lasextadeportes.com", "lasextanoticias.com", "atresplayer.com"]
 
 class GrupoA3(Canal.Canal):
     '''
@@ -42,6 +46,10 @@ class GrupoA3(Canal.Canal):
     URL_DE_DESCARGA_LA_SEXTA = "http://deslasexta.antena3.com/"
     URL_DE_F1 = "http://www.antena3.com/gestorf1/xml_visor/"
     URL_VISOR_F1 = "http://www.antena3.com/gestorf1/static_visor/"
+    P = "http://aabilio.me/p/browse.php?f=norefer&u="
+
+    URL_API_TIME = "http://servicios.atresplayer.com/api/admin/time"
+    URL_EPISODE_INFO = "http://servicios.atresplayer.com/episode/get?episodePk="
 
     '''
         Clase para manejar los vídeos de la RTVE (todos).
@@ -351,6 +359,174 @@ class GrupoA3(Canal.Canal):
 
         return ret
 
+    def __get(self, url):
+        p = "http://www.gmodules.com/ig/proxy?url="
+        url = p+url
+        self.debug(unicode(url))
+        return Descargar.get(url)
+
+    def __getQ(self, url):
+        #q = self.__get(url)
+        q = Descargar.get(url)
+        self.debug(unicode(q))
+        q = re.findall('BANDWIDTH=([0-9]*).*RESOLUTION=([0-9x]*)|BANDWIDTH=([0-9]*)', q)
+        q = [filter(None, n) for n in q]
+        qq = []
+        for i in q:
+            if len(i) < 2:
+                i += ('',)
+            if i[0] == "1973000":
+                tmp = ("2225", i[1])
+            else:
+                tmp = (str((int(i[0])/100000)*100), i[1])
+            qq.append(tmp)
+        self.debug(unicode(qq))
+        return qq
+
+    def __getApiMobileUrl(self, episode):
+        return Descargar.get("http://www.pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzE/%s" % (episode))
+
+    def atresplayer_mobile(self):
+        #stream = self.__get(self.url)
+        stream = Descargar.get(self.url)
+        episode = re.findall('episode="(.*)">', stream)[0]
+        header = {"Accept":"application/json"}
+        j = json.loads(Descargar.getHtmlHeaders("http://servicios.atresplayer.com/episode/get?episodePk="+episode, header=header))
+
+        url = Utiles.url_fix(self.__getApiMobileUrl(episode).replace("https://", "http://"))
+        self.debug(unicode(url))
+        #jj = json.loads(self.__get(Utiles.url_fix(url)))
+        jj = json.loads(Descargar.get(Utiles.url_fix(url)))
+        url2down = jj['resultObject']['es']
+
+        if url2down is None:
+            raise Error.GeneralPyspainTVsError(u"[Atresplayer] No se han podido obtener enlaces para URL proporcionada")
+
+        title = u"%s %s".encode('utf-8') % (j['titleSection'].encode('utf-8'), j['titleDetail'].encode('utf-8'))
+        desc = unicode(j['seoDescription']).encode('utf-8')
+        name = u"VideoAtresPlayer.mp4"
+        img = j['urlImage'].replace(".jpg", "06.jpg")
+
+        return {"exito" : True,
+                "num_videos" : 1,
+                "mensaje"   : u"URL obtenido correctamente",
+                "videos":[{
+                        "url_video" : [url2down] if type(url2down) != list else url2down,
+                        "url_img"   : img if img is not None else None,
+                        "filename"  : [name] if type(name) != list else name,
+                        "tipo"      : "http",
+                        "partes"    : 1 if type(url2down) != list else len(url2down),
+                        "rtmpd_cmd" : None,
+                        "menco_cmd" : None,
+                        "url_publi" : None,
+                        "otros"     : None,
+                        "mensaje"   : None
+                        }],
+                "titulos": [title] if title is not None else None,
+                "descs": [desc] if desc is not None else None
+                }
+
+
+    def atresplayer(self):
+        getEpisodeUrl = "http://servicios.atresplayer.com/episode/get?episodePk="
+        locationHTTP2down = "desprogresiva.antena3.com/"
+        #locationHTTP2down = "tcdn.desprogresiva.antena3.com/"
+        locationRTMP2down = "a3premiumtkfs.fplive.net/"
+        locationQ = "deswowa3player.antena3.com/"
+
+        # Get episode info
+        streamHTML = Descargar.get(self.url)
+        episode = re.findall('episode="(.*)">', streamHTML)[0]
+        header = {"Accept":"application/json"}
+        j = json.loads(Descargar.getHtmlHeaders("http://servicios.atresplayer.com/episode/get?episodePk="+episode, header=header))
+        #j = json.loads(self.__get("http://servicios.atresplayer.com/episode/get?episodePk="+episode))
+        wowzaPath = j['wowzaPath'].replace("//", "/")
+
+        # Flags
+        isGeo = j['geolocked']
+        isRtmp = True if wowzaPath.find("a3player") != -1 else False
+
+        hasOffline = True if j['offlineDownload'] else False
+        hasHD = True if j['hd'] else False
+        hasVO = True if j['vo'] else False
+        hasDRM = True if j['drmEncrypted'] else False
+        hasDrm = True if j['drm'] else False
+
+        protocol = "rtmp" if isRtmp else "http"
+        geo = "geo" if isGeo else ""
+        sigra = "sigra" if j['sigra'] else "000"
+        smil = "mp4" if j['sigra'] else "smil"
+        playlist = sigra if j['sigra'] else "es"
+        vsng = "vcg" if isGeo else "vsg"
+        ext = "."+j['fileExtension'] if j.has_key('fileExtension') else ".mp4"
+        assetsN = re.findall("a3player(.)\/", wowzaPath)[0] if isRtmp else re.findall("assets(.)\/", wowzaPath)[0]
+
+
+        if isRtmp:
+            if isGeo:
+                wowzaPath = wowzaPath.replace("a3player%s/geo/" % assetsN, "assets%s/" % assetsN)
+            else:
+                wowzaPath = wowzaPath.replace("a3player%s/nogeo/" % assetsN, "assets%s/" % assetsN)
+                wowzaPath = wowzaPath.replace("a3player%s/" % assetsN, "assets%s/" % assetsN)
+            
+            #rtmpd_cmd = "rtmpdump -r rtmp://%s%s%sa3premiumtk/%s/%s.mp4 -o %s" % (geo, locationRTMP2down, geo, wowzaPath, sigra, name)
+            url2down = "http://%s%s%s%s%s" % (geo, locationHTTP2down, wowzaPath, sigra, ext)
+            title = u"%s %s".encode('utf-8') % (j['titleSection'].encode('utf-8'), j['titleDetail'].encode('utf-8'))
+            protocol = "http"
+        else:
+            # Obtener distintas calidades
+            try:
+                urlQ = "http://%s%s%s/_definst_/%s:%s%s.%s/playlist.m3u8" % (geo, locationQ, vsng, smil, wowzaPath, playlist, smil)
+                Q = self.__getQ(urlQ)
+            except:
+                Q = [('600', '720x404'), ('900', '720x404'), ('1300', '720x404'), ('1500', '1280x720'), ('2225', '1280x720')]
+
+            if len(Q) > 1:
+                url2down = []
+                title = []
+                for q in Q:
+                    w = "720" if not q[1] else q[1].split('x')[0]
+                    ww = "720x404" if not q[1] else q[1]
+                    k = q[0]
+                    tmp = "http://%s%s%svideo_%s_%sk_es.mp4" % (geo, locationHTTP2down, wowzaPath, w, k) # TODO: include VO
+                    url2down.append(tmp)
+                    title.append(u"%s %s [%s (%sk)]".encode('utf-8') % (j['titleSection'].encode('utf-8'), j['titleDetail'].encode('utf-8'), ww.encode('utf-8'), k.encode('utf-8')))
+            else:
+                url2down = "http://%s%s%svideo_%s_%sk_es.mp4" % (geo, locationHTTP2down, wowzaPath, Q[1], Q[0]) # TODO: include VO
+                title = u"%s %s [%s (%sk)]".encode('utf-8') % (j['titleSection'].encode('utf-8'), j['titleDetail'].encode('utf-8'), Q[i][1].encode('utf-8'), Q[i][0].encode('utf-8'))
+
+        desc = [unicode(j['seoDescription']).encode('utf-8')]*len(url2down)
+        name = u"VideoAtresPlayer.mp4"
+        img = j['urlImage'].replace(".jpg", "06.jpg")
+
+        url2down = [url2down] if type(url2down) is not list else url2down
+        videos = []
+        for i in range(len(url2down)):
+            qString = None if isRtmp else u"RESOLUTION: %s // BANDWIDTH: %s" % (Q[i][1].encode('utf-8'), Q[i][0].encode('utf-8')) or None
+            tmp = {
+                    "url_video" : [url2down[i]],
+                    "url_img"   : img if img is not None else None,
+                    "filename"  : [name] if type(name) != list else name,
+                    "tipo"      : protocol,
+                    "partes"    : 1,
+                    "rtmpd_cmd" : [rtmpd_cmd] if protocol == "rtmp" else None,
+                    "menco_cmd" : None,
+                    "url_publi" : None,
+                    "otros"     : qString or None,
+                    "mensaje"   : u"Puede que alguna calidad no esté disponible".encode('utf-8')
+                    }
+            videos.append(tmp)
+
+
+
+        return {"exito" : True,
+                "num_videos" : len(url2down),
+                "mensaje"   : u"URL obtenido correctamente",
+                "videos": videos,
+                "titulos": [title] if type(title) != list  else title,
+                "descs": [desc] if type(desc) != list  else title
+                }
+
 
     def getInfo(self):
         '''
@@ -385,10 +561,13 @@ class GrupoA3(Canal.Canal):
             "videos", "mesajes" y "descs" deben ser listas de cadenas (si no son None)
             "url_video", "filename", "rtmp_cmd", "menco_cmd" (de "videos") deben ser listas de cadenas (si no son None)
         '''
+
         img = None
         # print "[+] Procesando descarga"
         streamHTML = Descargar.getHtml(self.url)
-        if self.url.find(".com/videos/") != -1: # Modo Salón
+        if self.url.find("atresplayer.com/") != -1:
+            return self.atresplayer_mobile()
+        elif self.url.find(".com/videos/") != -1: # Modo Salón
             try:
                 img = self.URL_DE_ANTENA3 + Utiles.qe(streamHTML).split("player_capitulo.poster=\'/")[1].split("\'")[0]
             except:

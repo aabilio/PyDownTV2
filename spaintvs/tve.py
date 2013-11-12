@@ -237,7 +237,7 @@ class TVE(Canal.Canal):
 
         # -- Método 24 Mayo 2013
         self.debug(u"Probando método de 24 de uno de Mayo de 2013")
-        manager = "anubis"
+        manager = re.findall('data-idManager="(.*)"', sourceHTML)[0] or re.findall('idManager="(.*)"', sourceHTML)[0] or "default"
         tipo = "videos"
         url = "http://www.rtve.es/ztnr/movil/thumbnail/%s/%s/%s.png" % (manager, tipo, videoID)
 
@@ -272,8 +272,9 @@ class TVE(Canal.Canal):
             text_index = text_index + 1
             increment = increment + 1
             if increment == 5: increment = 1
-            try: plaintext = plaintext + intermediate_cyphertext[text_index-1]
-            except: pass
+            plaintext = plaintext + intermediate_cyphertext[text_index-1]
+            #try: plaintext = plaintext + intermediate_cyphertext[text_index-1]
+            #except: pass
 
         urlVideo = plaintext
         if urlVideo != "":
@@ -286,6 +287,8 @@ class TVE(Canal.Canal):
         else:
             raise Error.GeneralPyspainTVsError("No se pudo encontrar el enlace de descarga")
 
+        #TEMP FIX:
+        #url_video = url_video.replace(url_video.split(".")[1], url_video.split(".")[1][:3])
 
         # -- Método 24 Mayo 2013 FIN
         

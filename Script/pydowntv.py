@@ -33,7 +33,7 @@ import uiUtiles
 # Opciones para añadir canales
 _url_canales = {
                "rtve": ["rtve.es"],
-               "grupo_a3": ["antena3.com", "lasexta.com", "lasextadeportes.com", "lasextanoticias.com"],
+               "grupo_a3": ["antena3.com", "lasexta.com", "lasextadeportes.com", "lasextanoticias.com", "atresplayer.com"],
                "cuatro": ["cuatro.com"],
                "telecinco": ["telecinco.es", "divinity.es", "mitelekids.es"],
                "mitele": ["mitele.es"],

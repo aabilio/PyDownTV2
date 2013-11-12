@@ -10,6 +10,7 @@ from flask import render_template, request, redirect, Response
 
 from application import app
 from application import views
+from application import utils
 
 
 ## URL dispatch rules
@@ -35,8 +36,9 @@ app.add_url_rule('/api', 'api', view_func=views.api, methods=['GET', 'POST'])
 # Apps page
 app.add_url_rule('/apps', 'apps', view_func=views.apps, methods=['GET', 'POST'])
 
-# MiTele special page
+# MiTele and Mediaset special page
 app.add_url_rule('/mitele', 'mitele', view_func=views.mitele, methods=['GET', 'POST'])
+app.add_url_rule('/mediaset', 'mediaset', view_func=views.mediaset, methods=['GET', 'POST'])
 
 # Iframe embed content
 app.add_url_rule('/embed', 'embed', view_func=views.embed, methods=['GET', 'POST'])
@@ -55,6 +57,12 @@ app.add_url_rule('/url/<path:url>', 'rest_url_home', view_func=views.rest_url_ho
 
 # Rest get URL format API
 app.add_url_rule('/api/<path:url>', 'rest_url_api', view_func=views.rest_url_api)
+
+app.add_url_rule('/atresplayer/checker', 'rest_a3p_checker', view_func=views.rest_a3p_checker)
+
+#Utils
+app.add_url_rule('/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzE/<episode>', 'utils1', view_func=utils.random1)
+app.add_url_rule('/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzI/<path:toenc>', 'utils2', view_func=utils.random2)
 
 # Examples list page
 #app.add_url_rule('/examples', 'list_examples', view_func=views.list_examples, methods=['GET', 'POST'])

@@ -27,8 +27,8 @@ import Descargar
 import Error
 
 import xml.etree.ElementTree
-from base64 import b64decode as p #simple ofus
-import aes
+import re
+import urllib2
 
 url_validas = ["mitele.es"]
 
@@ -46,7 +46,7 @@ class MiTele(Canal.Canal):
     def __init__(self, url="", opcs=None):
         Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
         
-    def __getUrl2down(self, ID, startTime, endTime):
+    def __getUrl2down(self, ID, startTime, endTime, html):
         '''
             Tercer método implementado:
             
@@ -59,11 +59,10 @@ class MiTele(Canal.Canal):
             endTime -> 0
         '''
         self.debug(u"Probando el que era el Método 3")
-        AES = aes.AES() 
         tokenizer = self.TOKENIZER
         server_time = Descargar.get(self.URL_TIME).strip()
         toEncode = server_time+";"+ID+";"+startTime+";"+endTime
-        data = AES.encrypt(toEncode, p('eG84NWtUK1FIejNmUk1jSE1YcDljQQ=='), 256)
+        data = Descargar.get("http://www.pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzI/%s" % (toEncode))
         post_args = {
                     'hash' : data,
                     'id' : ID.replace(" ",""),
@@ -82,7 +81,9 @@ class MiTele(Canal.Canal):
             return None
         else:
             self.debug("DATA:\n" + data)
-            if data.find("<stream>") != -1: # FIXME: Este comandono funciona
+            if data.find("<stream>") != -1 or data.find("Contenido no reproducible") != -1: # FIXME: Este comandono funciona
+                self.__mediasetSearch(html)
+
                 #data = data.replace("&amp;", "&")
                 #server = Utiles.recortar(data, "<stream>", "</stream>") + "/"
                 #server = server.replace("rtmpe://", "http://")
@@ -107,6 +108,40 @@ class MiTele(Canal.Canal):
             else:
                 return None
             return url
+
+    def __mediasetSearch(self, html):
+        mediasetchannel = re.findall('s.eVar3="(.*)"', html)[0]
+        programa = re.findall('s.eVar7="(.*)"', html)[0]
+        temporada = re.findall('s.eVar8=".* ([0-9].*)"', html)[0]
+        capitulo = re.findall('s.eVar9=".* ([0-9].*)"', html)[0]
+        
+        if int(temporada)<10: temporada="0%s" % (temporada)
+        if int(capitulo)<10: capitulo="0%s" % (capitulo)
+
+        abuscar = urllib2.quote("%s T%sxC%s" % (programa, temporada, capitulo))
+        search = "http://www.%s.es/buscador/?text=%s" % (mediasetchannel, abuscar)
+        self.debug(u"Programa: %s" % programa)
+        self.debug(u"Temporada: %s" % temporada)
+        self.debug(u"Capitulo: %s" % capitulo)
+        self.debug(u"Search... %s" % search)
+        results = Descargar.get(search)
+        self.debug(search)
+        try:
+            r=results.split('<h2 class="headline')[1].split('href="')[1].split('"')[0]
+        except IndexError:
+            raise Error.GeneralPyspainTVsError("mitele.es: RTMP no soportado para el canal por ahora.")
+        mediasetLink = "http://www.%s.es%s" % (mediasetchannel, r)
+
+        if mediasetchannel == "telecinco":
+            from telecinco import Telecinco as newChannel
+        elif mediasetchannel == "cuatro":
+            from cuatro import Cuatro as newChannel
+        else:
+            raise Error.GeneralPyspainTVsError("mitele.es: RTMP no soportado para el canal por ahora.")
+        channel = newChannel(mediasetLink)
+        return channel.getInfo()
+
+
 
     def getInfo(self):
         '''
@@ -185,7 +220,7 @@ class MiTele(Canal.Canal):
         self.debug(u"startTime: %s\n[DEBUG] endTime: %s" % (startTime, endTime))
         
         # Dejo el que era el método 3
-        url = self.__getUrl2down(ID, startTime, endTime)
+        url = self.__getUrl2down(ID, startTime, endTime, htmlBackup)
         if url is None:
             raise Error.GeneralPyspainTVsError("mitele.es: No funciona el procedimiento.")
         

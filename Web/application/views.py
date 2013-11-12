@@ -69,7 +69,7 @@ class Canales(object):
     
     def isGrupoAntena3(self):
         '''return True si la URL pertenece al Grupo de Antena 3'''
-        urls = ["antena3.com", "lasexta.com", "lasextadeportes.com", "lasextanoticias.com"]
+        urls = ["antena3.com", "lasexta.com", "lasextadeportes.com", "lasextanoticias.com", "atresplayer.com"]
         for url in urls:
             if self._url.find(url) != -1: return True
         return False
@@ -353,7 +353,7 @@ def home(urlOrig=None):
     except Exception, e:
         #flash(unicode(e.__str__()))
         #return redirect(url_for('home'))
-        flash(u"ERROR al recuperar el vídeo. ¿Es una URL válida?")
+        flash(u"ERROR al recuperar el vídeo. ¿Es una URL válida? %s" % e.__str__())
         return redirect(url_for('home'))
         #return render_template("api.html", messages=ErrorDesconocido)
     
@@ -557,7 +557,7 @@ def api(urlOrig=None):
     #END - RTPA
     ## END - CASOS ESPECIALES 
     
-    
+    urlOrig = urlOrig.replace(" ", "%20") # TODO: use other tec
     
     #opcs = _default_opcs
     #if request.method == "GET":
@@ -668,6 +668,29 @@ def mitele(urlOrig=None):  #Ahora ya no se pasa por aquí
     #except:
     #    flash(u"Se ha producido un error al localizar el vídeo.\nEste error no se debería de haber producido.\nPuedes volver a intentar a descargar el vídeo.")
     #    return redirect(url_for('home'))
+
+def mediaset(urlOrig=None):
+    '''Función especial para mediaset'''
+    opcs = _default_opcs
+    if urlOrig is None:
+        if request.method == "GET": # La URL se pasa por parámetro http://web.pydowntv.com/?url=""
+            try:
+                urlOrig = request.args['urlOrig']
+            except:
+                return render_template('ayuda.html')
+        else:
+            urlOrig = request.form['urlOrig']
+    try:
+        if urlOrig.find('cuatro.com/') != -1:
+            response = redirect(cuatro.Cuatro(urlOrig, opcs).getInfo()['videos'][0]['url_video'][0])
+        else:
+            response = redirect(telecinco.Telecinco(urlOrig, opcs).getInfo()['videos'][0]['url_video'][0])
+        #response.headers['User-Agent'] = "Mozilla/5.0 (Linux; U; Android 2.3.5; en-us; HTC Vision Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"
+        return response
+    except:
+        flash(u"Se ha producido un error al localizar el vídeo.\nEste error no se debería de haber producido.\nPuedes volver a intentar a descargar el vídeo.")
+        return redirect(url_for('home'))
+
     
 
 def embed(urlOrig=None):
@@ -772,6 +795,23 @@ def embed(urlOrig=None):
                            jdownloader=jdownloader,
                            last=last
                            )
+
+import requests
+def rest_a3p_checker():
+    url = request.args['url'] if request.args.has_key('url') else "http://fsmkjlkjkldfsdf.com"
+    r = requests.head(url, allow_redirects=True)
+    if r.url == "http://desprogresiva.antena3.com/mp_series1/util/video_decep.mp4":
+        info = {"url": r.url,"statuscode": 404}
+    else:
+        info = {"url": r.url,"statuscode": unicode(r.status_code) or "404"}
+    js = json.dumps(info)
+
+    if request.args.has_key("jsoncallback"):
+        return request.args["jsoncallback"] + "(" + js + ");"
+    else:
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp 
+    #return unicode(requests.head(url).status_code) or "404"
     
 def ayuda():
     return render_template("ayuda.html")
