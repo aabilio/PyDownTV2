@@ -385,6 +385,8 @@ class GrupoA3(Canal.Canal):
 
     def __getApiMobileUrl(self, episode):
         return Descargar.get("http://www.pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzE/%s" % (episode))
+    def __getApiMobileUrl2(self, episode):
+        return Descargar.get("http://www.pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzM/%s" % (episode))
 
     def atresplayer_mobile(self):
         #stream = self.__get(self.url)
@@ -393,17 +395,29 @@ class GrupoA3(Canal.Canal):
         header = {"Accept":"application/json"}
         j = json.loads(Descargar.getHtmlHeaders("http://servicios.atresplayer.com/episode/get?episodePk="+episode, header=header))
 
-        url = Utiles.url_fix(self.__getApiMobileUrl(episode).replace("https://", "http://"))
-        self.debug(unicode(url))
-        #jj = json.loads(self.__get(Utiles.url_fix(url)))
-        jj = json.loads(Descargar.get(Utiles.url_fix(url)))
-        try:
-            url2down = jj['resultObject']['es']
-        except:
-            raise Error.GeneralPyspainTVsError(unicode(jj['resultDes']))
+        if j['type'] == "REGISTER":
+            url = Utiles.url_fix(self.__getApiMobileUrl2(episode))
+            #self.debug(unicode(url))
+            #jj = json.loads(Descargar.getHtmlHeaders(Utiles.url_fix(url)))
+            try:
+                #url2down = jj['resultDes']
+                url2down = url
+            except:
+                raise Error.GeneralPyspainTVsError(unicode(jj['resultDes']))
+        else:
+            url = Utiles.url_fix(self.__getApiMobileUrl(episode).replace("https://", "http://"))
+            self.debug(unicode(url))
+            #jj = json.loads(self.__get(Utiles.url_fix(url)))
+            jj = json.loads(Descargar.get(Utiles.url_fix(url)))
+            try:
+                url2down = jj['resultObject']['es']
+            except:
+                raise Error.GeneralPyspainTVsError(unicode(jj['resultDes']))
 
-        if url2down is None:
-            raise Error.GeneralPyspainTVsError(u"[Atresplayer] No se han podido obtener enlaces para URL proporcionada")
+            if url2down is None:
+                raise Error.GeneralPyspainTVsError(u"[Atresplayer] No se han podido obtener enlaces para URL proporcionada")
+
+            
 
         title = u"%s %s".encode('utf-8') % (j['titleSection'].encode('utf-8'), j['titleDetail'].encode('utf-8'))
         desc = unicode(j['seoDescription']).encode('utf-8')

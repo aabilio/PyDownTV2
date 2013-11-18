@@ -188,16 +188,48 @@
 								</script>
 							{% endif %}
 						{% elif urlOrig.find("atresplayer.com/") != -1 %}
-							<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: -->
-								<a class="checker_input" href="{{ parte }}" ind="{{ loop.index0 }}"style="display: inline-block; text-decoration: underline;">
-									<h5>{{ tit }}</h5>
-								</a>
-								<!--<div class="checker_output" style="display: inline-block;" alt="{{ parte }}">
-									<div class="a3loading" style="display:inline-block;">
-										<img src="/static/img/loading2.gif" alt="" />
-									</div>
-								</div>-->
-							</li>
+							{% if parte.find("/api/") != -1 %}
+								<li id="a3apili" class="text bold color theme" style="color: #ee6557;">
+									<a class="button" id="a3apia" href="#">Obtener Enlace</a>
+								</li>
+								<li id="a3apilio" class="text bold color theme" style="color: #ee6557; display:none;">
+									<a class="checker_input" href="#" ind="{{ loop.index0 }}"style="display: inline-block; text-decoration: underline;">
+										<h5>{{ tit }}</h5>
+									</a>
+								</li>
+								<script>
+									$('#a3apia').click(function(){
+										$.ajax({
+										    type: "GET",
+										    url: "{{ parte }}",
+										    async: false,
+										    crossDomain: true,
+										    data: "blabla",
+										    dataType: "jsonp",
+										    success: function(data) {
+										        if(data != null) {
+										        	$('#a3apilio a').attr("href", data.resultDes);
+										        	$('#a3apili').fadeOut();
+										        	$('#a3apilio').fadeIn();
+										        } else {
+										        	alert("No se ha podido obtener el enlace al vídeo");
+										        }
+										    }
+										});
+									});
+								</script>
+							{% else %}
+								<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: -->
+									<a class="checker_input" href="{{ parte }}" ind="{{ loop.index0 }}"style="display: inline-block; text-decoration: underline;">
+										<h5>{{ tit }}</h5>
+									</a>
+									<!--<div class="checker_output" style="display: inline-block;" alt="{{ parte }}">
+										<div class="a3loading" style="display:inline-block;">
+											<img src="/static/img/loading2.gif" alt="" />
+										</div>
+									</div>-->
+								</li>
+							{% endif %}
 						{% else %}
 							<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a  href="{{ parte }}" style="text-decoration: underline;"><h5>{{ tit }}</h5></a></li>
 						{% endif %}

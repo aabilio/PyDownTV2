@@ -62,7 +62,10 @@ app.add_url_rule('/atresplayer/checker', 'rest_a3p_checker', view_func=views.res
 
 #Utils
 app.add_url_rule('/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzE/<episode>', 'utils1', view_func=utils.random1)
+app.add_url_rule('/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzM/<episode>', 'utils3', view_func=utils.random3)
 app.add_url_rule('/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzI/<path:toenc>', 'utils2', view_func=utils.random2)
+
+
 
 # Examples list page
 #app.add_url_rule('/examples', 'list_examples', view_func=views.list_examples, methods=['GET', 'POST'])
