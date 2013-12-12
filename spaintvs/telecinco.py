@@ -166,7 +166,7 @@ class Telecinco(Canal.Canal):
                 try: vid['filename'] = Utiles.formatearNombre(info['nielsen']['title']+'.mp4')
                 except: vid['filename'] = 'VideosDeTelecinco.mp4'
                 ret['videos'].append(vid)
-                ret['titulos'].append(unicode(info['nielsen']['title']).encode('utf8'))
+                ret['titulos'].append(unicode(info['nielsen']['title']).encode('utf8').replace('"','').replace("'",""))
                 ret['descs'].append(u'Cat.: %s. Subcat.: %s. %s'.encode('utf8') % (info['nielsen']['category'].encode('utf8'),info['nielsen']['subcategory'].encode('utf8'),info['nielsen']['title'].encode('utf8')))
             return ret      
         else:
@@ -185,6 +185,9 @@ class Telecinco(Canal.Canal):
         except:
             desc = tit_vid if tit_vid is not None else None
         
+        #TIT FIX:
+        tit_vid = tit_vid.replace('"','').replace("'","")
+
         return {"exito" : True,
                 "num_videos" : 1,
                 "mensaje"   : u"URL obtenido correctamente",
