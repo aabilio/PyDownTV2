@@ -29,7 +29,9 @@ import Error
 from pyamf import remoting
 import httplib
 
-url_validas = ["eitb.tv"]
+import re
+
+url_validas = ["eitb.tv", "eitb.com"]
 
 class EITB(Canal.Canal):
     '''
@@ -113,6 +115,9 @@ class EITB(Canal.Canal):
         '''
         
         html = Descargar.get(self.url)
+
+        if self.url.find("eitb.com/") != -1:
+            raise Error.GeneralPyspainTVsError(u".com de EITB no está de momento soportado por pydowntv")
         
         #TODO: Incluír este soporte para mp3
         if self.url.find("audios/") != -1 or self.url.find("audioak/") != -1:
@@ -188,12 +193,18 @@ class EITB(Canal.Canal):
                     url = str(vid['defaultURL'])
                     #tcurl = url.replace("/&mp4:"+url.split("/&mp4:")[1].split(".mp4")[0]+".mp4", "")
                     pageurl = self.url
+                    typem = "rtmp"
                     if url.find("edgefcs.net") != -1: #NUEVO edgefcs de AKAMAI (thanks to http://blog.tvalacarta.info/)
                         app = "ondemand?"+ url.split(".mp4?")[1]+"&videoId="+videoID+"&lineUpId=&pubId="+publisherID+"&playerId="+playerID
                         playpath = "mp4:"+url.split("mp4:")[1]+"&videoId="+videoID
                         swfurl = "http://admin.brightcove.com/viewer/us20121213.1025/federatedVideoUI/BrightcovePlayer.swf?uid=1355746343102"
                         rtmpd_cmd = "rtmpdump --rtmp '"+url+"' --app='"+app+"' --swfUrl='"+swfurl+"' --playpath='"+playpath+"' --pageUrl='"+pageurl+"' -o '"+name+"'"
                         msg = u"Nuevos comandos gracias a Jesús de <a href=\"http://blog.tvalacarta.info/\">TV a Carta</a>".encode('utf8')
+                        #Convertir a HTTP, paso intermedio (thanks @denobis)
+                        try: change = re.findall("rtmp://.*\&mp4:", url)[0]
+                        except: change = "#####"
+                        url = url.replace(change, "http://brightcove04.brightcove.com/")
+                        if url.startswith("http://"): typem = "http"
                     else: #Antiguo: brightcove, hay más?
                         app = url.split("/&")[0].split(".net/")[1]  +"?videoId="+videoID+"&lineUpId=&pubId="+publisherID+"&playerId="+playerID
                         playpath = "mp4:"+url.split("mp4:")[1].split(".mp4")[0]+".mp4"+"?videoId="+videoID+"&lineUpId=&pubId="+publisherID+"&playerId="+playerID
@@ -209,7 +220,7 @@ class EITB(Canal.Canal):
                             "url_video" : [url],
                             "url_img"   : img if img is not None else None,
                             "filename"  : [name] if name is not None else None,
-                            "tipo"      : "rtmp",
+                            "tipo"      : typem,
                             "partes"    : 1,
                             "rtmpd_cmd" : [rtmpd_cmd],
                             "menco_cmd" : None,

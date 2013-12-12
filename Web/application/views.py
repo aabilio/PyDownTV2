@@ -145,7 +145,7 @@ class Canales(object):
     
     def isEITB(self):
         '''return True si la URL pertenece a EITB'''
-        urls = ["eitb.tv"]
+        urls = ["eitb.tv", "eitb.com"]
         for url in urls:
             if self._url.find(url) != -1: return True
         return False

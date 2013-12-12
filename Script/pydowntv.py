@@ -44,7 +44,7 @@ _url_canales = {
                "canalextremadura": ["canalextremadura.es"],
                "mtv": ["mtv.es", "mtv.com"],
                "telemadrid": ["telemadrid.es"],
-               "eitb": ["eitb.tv"],
+               "eitb": ["eitb.tv", "eitb.com"],
                "rtvcyl": ["rtvcyl.es"],
                "rtvcm": ["rtvcm.es"],
                "tv3": ["tv3.cat", "3cat24.cat", "324.cat", "3xl.cat", "catradio.cat", "esport3.cat", "8tv.cat"],
