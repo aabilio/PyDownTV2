@@ -122,6 +122,7 @@ def argsparse():
                       help="Mostrar info de debug")
     parser.add_option("-p", "--partes", dest="partes", help="-p 1,2,3")
     parser.add_option("-F", "--formula1", dest="formula1", help="V, S, c, P, C")
+    parser.add_option("-N", "--nombre", dest="user_filename", help="-N ficheroDestino.mp4")
     return parser.parse_args()
         
 # def comprobar_version():
@@ -166,7 +167,8 @@ if __name__ == "__main__":
             "log": options.silent if options.silent is not None else True,
             "debug": options.debug if options.debug is not None else False,
             "partes": [int(p) for p in options.partes.split(",")] if options.partes is not None else None,
-            "formula1": options.formula1 if options.formula1 is not None else None
+            "formula1": options.formula1 if options.formula1 is not None else None,
+            "user_filename": str(options.user_filename) if options.user_filename is not None else None
             }
     ####
 
@@ -226,9 +228,14 @@ if __name__ == "__main__":
                     if info["num_videos"] == 1:
                         for video in info["videos"]: # for, aunque solo debería de haber un vídeo
                             for indice_parte in range(video["partes"]): # Las partes se pasan por parámetro, sino TODO!
+                                try:
+                                    if opcs["user_filename"]:
+                                        opcs["user_filename"] = "part_"+str(indice_parte)+"_"+opcs["user_filename"]
+                                except:
+                                    opcs["user_filename"] = None
                                 d = uiDescargar.Descargar(
                                                           video["url_video"][indice_parte],
-                                                          video["filename"][indice_parte],
+                                                          opcs["user_filename"] or video["filename"][indice_parte],
                                                           video["tipo"],
                                                           video["rtmpd_cmd"][indice_parte] if video["rtmpd_cmd"] is not None else None,
                                                           video["menco_cmd"][indice_parte] if video["menco_cmd"] is not None else None,
@@ -242,16 +249,28 @@ if __name__ == "__main__":
                     else:
                         # TODO: Decidir qué hacer con los vídeo aquí (descargar, preguntar cuál,...) y luego las partes de cada uno
                         # De momento descargar todos:
+                        indice_video = 0
                         for video in info["videos"]:
+                            try:
+                                if opcs["user_filename"]:
+                                    opcs["user_filename"] = "vid_"+str(indice_video)+"_"+opcs["user_filename"]
+                            except:
+                                opcs["user_filename"] = None
                             for indice_parte in range(video["partes"]):
+                                try:
+                                    if opcs["user_filename"]:
+                                        opcs["user_filename"] = "part_"+str(indice_parte)+"_"+opcs["user_filename"]
+                                except:
+                                    opcs["user_filename"] = None
                                 d = uiDescargar.Descargar(
                                                           video["url_video"][indice_parte],
-                                                          video["filename"][indice_parte],
+                                                          opcs["user_filename"] or video["filename"][indice_parte],
                                                           video["tipo"],
                                                           video["rtmpd_cmd"][indice_parte] if video["rtmpd_cmd"] is not None else None,
                                                           video["menco_cmd"][indice_parte] if video["menco_cmd"] is not None else None,
                                                           )
                                 d.descargarVideo()
+                            indice_video += 1
             else: ## NO éxito
                 uiUtiles.salir(u"[ERROR] No se ha encontrado el vídeo buscado")
 

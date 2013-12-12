@@ -150,7 +150,7 @@ class Telecinco(Canal.Canal):
                 vid = {
                 "url_video" : None,
                 "url_img"   : None,
-                "filename"  : None,
+                "filename"  : [],
                 "tipo"      : "http",
                 "partes"    : 1,
                 "rtmpd_cmd" : None,
@@ -163,8 +163,8 @@ class Telecinco(Canal.Canal):
                 info = json.loads(stream[1:-1])
                 vid['url_video'] = [info['sources'][0]['src']]
                 vid['url_img'] = info['poster']
-                try: vid['filename'] = Utiles.formatearNombre(info['nielsen']['title']+'.mp4')
-                except: vid['filename'] = 'VideosDeTelecinco.mp4'
+                try: vid['filename'].append(Utiles.formatearNombre(info['nielsen']['title']+'.mp4'))
+                except: vid['filename'].append('VideosDeTelecinco.mp4')
                 ret['videos'].append(vid)
                 ret['titulos'].append(unicode(info['nielsen']['title']).encode('utf8').replace('"','').replace("'",""))
                 ret['descs'].append(u'Cat.: %s. Subcat.: %s. %s'.encode('utf8') % (info['nielsen']['category'].encode('utf8'),info['nielsen']['subcategory'].encode('utf8'),info['nielsen']['title'].encode('utf8')))
