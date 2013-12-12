@@ -82,7 +82,23 @@ class ABC(Canal.Canal):
         response = conn.getresponse().read()
         response = remoting.decode(response).bodies[0][1].body
         return response
-    
+
+    def __getBestQ(self, urls):
+        qn = [re.findall(".*/.*_(.*)_.*\.mp4",url)[0] for url in urls]
+        return urls[qn.index(max(qn))]
+        
+
+    def __newABC(self, html):
+        video_html = re.findall('<div id="video_abc_(.*)loadVideoABC',html, re.S)[0] #TODO: HTML parser
+        medio = re.findall('var.*SITIO.*=.*"(.*)";', video_html)[0]
+        idVideo = re.findall('var.*RUTA_VIDEO.*=.*"(.*)";', video_html)[0]
+        idDivVideo = "videot_%s" % idVideo
+        linkURLVideo = self.url
+        origenVideo = re.findall('var.*ORIGEN.*=.*"(.*)";', video_html)[0]
+        modGenUrl = "http://modulos-mm.abc.es/includes/manuales/videos/php/proxyModgen.php?modoExtendido=player&idModulo=ABC_playerVideo&medio=%s&idDivVideo=%s&idVideo=%s&linkURLVideo=%s&origenVideo=%s" % (medio,idDivVideo,idVideo,linkURLVideo,origenVideo)
+        self.debug(modGenUrl)
+
+
     def getInfo(self):
         '''
             Devuelve toda la información asociada a la URL recibida, de la siguiente forma:
@@ -118,6 +134,9 @@ class ABC(Canal.Canal):
         '''
         
         html = Descargar.get(self.url)
+
+        #Método 4DIC2013: #TODO: Acabar esto
+        #return self.__newABC(html)
 
         #Por ahora solo soportados para brightcove:
         if not re.findall("ORIGEN[ \=\"\']*([a-zA-Z]*)[ \"\']*;", html)[0] == "bc":
@@ -178,6 +197,12 @@ class ABC(Canal.Canal):
         #url = "/".join(img.split("/")[:3])+"/"+"/".join(url.split("/")[3:])
         rtmpd_cmd = "rtmpdump -r '"+url.replace("&mp4:","mp4/")+"' -o '"+name+"'"
 
+        #Convertir a HTTP, paso intermedio de método: #Método 4DIC2013
+        try: change = re.findall("rtmp://.*videos/" ,url)[0]
+        except: change = "#####"
+        url = url.replace(change, "http://comeresa.uds.ak.o.brightcove.com/")
+        if url.startswith("http://"): typem = "http"
+        else: typem = "rtmp"
         
         return {"exito" : True,
                 "num_videos" : 1,
@@ -186,7 +211,7 @@ class ABC(Canal.Canal):
                         "url_video" : [url.replace("&mp4:","mp4/")],
                         "url_img"   : img if img is not None else None,
                         "filename"  : [name] if name is not None else None,
-                        "tipo"      : "rtmp",
+                        "tipo"      : typem,
                         "partes"    : 1,
                         "rtmpd_cmd" : [rtmpd_cmd],
                         "menco_cmd" : None,

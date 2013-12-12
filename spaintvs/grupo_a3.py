@@ -404,6 +404,12 @@ class GrupoA3(Canal.Canal):
                 url2down = url
             except:
                 raise Error.GeneralPyspainTVsError(unicode(jj['resultDes']))
+        elif j['type'] == "FREE": # TEMP FIX
+            url = Utiles.url_fix(self.__getApiMobileUrl2(episode))
+            try:
+                url2down = url
+            except:
+                raise Error.GeneralPyspainTVsError(unicode(jj['resultDes']))
         else:
             url = Utiles.url_fix(self.__getApiMobileUrl(episode).replace("https://", "http://"))
             self.debug(unicode(url))
