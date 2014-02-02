@@ -16,6 +16,7 @@ from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 
 from flask import render_template, flash, url_for, redirect, Response, json, request, g
 from settings import DOS_IPS as dosIPs
+from application import utils
 
 #from models import ExampleModel
 #from decorators import login_required, admin_required
@@ -558,6 +559,10 @@ def api(urlOrig=None):
     ## END - CASOS ESPECIALES 
     
     urlOrig = urlOrig.replace(" ", "%20") # TODO: use other tec
+
+    # Track API:
+    utils.sendAPICall2Analytics(request.remote_addr, "/api/url/"+urlOrig)
+
     
     #opcs = _default_opcs
     #if request.method == "GET":

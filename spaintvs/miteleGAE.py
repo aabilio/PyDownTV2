@@ -28,6 +28,7 @@ import Error
 
 import xml.etree.ElementTree
 import re
+import urllib2
 
 url_validas = ["mitele.es"]
 
@@ -37,14 +38,18 @@ class MiTele(Canal.Canal):
     '''
     
     #URL_TIME  = "http://www.mitele.es/media/clock.php"
-    URL_TIME = "http://servicios.telecinco.es/tokenizer/clock.php"
+    #URL_TIME = "http://servicios.telecinco.es/tokenizer/clock.php"
+    URL_TIME = "http://token.mitele.es/clock.php"
+    
     #TOKENIZER = "/tokenizer/tk3.php"
-    TOKENIZER = "/index.php"
-    URL_POST = "token.mitele.es"
+    TOKENIZER = "/"
+    
+    #URL_POST = "token.mitele.es"
+    URL_POST = "servicios.telecinco.es/tokenizer/tkjs.php"
     
     def __init__(self, url="", opcs=None):
         Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
-        
+
     def __getUrl2down(self, ID, startTime, endTime, html):
         '''
             Tercer método implementado:
@@ -59,30 +64,63 @@ class MiTele(Canal.Canal):
         '''
         self.debug(u"Probando el que era el Método 3")
         tokenizer = self.TOKENIZER
+        header = {
+            "Referer": "http://www.mitele.es/series-online/aida/temporada-10/capitulo-219/",
+            "Accept": "*/*",
+            "Accept-Language": "es,en;q=0.8",
+            "Connection": "keep-alive",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36",
+            "Host": "token.mitele.es"
+        }
         server_time = Descargar.get(self.URL_TIME).strip()
-        toEncode = server_time+";"+ID+";"+startTime+";"+endTime
+
+        toEncode = (server_time+";"+ID+";"+startTime+";"+endTime).replace(" ", "")
+        self.debug("[DEBUG] server_time: %s" % server_time)
+        self.debug(u"[DEBUG] toEncode: %s" % toEncode)
+        self.debug(u"[DEBUG] Util URL: http://www.pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzI/%s" % (toEncode))
+
         data = Descargar.get("http://www.pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzI/%s" % (toEncode))
+        
+        # Datos actuales para el get
+        get_args = data+"&id="+ID.replace(" ","")+"&startTime=0&endTime=0";
+        # Datos antiguos para el POST
         post_args = {
                     'hash' : data,
                     'id' : ID.replace(" ",""),
                     'startTime' : '0',
                     'endTime': '0'
                     }
+
         self.debug(u"Token: %s" % post_args)
         
         try:
-            #data = Descargar.doPOST(self.URL_POST, tokenizer, post_args, doseq=True)
-            data = Descargar.doPOST("aabilio.hl161.dinaserver.com", "/pydowntv/mitele2.php", post_args, doseq=True)
+            header = {
+                "Referer": "http://static1.tele-cinco.net/comun/swf/playerMitele.swf",
+                "Accept": "*/*",
+                "Origin": "http://static1.tele-cinco.net",
+                "Connection": "keep-alive",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36", 
+                "Accept-Language": "de,en;q=0.7,en-us;q=0.3", 
+                "Content-type": "application/x-www-form-urlencoded",
+                "Cookie": "s_cc=true;s_fid=7B0AC1148C6D6D16-0521A69344CCF613;s_ppv="+self.url+",49,49,1186;s_sq=[[B]];"
+            }
+            # Método antiguo, ahora utilizamos GET (guardamos POST para descubrir enlaces de mitele)
+            #data = Descargar.doPOST("pydowntv.pydowntv.com", "/pydowntv/mitele2.php", post_args, doseq=True)
+            
+            # Devuelve enlaces de Telecinco
+            #data = Descargar.get("http://token.mitele.es?hash="+get_args, withHeader=True, header=header)
+            data = Descargar.get("http://pydowntv.pydowntv.com/pydowntv/mitele3.php?url=%s&referer=%s" % (urllib2.quote("http://token.mitele.es?hash="+get_args), urllib2.quote(self.url)))
+
         except Exception, e:
             raise Error.GeneralPyspainTVsError("mitele.es: Error en Tokenizer: "+e.__str__())
 
         if data is None:
             return None
         else:
-            self.debug("DATA:\n" + data)
+            self.debug("[DEBUG] DATA:\n" + data)
             if data.find("<stream>") != -1 or data.find("Contenido no reproducible") != -1: # FIXME: Este comandono funciona
                 self.__mediasetSearch(html)
-                
+
                 #data = data.replace("&amp;", "&")
                 #server = Utiles.recortar(data, "<stream>", "</stream>") + "/"
                 #server = server.replace("rtmpe://", "http://")
@@ -102,9 +140,10 @@ class MiTele(Canal.Canal):
                     url = data.split("<url><file>")[1].split("</file></url>")[0].replace("&amp;", "&").replace(" ", "")
                 except IndexError:
                     url = data.split("<file geoblocked=\"true\">")[1].split("</file></url>")[0].replace("&amp;", "&").replace(" ", "")
-            elif data.find("tokenizedUrl"):
+            elif data.find("tokenizedUrl") != -1:
                 url = data.split('"tokenizedUrl":"')[1].split('"')[0].replace(" ", "").replace("\/", "/")
             else:
+                print "no entiendo lo que pone"
                 return None
             return url
 
@@ -268,7 +307,7 @@ class MiTele(Canal.Canal):
                         "otros"     : None,
                         "mensaje"   : None
                         }],
-                "titulos": [tit_vid] if tit_vid is not None else None,
+                "titulos": [tit_vid.replace("'","")] if tit_vid is not None else None,
                 "descs": [desc] if desc is not None else None
                 }
         

@@ -163,7 +163,7 @@ class CExtremadura(Canal.Canal):
                 ext = "." + url.split(".")[-1]
                 name = html.split("<title>")[1].split("<")[0] + ext
             except:
-                Error.GeneralPyspainTVsError(u"No se ha podido acceder a ningún contenido")
+                raise Error.GeneralPyspainTVsError(u"No se ha podido acceder a ningún contenido")
             
         if name:
             name = Utiles.formatearNombre(name)

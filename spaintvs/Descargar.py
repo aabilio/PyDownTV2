@@ -175,7 +175,7 @@ def isReachable(url): # Retro compatibilidad con módulo de TVE
         return False
     
 
-def doPOST(url, path, post_args, doseq=True, headers=None):
+def doPOST(url, path, post_args, doseq=True, header=None):
     '''
         Recibe:
             - url (ejemplo.com)
@@ -204,7 +204,7 @@ def doPOST(url, path, post_args, doseq=True, headers=None):
                 "Connection": "close", 
                 "Accept-Language": "de,en;q=0.7,en-us;q=0.3", 
                 "Content-type": "application/x-www-form-urlencoded"
-                } if headers is None else headers
+                } if header is None else header
     conn = httplib.HTTPConnection(url, 80)
     conn.request("POST", path, Post, headers) 
     #conn.set_tunnel("80.58.250.68", 80, headers) # Opcional por si hace falta proxy español

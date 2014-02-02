@@ -137,7 +137,7 @@ class Telecinco(Canal.Canal):
             #rx=re.compile(r"MSV\.embedData\[(.*)\]", re.MULTILINE|re.DOTALL)
             rx=re.compile(r'/mdsvideo/popup\.html\?(.*)"')
             videos = rx.findall(streamHTML)
-            if not videos: Error.GeneralPyspainTVsError("Telecinco.es. No se encuentra contenido.")
+            if not videos: raise Error.GeneralPyspainTVsError("Telecinco.es. No se encuentra contenido.")
             ret =   {
                     "exito" : True,
                     "num_videos" : len(videos),
@@ -159,6 +159,7 @@ class Telecinco(Canal.Canal):
                 "otros"     : None,
                 "mensaje"   : None
                 }
+                self.debug(u"API ENDPOINT: %s" % self.URL_JSON + js + "&imageContentId=" + Utiles.recortar(js, 'contentId=', '&'))
                 stream = Descargar.getHtmlUtf8(self.URL_JSON + js + "&imageContentId=" + Utiles.recortar(js, 'contentId=', '&'))
                 info = json.loads(stream[1:-1])
                 vid['url_video'] = [info['sources'][0]['src']]
@@ -170,7 +171,7 @@ class Telecinco(Canal.Canal):
                 ret['descs'].append(u'Cat.: %s. Subcat.: %s. %s'.encode('utf8') % (info['nielsen']['category'].encode('utf8'),info['nielsen']['subcategory'].encode('utf8'),info['nielsen']['title'].encode('utf8')))
             return ret      
         else:
-            Error.GeneralPyspainTVsError("Telecinco.es. No se encuentra contenido.")
+            raise Error.GeneralPyspainTVsError("Telecinco.es. No se encuentra contenido.")
         
 
         tit_vid = None

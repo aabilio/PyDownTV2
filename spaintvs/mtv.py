@@ -38,7 +38,7 @@ class MTV(Canal.Canal):
     XML_URL = "http://www.mtv.es/services/scenic/feeds/get/mrss/"
     XML_URL_COM = "http://www.mtv.com/player/embed/AS3/rss/?uri="
     PROXY_LINFOX = "http://linfox.es/p/browse.php?u="
-    PROXY_AABILIO = "http://aabilio.hl161.dinaserver.com/p/browse.php?u="
+    PROXY_PYDOWNTV = "http://pydowntv.pydowntv.com/p/browse.php?u="
     
     def __init__(self, url="", opcs=None):
         Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
@@ -132,8 +132,8 @@ class MTV(Canal.Canal):
         url = "rtmp" + xml2.split("<src>rtmp")[-1].split("</src>")[0]
         if url.find("copyright_error.") != -1: # GEO bloqueado!
             logging.debug("GEO Bloqueado")
-            logging.debug(self.PROXY_AABILIO+xml.split("<media:content")[1].split("url=\"")[1].split("\"")[0])
-            xmlURL = self.PROXY_AABILIO+xml.split("<media:content")[1].split("url=\"")[1].split("\"")[0]
+            logging.debug(self.PROXY_LINFOX+xml.split("<media:content")[1].split("url=\"")[1].split("\"")[0])
+            xmlURL = self.PROXY_LINFOX+xml.split("<media:content")[1].split("url=\"")[1].split("\"")[0]
             xml2 = Descargar.get(xmlURL)
             logging.debug(xml2)
             url = "rtmp" + xml2.split("<src>rtmp")[-1].split("</src>")[0]
