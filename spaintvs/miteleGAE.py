@@ -118,23 +118,22 @@ class MiTele(Canal.Canal):
             return None
         else:
             self.debug("[DEBUG] DATA:\n" + data)
-            if data.find("<stream>") != -1 or data.find("Contenido no reproducible") != -1: # FIXME: Este comandono funciona
-                self.__mediasetSearch(html)
+            if data.find("<stream>") != -1 or data.find("Contenido no reproducible") != -1:
+                #self.__mediasetSearch(html) # DEPRECATED
 
-                #data = data.replace("&amp;", "&")
-                #server = Utiles.recortar(data, "<stream>", "</stream>") + "/"
-                #server = server.replace("rtmpe://", "http://")
-                #server = server.replace("rtmpe://streaminggeo.mitele.es/","http://videosgeo.mitele.es") +"/"
-                #play = Utiles.recortar(data, "mp4:", "</file>").replace("nvb", "vf").replace("nva","vu").replace("token", "h")
-                #return server + Utiles.recortar(data, "mp4:", "</file>") + "&start=0"
-                raise Error.GeneralPyspainTVsError("mitele.es: RTMP no soportado para el canal por ahora.")
-                #R = data.split("<stream>")[1].split("</stream>")[0]
-                #A = "\""+ "/".join(data.split("/")[4:]).split("</stream>")[0] +"\""
-                #F = "\""+ "WIN 11,1,102,55" +"\""
-                #W = "\""+ "http://static1.tele-cinco.net/comun/swf/playerMitele.swf" +"\""
-                #P = "\""+ self._URL_recibida +"\""
-                #Y = "\""+ "mp4:" + data.split("</file>")[0].split("mp4:")[1] +"\""
-                #url = [R, "-a", A, "-f", F, "-W", W, "-p", P, "-y", Y]
+                newData = Descargar.get("http://www.pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzI/%s?method=a" % (toEncode))
+                #rtmpinfo = Descargar.doPOST(self.URL_POST, tokenizer, {'hash':newData}, doseq=True)
+                rtmpinfo = Descargar.doPOST("pydowntv.pydowntv.com", "/pydowntv/mitele2.php", {'hash':newData}, doseq=True)
+                self.debug("NEW DATA:\n" + rtmpinfo)
+
+                rtmpinfo = rtmpinfo.replace("&amp;", "&")
+                rtmp_r   = "\""+ re.findall("\<stream\>(.*?)\<\/stream\>",rtmpinfo)[0]+"/" +"\""
+                rtmp_y   = "\""+ re.findall("\<file.*>(.*?)\<\/file\>",rtmpinfo)[0] +"\""
+                rtmp_a   = "\""+ rtmp_r.split("/")[-2] + "?" + rtmp_y.split("?")[1] #+"\""
+                rtmp_u   = "\""+ rtmp_y.split("?")[1] #+"\""
+                rtmp_s   = "\""+ 'http://static1.tele-cinco.net/comun/swf/playerMitele.swf' +"\""
+
+                url = [rtmp_r, "-y", rtmp_y, "-a", rtmp_a, "-u", rtmp_u, "-s", rtmp_s]
             elif data.find("file") != -1:
                 try:
                     url = data.split("<url><file>")[1].split("</file></url>")[0].replace("&amp;", "&").replace(" ", "")
@@ -291,6 +290,14 @@ class MiTele(Canal.Canal):
             #desc = Utiles.descriptionFormat(Utiles.recortar(htmlBackup, "\"post_content\":\"", "\"").strip())
         except:
             desc = tit_vid if tit_vid is not None else None
+
+        if type(url) is list: # Comando RTMP
+            _type = "rtmp"
+            rtmpd_cmd = "rtmpdump -r " + " ".join(url) + " -o \"" + name + "\""
+            url = "rtmp"+rtmpd_cmd.split("rtmp")[2].split('"')[0]
+        else:
+            rtmpd_cmd = None
+            _type = "http"
             
         return {"exito" : True,
                 "num_videos" : 1,
@@ -299,9 +306,9 @@ class MiTele(Canal.Canal):
                         "url_video" : [url],
                         "url_img"   : img if img is not None else None,
                         "filename"  : [name] if name is not None else None,
-                        "tipo"      : "http",
+                        "tipo"      : _type,
                         "partes"    : 1,
-                        "rtmpd_cmd" : None,
+                        "rtmpd_cmd" : [rtmpd_cmd] if rtmpd_cmd is not None else None,
                         "menco_cmd" : None,
                         "url_publi" : None,
                         "otros"     : None,
