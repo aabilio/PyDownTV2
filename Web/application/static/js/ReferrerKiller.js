@@ -113,7 +113,7 @@ var ReferrerKiller = (function () {
 		id = '__referrer_killer_' + (new Date).getTime() + Math.floor(Math.random()*9999);
 		/*-- Returning html with the hack wrapper --*/
 		return '<iframe \
-				style="border 1px solid #ff0000" \
+				style="border 1px solid #ff0000; width: 100%;" \
 				scrolling="no" \
 				frameborder="no" \
 				allowtransparency="true" ' +
@@ -125,7 +125,7 @@ var ReferrerKiller = (function () {
 			<html>\
 			<head>\
 			<meta charset=\\\'utf-8\\\'>\
-			<style>*{margin:0;padding:0;border:0;}</style>\
+			<style>*{margin:0;padding:0;border:0;} body .bck.color a, body .bck.dark a {color: #FFF;}</style>\
 			</head>' +
 			/*-- Function to adapt iframe's size to content's size --*/
 			'<script>\
@@ -153,10 +153,10 @@ var ReferrerKiller = (function () {
 					ifr.width  = width;\
 				}\
 			</script>' +
-			'<body onload=\\\'resizeWindow()\\\'>\' + decodeURIComponent(\'' +
+			'<body style=\\\'background-color: inherit;\\\'>\' + decodeURIComponent(\'' +
 			/*-- Content --*/
 			encodeURIComponent(html) +
-		'\') +\'</body></html>\'"></iframe>';
+		'\') +\'<script>window.onload = resizeWindow</script></body></html>\'"></iframe>';
 	}
 
 	/*-- Public interface --*/
@@ -188,7 +188,7 @@ var ReferrerKiller = (function () {
 		if (IE_GT_8) {
 			urlRedirection = URL_REDIRECTION;
 		}
-		html = '<a style="color: #16a6b6; text-decoration: underline; font-weight: bold; font-family: \"Source Sans Pro\";" rel="noreferrer" href="' + urlRedirection + escapeDoubleQuotes(url) + '" ' + objectToHtmlAttributes(anchorParams) + '>' + innerHTML + '</a>';
+		html = '<a onMouseOver=\\\'this.style.color="#1abc9c"\\\' onMouseOut=\\\'this.style.color="#fff"\\\' style="text-decoration: underline; font-size: 1.30em; color: white;" rel="noreferrer" href="' + urlRedirection + escapeDoubleQuotes(url) + '" ' + objectToHtmlAttributes(anchorParams) + '><h5>' + innerHTML + '</h5></a>';
 		return htmlString(html, iframeAttributes);
 	}
 	PUB.linkHtml = linkHtml;

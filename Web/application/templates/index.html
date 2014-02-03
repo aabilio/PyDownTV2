@@ -168,20 +168,25 @@
 					{% for parte in vid['url_video'] %}
 						{% if urlOrig.find("mitele.es") != -1 %}
 							<!--<li class="text bold color theme" style="color: #ee6557;">
-								<iframe src="{{ "http://pydowntv.p.ht/pydowntv/mt4.php?u="+urlOrig+"&tit="+tit }}" allowtransparency="true" border="0" frameborder="0" scrolling="no" style="max-height: 24px;"></iframe>
+								<a href="{{ url_for('mitele', urlOrig=urlOrig) }}" style="text-decoration: underline; font-family: " source="" sans="" pro";"="" rel="noreferrer" target="destiny"><h5>{{ tit }}</h5></a>
 							</li>-->
-							<!--<li class="text bold color theme" style="color: #ee6557;">--><!--Parte {{ loop.index0+1 }}: --><!--<a href="{{ url_for('mitele', urlOrig=urlOrig) }}" style="text-decoration: underline;"><h5>{{ tit }}</h5></a>-->
 							<li class="text bold color theme" style="color: #ee6557;"><span id="url_kill_referrer"></span></li>
 							<script>
 								document.getElementById('url_kill_referrer').innerHTML = ReferrerKiller.linkHtml( '{{ url_for('mitele', urlOrig=urlOrig) }}', '{{ tit }}', { target: 'destiny' }, { verticalAlign: 'bottom' } );
 							</script>
 						{% elif urlOrig.find("divinity.es") != -1 or urlOrig.find("cuatro.com") != -1 or urlOrig.find("telecinco.es") != -1  or urlOrig.find("mitelekids.es") != -1 %}
 							{% if parte.find('/rtmpe/geo/') != -1 %}
+								<!--<li class="text bold color theme" style="color: #ee6557;">
+									<a href="{{ url_for('mediaset', urlOrig=urlOrig) }}" style="text-decoration: underline; font-family: " source="" sans="" pro";"="" rel="noreferrer" target="destiny"><h5>{{ tit }}</h5></a>
+								</li>-->
 								<li class="text bold color theme" style="color: #ee6557;"><span id="url_kill_referrer_{{ cont_video }}"></span></li>
 								<script>
 									document.getElementById('url_kill_referrer_{{ cont_video }}').innerHTML = ReferrerKiller.linkHtml( '{{ url_for('mediaset', urlOrig=urlOrig) }}', '{{ tit|replace("\'", "") }}', { target: 'destiny' }, { verticalAlign: 'bottom' } );
 								</script>
 							{% else %}
+								<!--<li class="text bold color theme" style="color: #ee6557;">
+									<a href="{{ parte }}" style="text-decoration: underline; font-family: " source="" sans="" pro";"="" rel="noreferrer" target="destiny"><h5>{{ tit }}</h5></a>
+								</li>-->
 								<li class="text bold color theme" style="color: #ee6557;"><span id="url_kill_referrer_{{ cont_video }}"></span></li>
 								<script>
 									document.getElementById('url_kill_referrer_{{ cont_video }}').innerHTML = ReferrerKiller.linkHtml( '{{ parte }}', '{{ tit|replace("\'", "") }}', { target: 'destiny' }, { verticalAlign: 'bottom' } );
