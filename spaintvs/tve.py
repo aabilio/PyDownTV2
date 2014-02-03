@@ -278,11 +278,13 @@ class TVE(Canal.Canal):
 
         urlVideo = plaintext
         if urlVideo != "":
+            if not urlVideo.endswith(".mp4"): urlVideo = urlVideo.replace(urlVideo.split(".mp4")[1], "")
             url_video = urlVideo.replace("www.rtve.es", "media5.rtve.es")
+            
             titulo = sourceHTML.split("<title>")[1].split("</")[0].replace("RTVE.es", "").replace("-", "").strip()
             filename = titulo + ".mp4"
             filename = Utiles.formatearNombre(filename)
-            #sourceHTML = sourceHTML.split("<div id=\"video")[1].split("flashvars")[0] # Me quedo solo con la parte del vídeo principal
+
             url_img = sourceHTML.split("\"thumbnail\" content=\"")[1].split("\"")[0]
         else:
             raise Error.GeneralPyspainTVsError("No se pudo encontrar el enlace de descarga")
@@ -303,25 +305,65 @@ class TVE(Canal.Canal):
                     desc = Utiles.recortar(sourceHTML, "<meta name=\"description\" content=\"", "\"").strip()
                 except:
                     desc = u"Vídeos de Televión Española"
-                
-        return {"exito" : True,
-                "num_videos" : 1,
-                "mensaje"   : u"URL obtenido correctamente",
-                "videos":[{
-                        "url_video" : [url_video],
-                        "url_img"   : url_img,
-                        "filename"  : [filename],
-                        "tipo"      : "http",
-                        "partes"    : 1,
-                        "rtmpd_cmd" : None,
-                        "menco_cmd" : None,
-                        "url_publi" : None,
-                        "otros"     : None,
-                        "mensaje"   : None
-                        }],
-                "titulos": [titulo],
-                "descs": [desc] if desc is not None else None
-                }
+        
+        # Comprobar si existe calidad FLV
+        url_flv = url_video.replace("mp4", "flv")
+        if Descargar.isReachableHead(url_flv):
+            msgCalidad = u'''Este vídeo dispone de dos calidades. 
+            Para los vídeos de RTVE, la mejor suele ser la que se presenta en formato FLV. 
+            En los vídeos con más tiempo puede que el audio al principio no esté bien sincronizado 
+            con el audio. Este problema será menos grave en el formato FLV llegándose incluso a 
+            sincronizar totalmente pasados unos segundos.'''.encode('utf8')
+
+            return {"exito" : True,
+                    "num_videos" : 2,
+                    "mensaje"   : u"URL obtenido correctamente",
+                    "videos":[{
+                            "url_video" : [url_video],
+                            "url_img"   : url_img,
+                            "filename"  : [filename],
+                            "tipo"      : "http",
+                            "partes"    : 1,
+                            "rtmpd_cmd" : None,
+                            "menco_cmd" : None,
+                            "url_publi" : None,
+                            "otros"     : "MP4",
+                            "mensaje"   : msgCalidad
+                            },
+                            {
+                            "url_video" : [url_flv],
+                            "url_img"   : url_img,
+                            "filename"  : [filename.replace(".mp4", ".flv")],
+                            "tipo"      : "http",
+                            "partes"    : 1,
+                            "rtmpd_cmd" : None,
+                            "menco_cmd" : None,
+                            "url_publi" : None,
+                            "otros"     : "FLV",
+                            "mensaje"   : msgCalidad
+                            }],
+                    "titulos": [titulo,titulo],
+                    "descs": [desc, desc]
+                    }
+        else:
+            return {"exito" : True,
+                    "num_videos" : 1,
+                    "mensaje"   : u"URL obtenido correctamente",
+                    "videos":[{
+                            "url_video" : [url_video],
+                            "url_img"   : url_img,
+                            "filename"  : [filename],
+                            "tipo"      : "http",
+                            "partes"    : 1,
+                            "rtmpd_cmd" : None,
+                            "menco_cmd" : None,
+                            "url_publi" : None,
+                            "otros"     : None,
+                            "mensaje"   : None
+                            }],
+                    "titulos": [titulo],
+                    "descs": [desc] if desc is not None else None
+                    }
 
 class NoRedirectHandler(urllib2.HTTPRedirectHandler):
     def http_error_302(self, req, fp, code, msg, headers):

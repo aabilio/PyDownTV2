@@ -25,6 +25,7 @@ __date__ ="$09-oct-2012 20:57:46$"
 import urllib
 import urllib2
 import httplib
+from urlparse import urlparse
 #import time
 import codecs
 #import os
@@ -172,6 +173,24 @@ def isReachable(url): # Retro compatibilidad con módulo de TVE
         f.close()
         return True
     except Exception:
+        return False
+
+def isReachableHead(url): # Retro compatibilidad con módulo de TVE
+    #TODO: Meter headers
+    '''
+        Recibe: 
+            - url (http://ejemplo.com/ruta/de/ejemplo)
+        Comprueba si se puede acceder a una web (True or False)
+    '''
+    try:
+        u = urlparse(url)
+        conn = httplib.HTTPConnection(u.netloc)
+        conn.request("HEAD", u.path+u.query)
+        res = conn.getresponse()
+        if int(res.status) < 400:
+            return True
+        return False
+    except:
         return False
     
 
