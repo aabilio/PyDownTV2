@@ -28,6 +28,8 @@ import Error
 
 import httplib
 from pyamf import remoting
+import re
+import xml.etree.ElementTree
 
 url_validas = ["canalplus.es", "plus.es"]
 
@@ -81,6 +83,50 @@ class Plus(Canal.Canal):
         response = conn.getresponse().read()
         response = remoting.decode(response).bodies[0][1].body
         return response
+
+    def __newPlus(self, html):
+        self.debug(u"Nuevo método PLUS [Febrero 2014]")
+
+        charset = re.findall('\<meta http\-equiv\=\"Content\-Type\" content\=\"text\/html\; charset\=(.*)\" \/\>',html)[0]
+        html = html.decode(charset).encode("utf8")
+
+        mp4s = re.findall('source.*src=\"(.*)\".*type=\"video\/mp4\"', html)
+        try: # Título laterl en rosa
+            title = re.findall('h2.*class=\"title\">(.*)<\/h2>',html.split("<video")[1])[0].replace("<strong>", "").replace("</strong>","")
+        except: # Título de "Estás viendo"..
+            title = re.findall('titulo=(.*?)\"',html)[0]
+        try: # Descripción en lateral
+            desc = re.findall('h2.*class=\"title\">.*<\/h2>.*<p>(.*)</p>.*</div>.*<!-- .video_entry -->',html.split("<video")[1],re.S)[0]
+        except: # Descripción debajo del vídeo
+            desc = re.findall('div.*class\=\"desc_play_video\".*\<p>(.*?)<\/p>.*<\/div>',html,re.S)[0]
+        img = ("%s%s") % (self.URL_PLUS, re.findall('video.*poster=\"(.+?)\"',html)[0].replace("&amp;", "&"))
+        try: name = Utiles.formatearNombre(title)+'.mp4'
+        except: name = u"VideoCanalPlus.mp4".encode("utf8")
+
+        # Otra manera (parece que no siepre disponible para algunos 'xref=' ...):
+        #xref = re.findall('xref=(.*)',self.url)[0]
+        #urlInfo = "http://canalplus.es/servicios/player/mm_se_top.html?xref=%s&view=playlist" % (xref)
+        #info = Descargar.get(urlInfo)
+        #doc = xml.etree.ElementTree.fromstring(info) ## Parsear XML
+
+        return {"exito" : True,
+                "num_videos" : 1,
+                "mensaje"   : u"URL obtenido correctamente",
+                "videos":[{
+                        "url_video" : [mp4s[-1]], #De momento nos quedamos la última url, supuestamente la de mayor calidad
+                        "url_img"   : img if img is not None else None,
+                        "filename"  : [name] if name is not None else None,
+                        "tipo"      : "http",
+                        "partes"    : 1,
+                        "rtmpd_cmd" : None,
+                        "menco_cmd" : None,
+                        "url_publi" : None,
+                        "otros"     : None,
+                        "mensaje"   : None
+                        }],
+                "titulos": [title] if title is not None else None,
+                "descs": [desc] if desc is not None else None
+                }
     
     def getInfo(self):
         '''
@@ -117,7 +163,10 @@ class Plus(Canal.Canal):
         '''
         
         html = Descargar.get(self.url)
-        VideoPlayer = html.split("name=\"@videoPlayer\"  value=\"ref:")[1].split("\"")[0] #REFERER!!
+        try: # Método antiguo
+            VideoPlayer = html.split("name=\"@videoPlayer\"  value=\"ref:")[1].split("\"")[0] #REFERER!!
+        except: # 03/01/2014
+            return self.__newPlus(html)
         
         info = self.__get_info(VideoPlayer)
         
