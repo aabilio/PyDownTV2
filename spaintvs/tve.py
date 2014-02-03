@@ -237,7 +237,7 @@ class TVE(Canal.Canal):
 
         # -- Método 24 Mayo 2013
         self.debug(u"Probando método de 24 de uno de Mayo de 2013")
-        manager = re.findall('data-idManager="(.*)"', sourceHTML)[0] or re.findall('idManager="(.*)"', sourceHTML)[0] or "default"
+        manager = re.findall('data-idManager="(.*?)"', sourceHTML)[0] or re.findall('idManager="(.*?)"', sourceHTML)[0] or "default"
         tipo = "videos"
         url = "http://www.rtve.es/ztnr/movil/thumbnail/%s/%s/%s.png" % (manager, tipo, videoID)
 
