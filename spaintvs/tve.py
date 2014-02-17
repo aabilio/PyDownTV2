@@ -279,7 +279,7 @@ class TVE(Canal.Canal):
         urlVideo = plaintext
         if urlVideo != "":
             if not urlVideo.endswith(".mp4"): urlVideo = urlVideo.replace(urlVideo.split(".mp4")[1], "")
-            url_video = urlVideo.replace("www.rtve.es", "media5.rtve.es")
+            url_video = urlVideo.replace("www.rtve.es", "media5.rtve.es").replace("iphonelive","mvod")
             
             titulo = sourceHTML.split("<title>")[1].split("</")[0].replace("RTVE.es", "").replace("-", "").strip()
             filename = titulo + ".mp4"
