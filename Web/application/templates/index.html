@@ -272,9 +272,9 @@
 						<!--<span id="cmd">{{ cmd }}</span>--><!-- Método antiguo -->
 						<pre id="comando"><code data-language="shell">{{ cmd }}</code></pre><!-- Método nuevo -->
 						
-						<a id="easy-rtmpdump-button" onclick="return checkEasyRtmpdump();" class="button" target="_blank" href="http://localhost:25431/easy-rtmpdump.html?command={{ cmd|urlencode }}&name={{ tit }}&orig={{ urlOrig|urlencode }}&img={{ vid['url_img']|urlencode }}">Descargar con Easy-rtmpdump (MacOS & Linux)</a>
+						<a id="easy-rtmpdump-button" onclick="return checkEasyRtmpdump();" class="button" target="_blank" href="http://localhost:25431/easy-rtmpdump.html?command={{ cmd|urlencode }}&name={{ tit }}&orig={{ urlOrig|urlencode }}&img={{ vid['url_img']|urlencode }}">Descargar con Easy-rtmpdump (Mac & Linux)</a>
 						{% if urlOrig.find("mitele.es/") != -1 %}
-						<a id="rtmp-downloader-button" href="http://localhost:25432/easy-rtmpdump.html?nombre={{ tit }}&urlhttp={{ cmd|rtmpdownloadid }}&accion=descargar" onclick="return checkRTMPDownloader();" class="button secondary" target="_blank" >Descargar con RTMP-Downloader (Windows)</a>
+						<a id="rtmp-downloader-button" href="http://localhost:25432/easy-rtmpdump.html?nombre={{ tit }}&urlhttp={{ cmd|rtmpdownloadid }}&accion=descargar" onclick="return checkRTMPDownloader();" class="button secondary" target="_blank" >Descargar con RTMP-Downloader (Win)</a>
 						{% else %}
 						<a id="rtmp-downloader-button" href="http://localhost:25432/easy-rtmpdump.html?nombre={{ tit }}&url={{ cmd|rtmpdownloadnoexec }}&accion=descargar" onclick="return checkRTMPDownloader();" class="button secondary" target="_blank" >Descargar con RTMP-Downloader (Win)</a>
 						{% endif %}
