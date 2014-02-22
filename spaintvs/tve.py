@@ -31,6 +31,8 @@ import Utiles
 import Descargar
 import Error
 
+import xml.etree.ElementTree
+
 from base64 import b64decode as decode
 import re
 
@@ -208,36 +210,27 @@ class TVE(Canal.Canal):
         if self.url.find("rtve.es/infantil/") != -1:
             return self.__ClanTV(sourceHTML, videoID)
 
-        # -- Método 1 Octubre 2012:
-        # self.debug(u"Probando método de 1 de uno de Octubre de 2012")
-        # url = "http://www.rtve.es/ztnr/consumer/xl/video/alta/" + videoID + "_es_292525252525111"
-        # self.debug(url)
-        
-        # user_agent="Mozilla"
-        # opener = urllib2.build_opener(NoRedirectHandler())
-        # urllib2.install_opener(opener)
-        # headers = { 'User-Agent' : user_agent }
-        # req = urllib2.Request(url, None, headers)
-        # u = urllib2.urlopen(req)
-        # try:
-        #     urlVideo = u.info().getheaders("Location")[0]
-        # except:
-        #     raise Error.GeneralPyspainTVsError("No se encuentra Location")
-        # u.close()
-        # if urlVideo != "":
-        #     url_video = urlVideo.replace("www.rtve.es", "media5.rtve.es")
-        #     titulo = sourceHTML.split("<title>")[1].split("</")[0].replace("RTVE.es", "").replace("-", "").strip()
-        #     filename = titulo + ".mp4"
-        #     filename = Utiles.formatearNombre(filename)
-        #     #sourceHTML = sourceHTML.split("<div id=\"video")[1].split("flashvars")[0] # Me quedo solo con la parte del vídeo principal
-        #     url_img = sourceHTML.split("\"thumbnail\" content=\"")[1].split("\"")[0]
-        # else:
-        #     raise Error.GeneralPyspainTVsError("No se pudo encontrar el enlace de descarga")
-        # -- Método 1 Octubre 2012 FIN
-
         # -- Método 24 Mayo 2013
         self.debug(u"Probando método de 24 de uno de Mayo de 2013")
-        manager = re.findall('data-idManager="(.*?)"', sourceHTML)[0] or re.findall('idManager="(.*?)"', sourceHTML)[0] or "default"
+        try: manager = re.findall('data-idManager="(.*?)"', sourceHTML)[0]
+        except:
+            try: manager = re.findall('idManager="(.*?)"', sourceHTML)[0]
+            except: manager = "default"
+
+        # # Nuevo método (22/02/14) , dejo el actual que todavía funciona
+        # if sourceHTML.find("themadvideo.com/player/js/MadVideo.js.php") != -1:
+            
+        #     themadvideo_id = re.findall('<iframe.*id\=\"visor(.*)\"' , sourceHTML)[0]
+        #     xmldata = Descargar.get("http://studio.themadvideo.com/api/videos/%s/player_data" % themadvideo_id).decode('utf8')
+        #     xmltree = xml.etree.ElementTree.fromstring(xmldata)
+
+        #     urlVideo = xmltree.find('./Layout/VideoPlayer/Data/src').text
+        #     url_img = xmltree.find('./Layout/VideoPlayer/Data/Keyframe').text
+        #     titulo = xmltree.find('.').attrib['title']
+        #     try: name = Utiles.formatearNombre(titulo) + ".mp4"
+        #     except: name = "VideoRtve.mp4"
+        #     desc = None
+        
         tipo = "videos"
         url = "http://www.rtve.es/ztnr/movil/thumbnail/%s/%s/%s.png" % (manager, tipo, videoID)
 
@@ -285,7 +278,10 @@ class TVE(Canal.Canal):
             filename = titulo + ".mp4"
             filename = Utiles.formatearNombre(filename)
 
-            url_img = sourceHTML.split("\"thumbnail\" content=\"")[1].split("\"")[0]
+            try: url_img = sourceHTML.split("\"thumbnail\" content=\"")[1].split("\"")[0]
+            except:
+                try: url_img = re.findall('<link.*rel\=\"image_src\".*href\=\"(.*)\"' , sourceHTML)[0]
+                except: url_img = re.findall('<meta.*name\=\"RTVE\.thumb_video\".*content\=\"(.*)\"',sourceHTML)[0]
         else:
             raise Error.GeneralPyspainTVsError("No se pudo encontrar el enlace de descarga")
 

@@ -71,6 +71,28 @@
    			}
     	}
 	</script>
+	<script language="javascript" src="http://localhost:25431/static/js/imrunning.js"></script>
+	<script language="javascript">
+		function checkEasyRtmpdump() {
+			function showEasyRtmpdumpModal() { TukTuk.Modal.show("easy_rtmpdump_not_running"); }
+			if ( typeof(EasyRtmpdump) != "undefined" ) {
+				if ( !EasyRtmpdump.isrunning ) showEasyRtmpdumpModal();
+				return EasyRtmpdump.isrunning ? true : false;
+			}
+			showEasyRtmpdumpModal(); return false;
+    	}
+	</script>
+	<script language="javascript" src="http://127.0.0.1:25432/rtmpdownloader.js"></script>
+	<script language="javascript">
+		function checkRTMPDownloader() {
+			function showRTMPDownloaderModal() { TukTuk.Modal.show("rtmp_downloader_not_running"); }
+			if ( typeof(rtmpdownloader) != "undefined" ) {
+				if ( !rtmpdownloader ) showRTMPDownloaderModal();
+				return rtmpdownloader ? true : false;
+			}
+			showRTMPDownloaderModal(); return false;
+    	}
+	</script>
 
 	<script>
 		$(document).ready(function() {
@@ -243,18 +265,29 @@
 				</ol>
 				
 				{% if vid['tipo'] == 'rtmp' %}
-				<p><strong>Comandos para rtmpdump:</strong></p><br />
+				<p><strong>Comandos para rtmpdump:</strong> <a class="button tiny" href="{{ url_for('ayuda')+'#DescargarRtmp' }}">AYUDA</a></p><br />
 				<ol class="square">
 					{% for cmd in vid['rtmpd_cmd'] %}
 					<li style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: -->
 						<!--<span id="cmd">{{ cmd }}</span>--><!-- Método antiguo -->
 						<pre id="comando"><code data-language="shell">{{ cmd }}</code></pre><!-- Método nuevo -->
+						
+						<a id="easy-rtmpdump-button" onclick="return checkEasyRtmpdump();" class="button" target="_blank" href="http://localhost:25431/easy-rtmpdump.html?command={{ cmd|urlencode }}&name={{ tit }}&orig={{ urlOrig|urlencode }}&img={{ vid['url_img']|urlencode }}">Descargar con Easy-rtmpdump (MacOS & Linux)</a>
+						{% if urlOrig.find("mitele.es/") != -1 %}
+						<a id="rtmp-downloader-button" href="http://localhost:25432/easy-rtmpdump.html?nombre={{ tit }}&urlhttp={{ cmd|rtmpdownloadid }}&accion=descargar" onclick="return checkRTMPDownloader();" class="button secondary" target="_blank" >Descargar con RTMP-Downloader (Windows)</a>
+						{% else %}
+						<a id="rtmp-downloader-button" href="http://localhost:25432/easy-rtmpdump.html?nombre={{ tit }}&url={{ cmd|rtmpdownloadnoexec }}&accion=descargar" onclick="return checkRTMPDownloader();" class="button secondary" target="_blank" >Descargar con RTMP-Downloader (Win)</a>
+						{% endif %}
+						
 					</li>
 					{% endfor %}
 				</ol>
-				<p class="text normal color cancel">
+				<!--<p class="text normal color cancel">
 					<a class="text normal color cancel" href="{{ url_for('ayuda')+'#DescargarRtmp' }}">Si no sabes cómo descargar este tipo de vídeos, echa un
 					vistazo a esto</a>
+				</p>-->
+				<p class="text normal color cancel">
+					<a class="button anchor secondary" href="{{ url_for('ayuda')+'#DescargarRtmpEasy' }}">AYUDA con Easy-rtmpdump y/o RTMP-Downloader</a>
 				</p>
 				{% endif %}
 	            <!--<h1 class="icon share text color theme"></h1>
@@ -363,6 +396,39 @@
         	<button data-modal="close" class="button alert"><span class="icon remove"></span>Ok</button>
         </footer>
     </div>
+    <div id="easy_rtmpdump_not_running" data-tuktuk="modal" class="column_6">
+    	<header class="bck alert">
+    		<h5 class="text bold">Se ha detectado error:</h5>
+    	</header>
+        <article class="text big">
+        	Easy-rtmpdump no está iniciado en tu ordenador. Inicia el programa y vuelve a cargar esta página.
+        </article>
+        <footer>
+        	<button onclick="return reloadPage()" data-modal="close" class="button success"><span class="icon ok"></span>Recargar</button>
+        	<button data-modal="close" class="button alert"><span class="icon remove"></span>Ok</button>
+        </footer>
+    </div>
+    <div id="rtmp_downloader_not_running" data-tuktuk="modal" class="column_6">
+    	<header class="bck alert">
+    		<h5 class="text bold">Se ha detectado error:</h5>
+    	</header>
+        <article class="text big">
+        	RTMP-Downloader no está iniciado en tu ordenador. Inicia el programa y vuelve a cargar esta página.
+        </article>
+        <footer>
+        	<button onclick="return reloadPage()" data-modal="close" class="button success"><span class="icon ok"></span>Recargar</button>
+        	<button data-modal="close" class="button alert"><span class="icon remove"></span>Ok</button>
+        </footer>
+    </div>
+
+    <script>
+    	function reloadPage() {
+    		url = document.location.href;
+    		document.location.href = url.indexOf("?url=") != -1 ? url : url+'?url={{ urlOrig }}';
+    		return true;
+    	}
+    </script>
+
     <!-- TUKTUK.WIDGETS -->
     <script src="/static/js/tuktuk.js"></script>
     {% if get_flashed_messages() %}
@@ -418,5 +484,23 @@
 	    }, 1000);*/
     </script>-->
     {% endif %}
+    <!-- Histats.com  START (hidden counter)-->
+	<script type="text/javascript">
+		document.write(unescape("%3Cscript src=%27http://s10.histats.com/js15.js%27 type=%27text/javascript%27%3E%3C/script%3E"));
+	</script>
+	<a href="http://www.histats.com" target="_blank" title="free contadores" >
+		<script  type="text/javascript" >
+			try {
+				Histats.start(1,2598970,4,0,0,0,"");
+				Histats.track_hits();
+			} catch(err) {};
+		</script>
+	</a>
+	<noscript>
+		<a href="http://www.histats.com" target="_blank">
+			<img  src="http://sstatic1.histats.com/0.gif?2598970&101" alt="free contadores" border="0">
+		</a>
+	</noscript>
+	<!-- Histats.com  END  -->
 </body>
 </html>

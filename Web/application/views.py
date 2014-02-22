@@ -631,7 +631,7 @@ def api(urlOrig=None):
     if request.args.has_key("jsoncallback"):
         return request.args["jsoncallback"] + "(" + js + ");"
     else:
-        resp = Response(js, status=200, mimetype='application/json')
+        resp = Response(js, status=200, mimetype='application/json', headers={"Access-Control-Allow-Origin": "*"})
         return resp 
     #return render_template("api.html", messages=info)
     #except Error.GeneralPyspainTVsError, e:

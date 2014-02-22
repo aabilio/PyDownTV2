@@ -104,3 +104,26 @@ def change_request_url():
 	else:
 		pass
 
+import urllib
+from markupsafe import Markup
+@app.template_filter('urlencode')
+def urlencode_filter(s):
+    if type(s) == 'Markup':
+        s = s.unescape()
+    s = s.encode('utf8')
+    s = urllib.quote_plus(s)
+    return Markup(s)
+
+import re
+@app.template_filter('rtmpdownloadid')
+def rtmpdownloadid_filter(s):
+	return urlencode_filter("http://descargavideos.tv/mitele_handler.php?rtmp&id=" + re.findall("slist=1(.*?).mp4",s)[1]+".mp4")
+
+@app.template_filter('rtmpdownloadnoexec')
+def rtmpdownloadnoexec_filter(s):
+	return urlencode_filter(s.replace('rtmpdump ','')) #" ".join(s.split()[1:])
+
+
+
+
+

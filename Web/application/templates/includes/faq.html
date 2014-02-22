@@ -41,6 +41,7 @@
         </p>
         <div class="answer-wrapper">
             <p class="answer text normal color normal">
+                (Para Descargar con Easy-Rtmpdump o RTMP-Downloader mirad la <a class="button tiny" href="#DescargarRtmpEasy">siguiente FAQ</a> ;)) <br /><br />
             	Esos vídeos que aparecen como "rtmp", no se pueden descargar directamente haciendo clic con el botón derecho del ratón.
             	Necesitarás un programa especial. En <a href=">https://github.com/aabilio/PyDownTV2/tree/master/Escritorio"><span class="icon github">GitHub</span></a>
             	estamos desarrollando una versión de Escritorio sobre todo para ayudar en la descarga de estos vídeos.
@@ -88,6 +89,94 @@
             			</li>
             		</ul>
             	</ol>
+            </p>
+        </div>
+        <p class="question text bold">
+            <a name="DescargarRtmpEasy">¿Cómo descargo los rtmp con Easy-Rtmpdump y/o RTMP-Downloader</a>
+        </p>
+        <div class="answer-wrapper">
+            <p class="answer text normal color normal">
+                Lo primero es lo primero, Easy-rtmpdump es un proyecto distinto a PyDownTV, aunque está diseñado para él por los mismos desarrolladores (<a href="https://github.com/aabilio/ertmpdump">también es Software Libre y su código se puede ver en <span class="button tiny icon github"> Github</span></a>). Solo está disponible para Mac OS X y GNU/Linux por ahora. ¿Por qué? Porque @forest de descargavideos.tv ya tiene una buena app para este Sistema Operativo: RTMP-Downloader.
+
+                <ul class="circle">
+                    <li class="text normal color normal">
+                        <h5 style="background-color: black; color: white;">Easy-rtmpdump</h5>
+                        <ul class="circle">
+                            <li>
+                                <u style="color: white; background-color: #1abc9c">Mac OS X</u>
+                                Requisitos:
+                                <ol>
+                                    <li>Python: preinstalado en el sistema operativo</li>
+                                    <li>Instalar PIP: Abrir terminal y pegar lo siguiente</li>
+                                    <pre><code data-language="shell">curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python</code></pre>
+                                    <li>
+                                        Instalar gevent-socketio: Abrir terminal y pegar lo siguiente:
+                                    </li>
+                                    <pre><code data-language="shell">sudo pip install gevent-socketio</code></pre>
+                                    <li>Descargar Easy-rtmpdump de aquí: <a class="button tiny" href="#">Descargar Easy-rtmpdump</a></li>
+                                    <li>Descomprimir el archivo .zip donde se quiera. Y ya no hay más pasos ;)</li>
+                                    <li>Para ejecutar el programa, doble clic en: Easy-rtmpdump_MACOSX. Se abre una pestaña en el navegador (recomendado Google Chrome) donde se interactuará con el programa.</li>
+                                    <li>Ya solo tienes que obtener los enlaces con pydowntv y darle a descargar con Easy-Rtmpdump ;)</li>
+                                    <li>
+                                        Ver vídeo explicativo:
+
+                                    </li>
+                                </ol>       
+                            </li>
+
+                            <li>
+                                <u style="color: white; background-color: #1abc9c">GNU/Linux</u>
+                                Requisitos:
+                                <ol>
+                                    <li>Python: preinstalado en el sistema operativo</li>
+                                    <li>Instalar PIP, Python-greenlet, Python-pip, Python-dev, Python-tk y rtmpdump (Ejemplo Debian/Ubuntu):</li>
+                                    <pre><code data-language="shell">sudo apt-get install python-greenlet python-pip python-dev python-tk rtmpdump</code></pre>
+                                    <li>Instalar gevent-socketio:</li>
+                                    <pre><code data-language="shell">sudo pip install gevent-socketio</code></pre>
+                                    <li>Descargar Easy-rtmpdump de aquí: <a class="button tiny" href="#">Descargar Easy-rtmpdump</a></li>
+                                    <li>Descomprimir el archivo .zip donde se quiera. Y ya no hay más pasos ;)</li>
+                                    <li>Para ejecutar el programa, doble clic en: Easy-rtmpdump_LINUX_32bits o Easy-rtmpdump_LINUX_64bits. Se abre una pestaña en el navegador (recomendado Google Chrome) donde se interactuará con el programa.</li>
+                                    <li>Ya solo tienes que obtener los enlaces con pydowntv y darle a descargar con Easy-Rtmpdump ;)</li>
+                                    <li>
+                                        Ver vídeo explicativo:
+                                        
+                                    </li>
+                                </ol>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="text normal color normal">
+                        <h5 style="background-color: black; color: white;">RTMP-Downloader</h5>
+                        <ul class="circle">
+                            <li><u style="color: white; background-color: #1abc9c">Windows</u>
+                                <ol>
+                                    <li>
+                                        Descargar el programa: <a href="http://www.mediafire.com/download/ac82wb0za9vw965/RTMP-Downloader+V0.2b.zip" class="button tiny">Versión 0.2b</a>  <a href="http://www.descargavideos.tv/lab#lab_rtmp-downloader" class="button tiny">Otras Versiones</a> 
+                                    </li>
+                                    <li>
+                                        Pasos a seguir:
+                                        <ul>
+                                            <li>Descargar el archivo con el programa</li>
+                                            <li>Descomprimir el archivo en una carpeta. Esta carpeta será donde se guarden también los vídeos</li>
+                                            <li>Abrir el programa haciendo doble clic en el ejecutable (RTMP-Downloader.exe)</li>
+                                            <li>Se abrirá una pestaña/ventana nueva en el navegador. No cerrarla.</li>
+                                            <li>Buscar los enlaces con pydowntv</li>
+                                            <li>Hacer clic en descargar con RTMP-Downloader (Windows)</li>
+                                            <li>Esperar a que la descarga termine (se puede ver en la web que abre el programa al iniciarse)</li>
+                                            <li>Se abrirá una carpeta con el vídeo una vez descargado.</li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        Ver vídeo explicativo:
+                                        <div class="video-container" id="genericUse">
+                                            <iframe width="560" height="315" src="http://www.youtube.com/embed/Jb0mt2qRXGw?rel=0" frameborder="0" allowfullscreen></iframe>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </p>
         </div>
         <p class="question text bold">
@@ -239,3 +328,8 @@
         </div>-->
     </div>
 </section>
+<!-- Include Rainbow Code Highlighter -->
+<script src="/static/rainbow/rainbow.min.js"></script>
+<script src="/static/rainbow/language/generic.js"></script>
+<script src="/static/rainbow/language/shell.js"></script>
+<link href="/static/rainbow/themes/tricolore.css" rel="stylesheet" type="text/css">
