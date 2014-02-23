@@ -106,16 +106,12 @@
                                 <u style="color: white; background-color: #1abc9c">Mac OS X</u>
                                 Requisitos:
                                 <ol>
-                                    <li>Python: preinstalado en el sistema operativo</li>
-                                    <li>Instalar PIP: Abrir terminal y pegar lo siguiente</li>
-                                    <pre><code data-language="shell">curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python</code></pre>
-                                    <li>
-                                        Instalar gevent-socketio: Abrir terminal y pegar lo siguiente:
-                                    </li>
-                                    <pre><code data-language="shell">sudo pip install -U gevent-socketio requests</code></pre>
+                                    <li>Instalar GCC. La manera más fácil: Descargar el .pkg que corresponda a tu versión de Mac OS desde aquí: <a class="button tiny" href="https://github.com/kennethreitz/osx-gcc-installer/downloads">OSX-GCC-INSTALLER</a> e instalar normalmente. (Para los que sepan, pueden instalar GCC instalado xcode y después las Command Line Tools for Xcode)</li>
+                                    <li>Instalar dependencias de Easy-rtmpdump:</li>
+                                    <pre><code data-language="shell">curl https://dl.dropboxusercontent.com/s/6xfl97tbslpvr6q/mac_installer.sh | sh</code></pre>
                                     <li>Descargar Easy-rtmpdump de aquí: <a class="button tiny" href="https://www.dropbox.com/s/ac3q0z98wpyomge/easy-rtmpdump.zip">Descargar Easy-rtmpdump</a></li>
                                     <li>Descomprimir el archivo .zip donde se quiera. Y ya no hay más pasos ;)</li>
-                                    <li>Para ejecutar el programa, doble clic en: Easy-rtmpdump_MACOSX. Se abre una pestaña en el navegador (recomendado Google Chrome) donde se interactuará con el programa.</li>
+                                    <li>Para ejecutar el programa, doble clic en: Easy-rtmpdump_MACOSX (si no funciona abrir con Easy-rtmpdump_MACOSX.command). Se abre una pestaña en el navegador (recomendado Google Chrome) donde se interactuará con el programa.</li>
                                     <li>Ya solo tienes que obtener los enlaces con pydowntv y darle a descargar con Easy-Rtmpdump ;)</li>
                                     <li>
                                         Ver vídeo explicativo:
@@ -130,11 +126,9 @@
                                 <u style="color: white; background-color: #1abc9c">GNU/Linux</u>
                                 Requisitos:
                                 <ol>
-                                    <li>Python: preinstalado en el sistema operativo</li>
-                                    <li>Instalar PIP, Python-greenlet, Python-pip, Python-dev, Python-tk y rtmpdump (Ejemplo Debian/Ubuntu):</li>
-                                    <pre><code data-language="shell">sudo apt-get install python-greenlet python-pip python-dev python-tk python-requests rtmpdump</code></pre>
-                                    <li>Instalar gevent-socketio:</li>
-                                    <pre><code data-language="shell">sudo pip install -U gevent-socketio</code></pre>
+                                    <li>Instalar las dependecias de Easy-rtmpdump en Debian/Ubuntu:</li>
+                                    <pre><code data-language="shell">curl https://dl.dropboxusercontent.com/s/ib0nl68ljk58lnc/linux_installer.sh | sh</code></pre>
+                                    Si tienes otro GNU/Linux primero descarga con tu gestor de paquete lo siguiente: python-greenlet python-pip python-dev python-tk python-requests rtmpdump y a continuación ejecuta lo siguiente<pre><code data-language>sudo pip install -U gevent-socketio</code></pre>
                                     <li>Descargar Easy-rtmpdump de aquí: <a class="button tiny" href="https://www.dropbox.com/s/ac3q0z98wpyomge/easy-rtmpdump.zip">Descargar Easy-rtmpdump</a></li>
                                     <li>Descomprimir el archivo .zip donde se quiera. Y ya no hay más pasos ;)</li>
                                     <li>Para ejecutar el programa, doble clic en: Easy-rtmpdump_LINUX_32bits o Easy-rtmpdump_LINUX_64bits. Se abre una pestaña en el navegador (recomendado Google Chrome) donde se interactuará con el programa.</li>
