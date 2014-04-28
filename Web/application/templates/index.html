@@ -217,7 +217,8 @@
 						{% elif urlOrig.find("atresplayer.com/") != -1 %}
 							{% if parte.find("/api/") != -1 %}
 								<li id="a3apili" class="text bold color theme" style="color: #ee6557;">
-									<a class="button" id="a3apia" href="#">Obtener Enlace</a>
+									<!--<a class="button" id="a3apia" href="#">Obtener Enlace</a>-->
+									Buscando enlace... (Puede que necesites estar logueado en atresplayer)
 								</li>
 								<li id="a3apilio" class="text bold color theme" style="color: #ee6557; display:none;">
 									<a class="checker_input" href="#" ind="{{ loop.index0 }}"style="display: inline-block; text-decoration: underline;">
@@ -225,7 +226,7 @@
 									</a>
 								</li>
 								<script>
-									$('#a3apia').click(function(){
+									//$('#a3apia').click(function(){
 										$.ajax({
 										    type: "GET",
 										    url: "{{ parte }}",
@@ -236,14 +237,14 @@
 										    success: function(data) {
 										        if(data != null) {
 										        	$('#a3apilio a').attr("href", data.resultDes);
-										        	$('#a3apili').fadeOut();
+										        	$('#a3apili').hide();
 										        	$('#a3apilio').fadeIn();
 										        } else {
 										        	alert("No se ha podido obtener el enlace al vídeo");
 										        }
 										    }
 										});
-									});
+									//});
 								</script>
 							{% else %}
 								<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: -->

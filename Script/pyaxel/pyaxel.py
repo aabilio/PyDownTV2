@@ -339,7 +339,7 @@ def download(url, options):
 
         printt(u"\n[Tamaño de Descarga] %s\n" % report_bytes(conn_state.filesize - sum(conn_state.progress)))
         #create output file with a .part extension to indicate partial download
-        out_fd = os.open(output_file+".part", os.O_CREAT | os.O_WRONLY)
+        out_fd = os.open(output_file+".part", os.O_CREAT | os.O_WRONLY, 0600)
 
         start_offset = 0
         start_time = time.time()
