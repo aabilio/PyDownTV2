@@ -29,6 +29,7 @@ from urlparse import urlparse
 #import time
 import codecs
 #import os
+from cookielib import CookieJar
 
 std_headers =  {
                'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; '

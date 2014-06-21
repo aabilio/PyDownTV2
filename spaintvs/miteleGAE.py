@@ -44,8 +44,8 @@ class MiTele(Canal.Canal):
     #TOKENIZER = "/tokenizer/tk3.php"
     TOKENIZER = "/"
     
-    #URL_POST = "token.mitele.es"
-    URL_POST = "servicios.telecinco.es/tokenizer/tkjs.php"
+    URL_POST = "token.mitele.es"
+    #URL_POST = "servicios.telecinco.es/tokenizer/tkjs.php"
     
     def __init__(self, url="", opcs=None):
         Canal.Canal.__init__(self, url, opcs, url_validas, __name__)
@@ -109,6 +109,7 @@ class MiTele(Canal.Canal):
             
             # Devuelve enlaces de Telecinco
             #data = Descargar.get("http://token.mitele.es?hash="+get_args, withHeader=True, header=header)
+            #data = Descargar.get("http://pydowntv.pydowntv.com/pydowntv/mitele3.php?url=%s&referer=%s" % (urllib2.quote("http://token.mitele.es?hash="+get_args), urllib2.quote(self.url)))
             data = Descargar.get("http://pydowntv.pydowntv.com/pydowntv/mitele3.php?url=%s&referer=%s" % (urllib2.quote("http://token.mitele.es?hash="+get_args), urllib2.quote(self.url)))
 
         except Exception, e:

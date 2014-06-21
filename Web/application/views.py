@@ -319,6 +319,12 @@ def home(urlOrig=None):
         flash(u"Parece que no has introducido ninguna url")
         return redirect(url_for('home'))
     
+    a3user = request.cookies.get('a3user', None)
+    a3pass = request.cookies.get('a3pass', None)
+    opcs["a3user"] = a3user if a3user is not None else None
+    opcs["a3pass"] = a3pass if a3pass is not None else None
+    #return a3user+ " - " +a3pass
+    
     ## CASOS ESPECIALES URL NO ASCCII
     #RTPA
     if urlOrig.find("rtpa.es") != -1:
@@ -451,6 +457,11 @@ def agranel(urlOrig=None): #TODO: Hacer HILOS!!!
     if urlOrig == u'' or urlOrig == u"Introduce AQUÍ la URL del vídeo a descargar...":
         flash(u"No has introducido ninguna url.. oO")
         return redirect(url_for('agranel')) 
+
+    a3user = request.cookies.get('a3user', None)
+    a3pass = request.cookies.get('a3pass', None)
+    opcs["a3user"] = a3user if a3user is not None else None
+    opcs["a3pass"] = a3pass if a3pass is not None else None
     
     # Ahora hay que cambiar todo
     urlsOrig = urlOrig.split()
@@ -549,7 +560,17 @@ def api(urlOrig=None):
                 return render_template("api.html")
         else:
             urlOrig = request.form['urlOrig']
-    
+
+    c_a3user = request.cookies.get('a3user', None)
+    c_a3pass = request.cookies.get('a3pass', None)
+    p_a3user = request.args.get('a3user', None)
+    p_a3pass = request.args.get('a3pass', None)
+    a3user   = p_a3user if p_a3user is not None else c_a3user
+    a3pass   = p_a3pass if p_a3pass is not None else c_a3pass 
+    opcs["a3user"] = a3user if a3user is not None else None
+    opcs["a3pass"] = a3pass if a3pass is not None else None
+
+
     ## CASOS ESPECIALES URL NO ASCCII
     #RTPA
     if urlOrig.find("rtpa.es") != -1:
@@ -730,6 +751,11 @@ def embed(urlOrig=None):
     if urlOrig == u'' or urlOrig == u"Introduce AQUÍ la URL del vídeo a descargar...":
         h(u"Parece que no has introducido ninguna url")
         return redirect(urflasl_for('home'))
+
+    a3user = request.cookies.get('a3user', None)
+    a3pass = request.cookies.get('a3pass', None)
+    opcs["a3user"] = a3user if a3user is not None else None
+    opcs["a3pass"] = a3pass if a3pass is not None else None
     
     ## CASOS ESPECIALES URL NO ASCCII
     #RTPA

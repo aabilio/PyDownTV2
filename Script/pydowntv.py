@@ -123,6 +123,8 @@ def argsparse():
     parser.add_option("-p", "--partes", dest="partes", help="-p 1,2,3")
     parser.add_option("-F", "--formula1", dest="formula1", help="V, S, c, P, C")
     parser.add_option("-N", "--nombre", dest="user_filename", help="-N ficheroDestino.mp4")
+    parser.add_option("-U", "--a3user", dest="a3user", help="--a3user felipe")
+    parser.add_option("-P", "--a3pass", dest="a3pass", help="--a3pass xh0pks")
     return parser.parse_args()
         
 # def comprobar_version():
@@ -168,7 +170,9 @@ if __name__ == "__main__":
             "debug": options.debug if options.debug is not None else False,
             "partes": [int(p) for p in options.partes.split(",")] if options.partes is not None else None,
             "formula1": options.formula1 if options.formula1 is not None else None,
-            "user_filename": str(options.user_filename) if options.user_filename is not None else None
+            "user_filename": str(options.user_filename) if options.user_filename is not None else None,
+            "a3user": str(options.a3user) if options.a3user is not None else None,
+            "a3pass": str(options.a3pass) if options.a3pass is not None else None
             }
     ####
 

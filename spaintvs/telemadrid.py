@@ -166,8 +166,9 @@ class Telemadrid(Canal.Canal):
         except:
             name = "VideoTelemadrid"+ext
         
-        url = "/".join(img.split("/")[:3])+"/"+"/".join(url.split("/")[3:])
-        
+        #url = "/".join(img.split("/")[:3])+"/"+"/".join(url.split("/")[3:])
+        url += "?v=&fp=&r=&g="
+
         return {"exito" : True,
                 "num_videos" : 1,
                 "mensaje"   : u"URL obtenido correctamente",
@@ -186,7 +187,4 @@ class Telemadrid(Canal.Canal):
                 "titulos": [tit] if tit is not None else None,
                 "descs": [desc] if desc is not None else None
                 }
-
-
-
 

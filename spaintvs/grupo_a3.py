@@ -26,6 +26,11 @@ import re
 try: import simplejson as json
 except: import json
 from hashlib import md5 
+from time import sleep
+import xml.etree.ElementTree
+import urllib2
+import urllib
+from cookielib import CookieJar
 
 import Canal
 import Descargar
@@ -245,6 +250,51 @@ class GrupoA3(Canal.Canal):
         
         return ret
 
+    def normalNuevoMultiple(self, xmls):
+        ret =   {
+                "exito" : True,
+                "num_videos" : 0,
+                "mensaje"   : u"URLs obtenido correctamente",
+                "videos":[],
+                "titulos": [],
+                "descs": []
+                }
+        cont = 0
+        for xml_ in xmls:
+            video = {
+                    "url_video" : [],
+                    "url_img"   : None,
+                    "filename"  : [],
+                    "tipo"      : "http",
+                    "partes"    : 0,
+                    "rtmpd_cmd" : None,
+                    "menco_cmd" : None,
+                    "url_publi" : None,
+                    "otros"     : None,
+                    "mensaje"   : None
+                    }
+
+            sxml = Descargar.get(xml_)  
+            xmltree = xml.etree.ElementTree.fromstring(sxml)
+            
+            url_desc = xmltree.find('./media/asset/files/videoSource').text.encode('utf8')
+            url_img = xmltree.find('./media/asset/files/background').text.encode('utf8')
+
+            ret["num_videos"] += 1
+            ret["titulos"].append(xmltree.find('./media/asset/info/art/name').text.encode('utf8'))
+            ret["descs"].append(xmltree.find('./media/asset/info/art/description').text.encode('utf8'))
+            
+            video["url_video"].append(url_desc)
+            video["url_img"] = url_img
+            #print cont, ":", ret["titulos"][cont]
+            video["filename"].append(Utiles.formatearNombre(ret["titulos"][cont])+".mp4")
+            video["partes"] = 1
+            ret["videos"].append(video)
+
+            cont += 1
+
+        return ret
+
     def normalMultiple(self, xmls):
         ret =   {
                 "exito" : True,
@@ -279,7 +329,7 @@ class GrupoA3(Canal.Canal):
             
             video["url_video"].append(url_desc+re.findall("<archivo><!\[CDATA\[(.*\.mp4)\]\]></archivo>", sxml)[0])
             video["url_img"] = url_img+re.findall("<archivo><!\[CDATA\[(.*\.jpg)\]\]></archivo>", sxml)[0]
-            print cont, ":", ret["titulos"][cont]
+            #print cont, ":", ret["titulos"][cont]
             video["filename"].append(Utiles.formatearNombre(ret["titulos"][cont]))
             video["partes"] = 1
             ret["videos"].append(video)
@@ -384,44 +434,86 @@ class GrupoA3(Canal.Canal):
         return qq
 
     def __getApiMobileUrl(self, episode):
-        return Descargar.get("http://www.pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzE/%s" % (episode))
+        return Descargar.get("http://pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzE/%s" % (episode))
+        #header = {"User-Agent": "Dalvik/1.6.0 (Linux; U; Android 4.3; GT-I9300 Build/JSS15J"}
+        #return Descargar.getHtmlHeaders("http://www.pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzE/%s" % (episode), header=header)
     def __getApiMobileUrl2(self, episode):
-        return Descargar.get("http://www.pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzM/%s" % (episode))
+        return Descargar.get("http://pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzM/%s" % (episode))
+        #header = {"User-Agent": "Dalvik/1.6.0 (Linux; U; Android 4.3; GT-I9300 Build/JSS15J"}
+        #return Descargar.getHtmlHeaders("http://www.pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzM/%s" % (episode), header=header)
+
+    def atresplayer_mobile_login(self, url, formdata):
+        self.debug(u"Legeando en atresplayer") #Login
+        cj = CookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+        opener.addheaders = [("User-Agent","Dalvik/1.6.0 (Linux; U; Android 4.3; GT-I9300 Build/JSS15J"),("Referer", "http://www.atresplayer.com/")]
+        data_encoded = urllib.urlencode(formdata)
+        response = opener.open(url, data_encoded)
+        self.debug(u"Comprobando login en atresplayer") #Check Login:
+        opener.addheaders = [("Accept","application/json"),("User-Agent","Dalvik/1.6.0 (Linux; U; Android 4.3; GT-I9300 Build/JSS15J"),("Referer", "http://www.atresplayer.com/")]
+        response = opener.open("http://servicios.atresplayer.com/connected")
+        content = json.loads(response.read())
+        if content["connected"]:
+            self.debug(u"Login correcto en atresplayer")
+            return cj
+        else: raise Error.GeneralPyspainTVsError(u"Usuario y/o contraseña incorrecta")
 
     def atresplayer_mobile(self):
         #stream = self.__get(self.url)
         stream = Descargar.get(self.url)
         episode = re.findall('episode="(.*)">', stream)[0]
         header = {"Accept":"application/json"}
+        self.debug("http://servicios.atresplayer.com/episode/get?episodePk="+episode)
         j = json.loads(Descargar.getHtmlHeaders("http://servicios.atresplayer.com/episode/get?episodePk="+episode, header=header))
 
-        if j['type'] == "REGISTER":
+        if j['type'] == "FREE":
             url = Utiles.url_fix(self.__getApiMobileUrl2(episode))
-            #self.debug(unicode(url))
-            #jj = json.loads(Descargar.getHtmlHeaders(Utiles.url_fix(url)))
+            header = {"User-Agent":"Dalvik/1.6.0 (Linux; U; Android 4.3; GT-I9300 Build/JSS15J)"}
+            data = json.loads(Descargar.getHtmlHeaders(url.replace("https://", "http://"), header=header))
+            self.debug(u"DATA:\n%s" % data)
             try:
-                #url2down = jj['resultDes']
-                url2down = url
-            except:
-                raise Error.GeneralPyspainTVsError(unicode(jj['resultDes']))
-        elif j['type'] == "FREE": # TEMP FIX
-            url = Utiles.url_fix(self.__getApiMobileUrl2(episode))
-            try:
-                url2down = url
+                url2down = data['resultObject']['es']
+                if url2down is None: raise Error.GeneralPyspainTVsError(u"No se ha podido obtener el enlace del vídeo")
+                #url2down = url.replace("https://", "http://")
             except:
                 raise Error.GeneralPyspainTVsError(unicode(jj['resultDes']))
         else:
-            url = Utiles.url_fix(self.__getApiMobileUrl(episode).replace("https://", "http://"))
-            self.debug(unicode(url))
-            #jj = json.loads(self.__get(Utiles.url_fix(url)))
-            jj = json.loads(Descargar.get(Utiles.url_fix(url)))
-            try:
-                url2down = jj['resultObject']['es']
-            except:
-                raise Error.GeneralPyspainTVsError(unicode(jj['resultDes']))
+            if not self.opcs["a3user"] or not self.opcs["a3pass"]:
+                raise Error.GeneralPyspainTVsError(u"No tienes permisos para acceder al contenido. Proporciona tu usuario y contraseña para volver a intentarlo (en la web: botón de opciones arriba a la izquierda).")
+            cj = self.atresplayer_mobile_login("http://servicios.atresplayer.com/j_spring_security_check", {"j_username":self.opcs["a3user"],"j_password":self.opcs["a3pass"]})
+            apiUrl = Utiles.url_fix(self.__getApiMobileUrl2(episode)).replace("https://","http://")
+            opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+            opener.addheaders = [("Accept","application/json"),("User-Agent","Dalvik/1.6.0 (Linux; U; Android 4.3; GT-I9300 Build/JSS15J"),("Referer", "http://www.atresplayer.com/")]
+            response = opener.open(apiUrl)
+            content = json.loads(response.read())
+            self.debug(u"CONTENT:\n%s" % content)
+            url2down = content['resultObject']['es']
+            if url2down is None: raise Error.GeneralPyspainTVsError(u"No se ha podido obtener el enlace del vídeo")
+            if not url2down: raise Error.GeneralPyspainTVsError(unicode(content['resultDes']))
 
-            if url2down is None:
-                raise Error.GeneralPyspainTVsError(u"[Atresplayer] No se han podido obtener enlaces para URL proporcionada")
+        # if j['type'] == "REGISTER":
+        #     url = Utiles.url_fix(self.__getApiMobileUrl2(episode))
+        #     #header = {"User-Agent":"Dalvik/1.6.0 (Linux; U; Android 4.3; GT-I9300 Build/JSS15J)"}
+        #     #data = json.loads(Descargar.getHtmlHeaders(url.replace("https://", "http://"), header=header))
+        #     try:
+        #         #url2down = data['resultObject']['es']
+        #         url2down = url.replace("https://", "http://")
+        #     except:
+        #         raise Error.GeneralPyspainTVsError(unicode(jj['resultDes']))
+        # elif j['type'] == "FREE": # TEMP FIX
+            
+        # else:
+        #     url = Utiles.url_fix(self.__getApiMobileUrl2(episode).replace("https://", "http://"))
+        #     self.debug(unicode(url))
+        #     #jj = json.loads(self.__get(Utiles.url_fix(url)))
+        #     jj = json.loads(Descargar.get(Utiles.url_fix(url)))
+        #     try:
+        #         url2down = jj['resultObject']['es']
+        #     except:
+        #         raise Error.GeneralPyspainTVsError(unicode(jj['resultDes']))
+
+        #     if url2down is None:
+        #         raise Error.GeneralPyspainTVsError(u"[Atresplayer] No se han podido obtener enlaces para URL proporcionada")
 
             
 
@@ -599,6 +691,11 @@ class GrupoA3(Canal.Canal):
             url2down, name = self.__modoSalon(streamHTML)
         else: # Otro vídeos (No modo salón)
             self.log(u"[INFO] Vídeo normal (no Modo Salón)")
+            # EN PRUEBAS (nuevo modo normal) (17/05/2014)  #######################################
+            xmls = re.findall(".*(http.*\/videosnuevosxml\/.*\.xml).*", streamHTML)
+            if len(xmls) > 0:
+                return self.normalNuevoMultiple(xmls)
+            ######################################################################################
             # EN PRUEBAS (solo si hay varios vídeos...)! (23/04/2013) [RETROCOMPATIBLE]: #########
             xmls = re.findall("\.xml='(.*)'", streamHTML)
             if len(xmls) > 1:

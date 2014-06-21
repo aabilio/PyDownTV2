@@ -24,7 +24,10 @@ __date__ ="$10-dic-2012 19:21:30$"
 import Canal
 import Utiles
 import Descargar
-#import Error
+import Error
+
+import re
+import json
 
 url_validas = ["rtpa.es"]
 
@@ -35,6 +38,7 @@ class RTPA(Canal.Canal):
     
     TOKEN = "http://servicios.rtpa.es/flumotion/player/tokenondemand_mp4.php?r=vod&v="
     TOKEN_ARCHIVO = "http://www.rtpa.es/vod_get_m3u_video.php?id="
+    RTPA_API_INFO_ENDPOINT = "http://www.rtpa.es/api/muestra_json_vod_video.php?id_video="
     URL_RTPA = "http://rtpa.es/"
     
     def __init__(self, url="", opcs=None):
@@ -76,6 +80,7 @@ class RTPA(Canal.Canal):
         
         try: #Tratar de quitar caracteres especiales de las urls que no lo necesitan
             self.url = self.url.split("video:")[0] + "video:_" + self.url.split("_")[1]
+            self.debug(u"Adaptar URL: %s" % self.url)
         except:
             pass
         
@@ -84,14 +89,14 @@ class RTPA(Canal.Canal):
         
         partes = None
         #método 12/11/2012:
-        if streamHTML.find("html5") != -1:
+        #if streamHTML.find("html5") != -1:
+        if re.findall("[\'\"]type[\'\"]\ *:\ *[\'\"]html5[\'\"]", streamHTML):
             partes = 1
-            name = streamHTML.split("<div id=\"sobreElVideo\">")[1].split("<h3>")[1].split("</h3>")[0] + ".mp4"
-            streamHTML = streamHTML.replace(" ", "")
-            try:
-                url = streamHTML.split("html5")[1].split("\'file\':\'")[1].split("\'")[0]
-            except:
-                url = streamHTML.split("html5")[0].split("\'file\':\'")[1].split("\'")[0]
+            videoID = re.findall("\:\_(.*)\.", self.url)[0]
+            url = re.findall("[\'\"]file[\'\"]\ *?:\ *?[\'\"](.*?)[\'\"]",streamHTML)[0]
+            info = json.loads(Descargar.getHtmlUtf8(self.RTPA_API_INFO_ENDPOINT+videoID))
+            try: name = Utiles.formatearNombre("%s (%s).mp4" % (info["VOD"][0]["nombre_programa"], info["VOD"][0]["fecha_emision"]))
+            except: name = u"ProgramaRTPA.mp4"
         else:
             # Cuantas partes son:
             try: 
@@ -140,47 +145,55 @@ class RTPA(Canal.Canal):
                     else:
                         break
                     
-        #FIXME: Gran fixme aquí, arreglat todo esto de desc y de tit_vid
-        try: #imagen del vídeo
-            img = self.URL_RTPA + Utiles.recortar(htmlBackup, "\'image\': \'", "\'")
-        except:
-            img = None
-        
-        desc = u""
-        try: # Descripción del vídeo
-            d = htmlBackup.split("<div class=\"overview\">")[1].split("<div>")[1].split("</div>")[0].strip()
-        except:
-            try:
-                d = htmlBackup.split("<div class=\"overview\">")[1].split("<p>")[1].split("</p>")[0].strip()
-            except:
-                pass
-        try: # desc coding
-            desc = unicode(d).encode("utf8")
-        except:
-            desc = u"Vídeo de la web de Radio Televisión del Principado de Asturias".encode("utf8")
-        if desc == u"": desc = u"Vídeo de la web de Radio Televisión del Principado de Asturias".encode("utf8")
-        
-        tit_vid = u""
-        try: #Título del vídeo
-            tit = htmlBackup.split("<div id=\"sobreElVideo\">")[1].split("<h3>")[1].split("</h3>")[0].strip()
-        except:
-            try:
-                tit = htmlBackup.split("<div id=\"sobreElVideo\">")[1].split("<h4 class=\"")[1].split(">")[1].split("<")[0].strip()
-            except:
-                pass
-        try: #titulo coding
-            tit = Utiles.tituloFormat(tit)
-            tit_vid = unicode(tit).encode("utf8")
-        except:
-            tit_vid = u"Vídeo de la web de Radio Televisión del Principado de Asturias".encode("utf8")
-        if tit_vid == u"": tit_vid = u"Vídeo de la web de Radio Televisión del Principado de Asturias".encode("utf8")
-        
-        if type(name) == list:
-            for i in name:
-                b = Utiles.formatearNombre(i)
-                name[name.index(i)] = b
+        #FIXME: Gran fixme aquí, arreglar todo esto de desc y de tit_vid
+
+        if info:
+            img  = info["VOD"][0]["url_imagen"]
+            desc = u"%s (%s)" % (info["VOD"][0]["nombre_programa"], info["VOD"][0]["fecha_emision"])
+            try: desc = unicode(desc).encode("utf8")
+            except: desc = u"Vídeo de la web de Radio Televisión del Principado de Asturias".encode("utf8")
+            tit_vid = desc
         else:
-            name = Utiles.formatearNombre(name)
+            try: #imagen del vídeo
+                img = self.URL_RTPA + Utiles.recortar(htmlBackup, "\'image\': \'", "\'")
+            except:
+                img = None
+            
+            desc = u""
+            try: # Descripción del vídeo
+                d = htmlBackup.split("<div class=\"overview\">")[1].split("<div>")[1].split("</div>")[0].strip()
+            except:
+                try:
+                    d = htmlBackup.split("<div class=\"overview\">")[1].split("<p>")[1].split("</p>")[0].strip()
+                except:
+                    pass
+            try: # desc coding
+                desc = unicode(d).encode("utf8")
+            except:
+                desc = u"Vídeo de la web de Radio Televisión del Principado de Asturias".encode("utf8")
+            if desc == u"": desc = u"Vídeo de la web de Radio Televisión del Principado de Asturias".encode("utf8")
+            
+            tit_vid = u""
+            try: #Título del vídeo
+                tit = htmlBackup.split("<div id=\"sobreElVideo\">")[1].split("<h3>")[1].split("</h3>")[0].strip()
+            except:
+                try:
+                    tit = htmlBackup.split("<div id=\"sobreElVideo\">")[1].split("<h4 class=\"")[1].split(">")[1].split("<")[0].strip()
+                except:
+                    pass
+            try: #titulo coding
+                tit = Utiles.tituloFormat(tit)
+                tit_vid = unicode(tit).encode("utf8")
+            except:
+                tit_vid = u"Vídeo de la web de Radio Televisión del Principado de Asturias".encode("utf8")
+            if tit_vid == u"": tit_vid = u"Vídeo de la web de Radio Televisión del Principado de Asturias".encode("utf8")
+            
+            if type(name) == list:
+                for i in name:
+                    b = Utiles.formatearNombre(i)
+                    name[name.index(i)] = b
+            else:
+                name = Utiles.formatearNombre(name)
         
         return {"exito" : True,
                 "num_videos" : 1,

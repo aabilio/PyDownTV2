@@ -44,6 +44,9 @@
     <link href="/static/rainbow/themes/tricolore.css" rel="stylesheet" type="text/css">
 
     <!--<script src="/static/js/lib/jquery.xdomainajax.js"></script>-->
+
+    <!-- Manage Cookies -->
+    <script src="/static/js/cookie.min.js"></script>
     
     <script type="text/javascript">
 	  var _gaq = _gaq || [];
@@ -194,7 +197,7 @@
 							</li>-->
 							<li class="text bold color theme" style="color: #ee6557;"><span id="url_kill_referrer"></span></li>
 							<script>
-								document.getElementById('url_kill_referrer').innerHTML = ReferrerKiller.linkHtml( '{{ url_for('mitele', urlOrig=urlOrig) }}', '{{ tit }}', { target: 'destiny' }, { verticalAlign: 'bottom' } );
+								document.getElementById('url_kill_referrer').innerHTML = ReferrerKiller.linkHtml( '{{ url_for('mitele', urlOrig=urlOrig) }}', '{{ tit|forceescape }}', { target: 'destiny' }, { verticalAlign: 'bottom' } );
 							</script>
 						{% elif urlOrig.find("divinity.es") != -1 or urlOrig.find("cuatro.com") != -1 or urlOrig.find("telecinco.es") != -1  or urlOrig.find("mitelekids.es") != -1 %}
 							{% if parte.find('/rtmpe/geo/') != -1 %}
@@ -203,7 +206,7 @@
 								</li>-->
 								<li class="text bold color theme" style="color: #ee6557;"><span id="url_kill_referrer_{{ cont_video }}"></span></li>
 								<script>
-									document.getElementById('url_kill_referrer_{{ cont_video }}').innerHTML = ReferrerKiller.linkHtml( '{{ url_for('mediaset', urlOrig=urlOrig) }}', '{{ tit|replace("\'", "") }}', { target: 'destiny' }, { verticalAlign: 'bottom' } );
+									document.getElementById('url_kill_referrer_{{ cont_video }}').innerHTML = ReferrerKiller.linkHtml( '{{ url_for('mediaset', urlOrig=urlOrig) }}', '{{ tit|forceescape }}', { target: 'destiny' }, { verticalAlign: 'bottom' } );
 								</script>
 							{% else %}
 								<!--<li class="text bold color theme" style="color: #ee6557;">
@@ -211,9 +214,9 @@
 								</li>-->
 								<li class="text bold color theme" style="color: #ee6557;"><span id="url_kill_referrer_{{ cont_video }}"></span></li>
 								<script>
-									document.getElementById('url_kill_referrer_{{ cont_video }}').innerHTML = ReferrerKiller.linkHtml( '{{ parte }}', '{{ tit|replace("\'", "") }}', { target: 'destiny' }, { verticalAlign: 'bottom' } );
+									document.getElementById('url_kill_referrer_{{ cont_video }}').innerHTML = ReferrerKiller.linkHtml( '{{ parte }}', '{{ tit|forceescape }}', { target: 'destiny' }, { verticalAlign: 'bottom' } );
 								</script>
-							{% endif %}
+							{% endif %}							
 						{% elif urlOrig.find("atresplayer.com/") != -1 %}
 							{% if parte.find("/api/") != -1 %}
 								<li id="a3apili" class="text bold color theme" style="color: #ee6557;">
@@ -226,37 +229,63 @@
 									</a>
 								</li>
 								<script>
+									$('#a3apili').hide();
+									$('#a3apilio a').attr("href", "{{ parte }}");
+									//$('#a3apilio a').attr("target","_blank");
+									$('#a3apilio').fadeIn();
+									
+
+
 									//$('#a3apia').click(function(){
-										$.ajax({
+										/*$.ajax({
 										    type: "GET",
 										    url: "{{ parte }}",
 										    async: false,
 										    crossDomain: true,
-										    data: "blabla",
+										    data: "ideaocralloxD",
 										    dataType: "jsonp",
 										    success: function(data) {
 										        if(data != null) {
-										        	$('#a3apilio a').attr("href", data.resultDes);
+										        	console.log(data)
+										        	$('#divListadoEnlacesInside').text(data.resultObject.es);
+										        	$('#a3apilio a').attr("href", data.resultObject.es);
 										        	$('#a3apili').hide();
 										        	$('#a3apilio').fadeIn();
 										        } else {
 										        	alert("No se ha podido obtener el enlace al vídeo");
 										        }
+										    },
+										    error: function(data) {
+										    	alert("entro error");
+										    	data2 = data;
 										    }
-										});
+										});*/
 									//});
 								</script>
+								<p class="text normal color white bck dark" style="padding: 5px;border-radius: 5px;"><span class="text bold color theme"><u>Temporalmente</u></span> atreplayer solo funciona en Chrome y <a href="https://chrome.google.com/webstore/detail/pydowntv-atresplayer-chro/ghcoiiiebjmlpmchihbilhfibgnpdlfj/related?hl=es&authuser=0" class="button tiny" target="_blank">con este fix</a> instalado<br />
+								<span class="text bold color theme"><u>ADEMÁS</u></span> hay que hacer <span class="text bold color theme"><u>CLIC IZQUIERDO</u></span> (normal) en el enlace. Se abrirá una página de texto con la url final.<br />
+								Copiar y pegar la url en Chrome. Si el vídeo no se descarga: Botón derecho sobre él y clic en "Guardar como"</p>
 							{% else %}
-								<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: -->
+								<!--<li class="text bold color theme" style="color: #ee6557;">
 									<a class="checker_input" href="{{ parte }}" ind="{{ loop.index0 }}"style="display: inline-block; text-decoration: underline;">
 										<h5>{{ tit }}</h5>
 									</a>
-									<!--<div class="checker_output" style="display: inline-block;" alt="{{ parte }}">
-										<div class="a3loading" style="display:inline-block;">
-											<img src="/static/img/loading2.gif" alt="" />
-										</div>
-									</div>-->
-								</li>
+								</li>-->
+								<li class="text bold color theme" style="color: #ee6557;"><span id="url_kill_referrer"></span></li>
+								<script>
+									document.getElementById('url_kill_referrer').innerHTML = ReferrerKiller.linkHtml( '{{ parte }}', '{{ tit|forceescape }}', { target: 'destiny' }, { verticalAlign: 'bottom' } );
+								</script>
+								<br />
+								<span class="text normal color white bck dark" style="padding: 10px;border-radius: 5px;"><span class="text bold color theme"><u>Algunos</u></span> enlaces de atreplayer requieren que completes estas <button id="bs_options" data-tuktuk-modal="modal-right" class="tiny secondary"><span style="font-size:1.5em" class="icon cog"></span>Opciones</button></span>
+								<script>
+									$('#bs_options').click(function(e){
+										e.preventDefault();
+										$('#modal-right').css('display', 'block');
+										$('html, body').animate({ scrollTop: 0},100);
+										return true;
+									});
+									
+								</script>
 							{% endif %}
 						{% else %}
 							<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a  href="{{ parte }}" style="text-decoration: underline;"><h5>{{ tit }}</h5></a></li>
@@ -336,7 +365,7 @@
 		                <FORM ACTION="http://127.0.0.1:9666/flash/add" target="hidden" METHOD="POST" class=""> 
 						  	<INPUT TYPE="hidden" NAME="source" VALUE="http://web.pydowntv.com">     
 						   	<INPUT TYPE="hidden" NAME="urls" VALUE="{{ jdownloader }}">
-						   	<INPUT TYPE="SUBMIT"  class="button secondary"  id="jdownloaderSubmit" NAME="submit" onclick="return comprobarJdownloader();" VALUE="JDownloader">
+						   	<INPUT TYPE="SUBMIT"  class="button secondary"  id="jdownloaderSubmit" NAME="submit" onclick="return comprobarJdownloader();" VALUE="JDownloader" style="border-radius: 4px 4px 4px 4px !important;">
 						</FORM>
 						<p class="text thin color cancel" id="comprobarJdownloader"><!--AQUÍ info sobre JDOWNLOADER--></p>
 						<button class="button secondary listadoEnlaces" href="#"> Listado de Enlaces</button>
@@ -351,7 +380,7 @@
 	    	{% endif %}
 	    	<div class="row" id="divListadoEnlaces" style="padding-top: 10px; display: none;">
 	    		<div class="column_12">
-	    			<pre><code data-language="generic">{% for v in videos %}{% for u in v['url_video'] %}{{ u+"\n" }}{% endfor %}{% endfor %}</code></pre>
+	    			<pre><code data-language="generic" id="divListadoEnlacesInside">{% for v in videos %}{% for u in v['url_video'] %}{{ u+"\n" }}{% endfor %}{% endfor %}</code></pre>
 	    		</div>
 	    	</div>
 	    	<div class="row" id="divListadoComandos" style="padding-top: 10px; display: none;">
@@ -421,6 +450,48 @@
         	<button data-modal="close" class="button alert"><span class="icon remove"></span>Ok</button>
         </footer>
     </div>
+    <div id="modal-right" data-tuktuk="modal" class="side column_5" style="display:none;">
+        <header>
+            <h2 class="inline text book">Opciones</h2>
+            <button onclick="return closeOptions()" data-modal="close" class="transparent small on-right inline icon remove"></button>
+        </header>
+        <article class="form">
+            <h4>Opciones para Atresplayer</h4>
+            <input id="option_a3user" type="text" class="large" placeholder="Usuario" />
+            <input id="option_a3pass" type="password" class="large" placeholder="Contraseña" />
+
+            *PyDownTV no almacena remotamente ningún dato personal. Los datos proporcionados en este apartado son guardados en tu propio navegador y se utlizarán cuando quieras acceder a un enlace de Atresplayer.
+            El uso de este servicio es a tu propia cuenta y PyDownTV no se hace responsable de posibles cancelaciones de cuentas por parte de Atresplayer.
+            Si rellenas el formulario y le das a guardar entendemos que aceptas lo anterior descrito y autorizas a PyDownTV a hacer login con tu cuenta cuando quieras acceder a un contenido de atresplayer. [<a href="https://github.com/aabilio/PyDownTV2/issues/125#issuecomment-42948437" target="_blank">Más info</a>].  
+        </article>
+        <footer>
+            <button onclick="return saveOptions()" data-modal="close">Guardar</button>
+        </footer>
+	</div>
+
+	<script>
+		function closeOptions() {
+			a3user = cookie.get('a3user', '');
+			a3pass = cookie.get('a3pass', '');
+			$('#option_a3user').attr("value", a3user);
+			$('#option_a3pass').attr("value", a3pass);
+
+			$('#modal-right').css('display', 'none');
+		}
+		function saveOptions() {
+			a3user = $('#option_a3user').val();
+			a3pass = $('#option_a3pass').val();
+			/*if ( a3user ) { */cookie.set('a3user', a3user, {expires: 9999,}); /*}*/
+			/*if ( a3pass ) { */cookie.set('a3pass', a3pass, {expires: 9999,}); /*}*/
+
+			$('#modal-right').css('display', 'none');
+		}
+		// Exec first time on page loads
+		a3user = cookie.get('a3user', null);
+		a3pass = cookie.get('a3pass', null);
+		if ( a3user ) { $('#option_a3user').attr("value", a3user); }
+		if ( a3pass ) { $('#option_a3pass').attr("value", a3pass); }
+	</script>
 
     <script>
     	function reloadPage() {
