@@ -1,0 +1,3 @@
+blacklist:
+- subnet: 95.85.32.63
+  description: /api?url=http://www.rtve.es/alacarta/videos/el-tiempo/chubascos-tormentas-debiles-localmente-moderadas/2628560/

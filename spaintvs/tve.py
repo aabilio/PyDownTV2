@@ -235,41 +235,64 @@ class TVE(Canal.Canal):
         url = "http://www.rtve.es/ztnr/movil/thumbnail/%s/%s/%s.png" % (manager, tipo, videoID)
 
         self.debug(u"Probando url:", url)
-        tmp_ = decode(Descargar.get(url))
-        tmp = re.findall(".*tEXt(.*)#[\x00]*([0-9]*).*", tmp_)[0]
-        tmp = [n for n in tmp]
-        cyphertext = tmp[0]
-        key = tmp[1]
-        tmp = tmp = [0 for n in range(500)]
+        try:
+            tmp_ = decode(Descargar.getHtmlHeaders(url, {"Referer": "http://www.rtve.es"}))
+            tmp = re.findall(".*tEXt(.*)#[\x00]*([0-9]*).*", tmp_)[0]
+            tmp = [n for n in tmp]
+            cyphertext = tmp[0]
+            key = tmp[1]
+            tmp = tmp = [0 for n in range(500)]
 
-        # Créditos para: http://sgcg.es/articulos/2012/09/11/nuevos-cambios-en-el-mecanismo-para-descargar-contenido-multimedia-de-rtve-es-2/
-        intermediate_cyphertext = ""
-        increment = 1
-        text_index = 0
-        while text_index < len(cyphertext):
-            text_index = text_index + increment
-            try: intermediate_cyphertext = intermediate_cyphertext + cyphertext[text_index-1]
-            except: pass
-            increment = increment + 1
-            if increment == 5: increment = 1
+            # Créditos para: http://sgcg.es/articulos/2012/09/11/nuevos-cambios-en-el-mecanismo-para-descargar-contenido-multimedia-de-rtve-es-2/
+            intermediate_cyphertext = ""
+            increment = 1
+            text_index = 0
+            while text_index < len(cyphertext):
+                text_index = text_index + increment
+                try: intermediate_cyphertext = intermediate_cyphertext + cyphertext[text_index-1]
+                except: pass
+                increment = increment + 1
+                if increment == 5: increment = 1
 
-        plaintext = ""
-        key_index = 0
-        increment = 4
-        while key_index < len(key):
-            key_index = key_index + 1
-            text_index = int(key[key_index-1]) * 10
-            key_index = key_index + increment
-            try: text_index = text_index + int(key[key_index-1])
-            except: pass
-            text_index = text_index + 1
-            increment = increment + 1
-            if increment == 5: increment = 1
-            plaintext = plaintext + intermediate_cyphertext[text_index-1]
-            #try: plaintext = plaintext + intermediate_cyphertext[text_index-1]
-            #except: pass
+            plaintext = ""
+            key_index = 0
+            increment = 4
+            while key_index < len(key):
+                key_index = key_index + 1
+                text_index = int(key[key_index-1]) * 10
+                key_index = key_index + increment
+                try: text_index = text_index + int(key[key_index-1])
+                except: pass
+                text_index = text_index + 1
+                increment = increment + 1
+                if increment == 5: increment = 1
+                plaintext = plaintext + intermediate_cyphertext[text_index-1]
+                #try: plaintext = plaintext + intermediate_cyphertext[text_index-1]
+                #except: pass
+            urlVideo = plaintext
+        except:
+             ads  = "6037182945"
+             str1 = "51%s-" % videoID
+             inverted_str1 = str1[::-1]
+             s = "".join([ads[int(n)] for n in inverted_str1[1:]])
+             url  = "http://ztnr.rtve.es/ztnr/pub/%s/%s/%s/%s/%s" % (s[0],s[1],s[2],s[3],s)
+             self.debug(u"Probando url:", url)
+             xmldata = Descargar.doPOST("www.pydowntv.com", "/utils/cnR2ZV9yYW5kb21fNA/", {"encrypted":Descargar.get(url)})
+             self.debug(xmldata.replace(xmldata[xmldata.find("</quality>")+10:],""))
 
-        urlVideo = plaintext
+             try:
+                 xmltree = xml.etree.ElementTree.fromstring(xmldata.replace(xmldata[xmldata.find("</quality>")+10:],""))
+                 for node in xmltree.findall("./preset"):
+                     if node.attrib.get('type') == "Alta":
+                         for url in node.findall("./response/url"):
+                             if url.attrib.get('provider') == "AKAMAI_STR-1030":
+                                 urlVideo = url.text
+             except:
+                 urlVideo = re.findall("<url.*>(.*)</url>", xmldata)[0]
+
+
+
+        
         if urlVideo != "":
             if not urlVideo.endswith(".mp4"): urlVideo = urlVideo.replace(urlVideo.split(".mp4")[1], "")
             url_video = urlVideo.replace("www.rtve.es", "media5.rtve.es").replace("iphonelive","mvod")

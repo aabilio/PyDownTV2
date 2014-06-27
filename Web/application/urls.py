@@ -64,7 +64,7 @@ app.add_url_rule('/atresplayer/checker', 'rest_a3p_checker', view_func=views.res
 app.add_url_rule('/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzE/<episode>', 'utils1', view_func=utils.random1)
 app.add_url_rule('/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzM/<episode>', 'utils3', view_func=utils.random3)
 app.add_url_rule('/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzI/<path:toenc>', 'utils2', view_func=utils.random2)
-
+app.add_url_rule('/utils/cnR2ZV9yYW5kb21fNA/', 'utils4', view_func=utils.random4, methods=['POST'])
 
 
 # Examples list page

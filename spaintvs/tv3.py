@@ -230,7 +230,8 @@ class TV3(Canal.Canal):
         
         self.debug(u"TOKEN Utilizdo: "+t)
         url = "rtmp://" + xmlUrl.split("rtmp://")[1].split("<")[0]
-        url = url.replace(url.split("mp4:")[0]+"mp4:", "http://mp4-high-dwn.media.tv3.cat/").replace(url.split(".mp4")[1],"")             
+        urlReplace = "http://mp4-medium-dwn-es.media.tv3.cat/" if url.find("mp4-es") != -1 else "http://mp4-medium-dwn.media.tv3.cat/"
+        url = url.replace(url.split("mp4:")[0]+"mp4:", urlReplace).replace(url.split(".mp4")[1],"")             
         
         #Buscar información con URL_INFO_VIDEO        
         info = Descargar.get(self.URL_INFO_VIDEO + ID, header=headers)
