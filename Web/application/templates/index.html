@@ -295,6 +295,11 @@
 									
 								</script>
 							{% endif %}
+						{% elif urlOrig.find("rtve.es/") != -1 %}
+							<li class="text bold color theme" style="color: #ee6557;"><span id="url_kill_referrer"></span></li>
+							<script>
+								document.getElementById('url_kill_referrer').innerHTML = ReferrerKiller.linkHtml( '{{ parte }}', '{{ tit|forceescape }}', { target: 'destiny' }, { verticalAlign: 'bottom' } );
+							</script>
 						{% else %}
 							<li class="text bold color theme" style="color: #ee6557;"><!--Parte {{ loop.index0+1 }}: --><a  href="{{ parte }}" style="text-decoration: underline;"><h5>{{ tit }}</h5></a></li>
 						{% endif %}
