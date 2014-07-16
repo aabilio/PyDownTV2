@@ -30,7 +30,10 @@ from time import sleep
 import xml.etree.ElementTree
 import urllib2
 import urllib
+import hmac
 from cookielib import CookieJar
+
+from secrets import A3PLAYER_SECRET
 
 import Canal
 import Descargar
@@ -73,6 +76,27 @@ class GrupoA3(Canal.Canal):
     # Comunicación de errores con nivel de aplicación:
     #    - lanzar la excepción: raise Error.GeneralPyspainTVsError("mensaje")
     
+    def callA3api(self, episode):
+        def getApiTime():
+            headers = {"User-Agent":"Dalvik/1.6.0 (Linux; U; Android 4.3; GT-I9300 Build/JSS15J)"}
+            return long(Descargar.get("http://servicios.atresplayer.com/api/admin/time.json", headers)) / 1000L
+
+        def d(s,s1):
+            l = 30000L + getApiTime()
+            s2 = e(s+str(l),s1)
+            return "%s|%s|%s" % (s,str(l),s2)
+
+        def e(s, s1):
+            return hmac.new(s1,s).hexdigest()
+
+        def getApiMobileUrl(episode):
+            p = A3PLAYER_SECRET
+            type_ = "android_tablet"
+            token = d(episode, p)
+            return "https://servicios.atresplayer.com/api/urlVideo/%s/%s/%s" % (episode, type_, token)
+
+        return getApiMobileUrl(episode)
+
     def __getUrlDescarga(self, xml):
         try:
             urlDeDescarga = Utiles.recortar(xml, "<urlHttpVideo><![CDATA[", "]]></urlHttpVideo>")
@@ -434,16 +458,18 @@ class GrupoA3(Canal.Canal):
         return qq
 
     def __getApiMobileUrl(self, episode):
-        return Descargar.get("http://pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzE/%s" % (episode))
+        return self.callA3api(episode)
+        #return Descargar.get("http://pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzE/%s" % (episode))
         #header = {"User-Agent": "Dalvik/1.6.0 (Linux; U; Android 4.3; GT-I9300 Build/JSS15J"}
         #return Descargar.getHtmlHeaders("http://www.pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzE/%s" % (episode), header=header)
     def __getApiMobileUrl2(self, episode):
-        return Descargar.get("http://pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzM/%s" % (episode))
+        return self.callA3api(episode)
+        #return Descargar.get("http://pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzM/%s" % (episode))
         #header = {"User-Agent": "Dalvik/1.6.0 (Linux; U; Android 4.3; GT-I9300 Build/JSS15J"}
         #return Descargar.getHtmlHeaders("http://www.pydowntv.com/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzM/%s" % (episode), header=header)
 
     def atresplayer_mobile_login(self, url, formdata):
-        self.debug(u"Legeando en atresplayer") #Login
+        self.debug(u"Logeando en atresplayer") #Login
         cj = CookieJar()
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
         opener.addheaders = [("User-Agent","Dalvik/1.6.0 (Linux; U; Android 4.3; GT-I9300 Build/JSS15J"),("Referer", "http://www.atresplayer.com/")]

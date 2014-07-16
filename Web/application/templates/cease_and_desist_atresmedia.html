@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <!--<meta charset="utf-8" />-->
+    <title>PyDownTV WEB: Cease and desist por parte de Atresmedia</title>
+
+	<meta name="title" content="PyDownTV: Cease and desist por parte de Atresmedia">
+	<meta name="author" content="aabilio">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Language" content="es" />
+	<link rel="author" href="http://web.pydowntv.com/static/humans.txt" />
+	<meta name="copyright" content="Copyright (c) 2012-2014 by aabilio">
+	<meta name="keywords" content="Cease,desist,atresmedia, antena3,pydowntv">
+	<meta name="description" content="Atresmedia nos obliga a eliminar todos los canales de su grupo">
+	<meta name="robots" content="index, follow">
+	<meta name="rating" content="general">
+	<meta name="google-site-verification" content="ejavY4el_TExdc8suqFo9yz9amL0KAeDNneXX2_r7Y4" />
+
+    <!-- TUKTUK -->
+    {% include 'includes/include_tuktuk.html' %}
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" type="text/css" href="/static/rainbow/themes/sjeiti.css" media="screen" />
+    <!-- Include Rainbow Code Highlighter -->
+    <script src="/static/rainbow/rainbow.min.js"></script>
+    <script src="/static/rainbow/rainbow.linenumbers.js"></script>
+    <script src="/static/rainbow/language/generic.js"></script>
+    <script src="/static/rainbow/language/shell.js"></script>
+
+    <!-- Manage Cookies -->
+    <script src="/static/js/cookie.min.js"></script>
+    
+    <style>
+    	.links a {color:#1abc9c !important;}
+    </style>
+    
+    <script type="text/javascript">
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-22464411-3']);
+	  _gaq.push(['_trackPageview']);
+	
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	</script>
+
+</head>
+
+<body>
+
+    <!-- ========================== HEADER ========================== -->
+	<header class="bck color padding_top">
+	    <div class="row text color normal shadow">
+	        <div class="column_6">
+	            <a href="{{ url_for('home') }}" class="logo text normal color normal">Py<span class="text book">DownTV</span> web<img src="/static/img/favicon.png"/></a>
+	        </div>
+	        <div class="column_3 offset_3 text right">
+	            <span class="text bold">Síguenos! </span>
+	            <a style="font-size:1.2em" href="https://twitter.com/pydowntv" alt="Síguenos en twitter" class="icon twitter"></a>
+	            <a style="font-size:1.2em" href="https://www.facebook.com/webpydowntv" alt="Síguenos en Facebook" class="icon facebook"></a>
+	        </div>
+	    </div>
+	</header>
+	<section class="bck dark underline navigation">
+        <div class="row text center">
+            <nav data-tuktuk="menu" class="padding text bold">
+                <a href="{{ url_for('home') }}"><span class="icon download"></span>Descargar!</a>
+                <a href="{{ url_for('agranel') }}"><span class="icon download"></span><span class="logo text normal">A</span>Granel</a>
+                <a href="{{ url_for('ayuda') }}"><span class="icon tag"></span>FAQ y Ayuda</a>
+                <a href="{{ url_for('canales') }}"><span class="icon pushpin"></span>Televisiones Soportadas</a>
+                <a href="{{ url_for('apps') }}"><span class="icon star"></span>Apps</a>
+                <a href="{{ url_for('api') }}"><span class="icon cog"></span>API</a>
+                <a href="https://github.com/aabilio/PyDownTV2"><span class="icon github"></span>El proyecto en Github</a>
+            </nav>
+        </div>
+    </section>
+
+	<section class="bck darkest landing text color white links" id="myLanding" style="padding: 3em 0;">
+	    <div class="row">
+	        <div class="column_8 offset_2" id="a3mtitle">
+	            <h2 class="text color theme normal hide-phone">Adiós Atresmedia</h2>
+	            <h3 class="text color theme normal show-phone">Adiós Atresmedia</h3>
+	            <br />
+	        </div>
+	    </div>
+
+	    <div class="row">
+	    	<div class="column_8 offset_2">
+	    		<p>Hace más de cuatro años que creé la primera versión a3Downloader, un <a class="text color theme" href="https://es.wikipedia.org/wiki/Bash">Bash Script</a> que más tarde se convertiría en PyDownTV, para obtener los enlaces de series precisamente de la web de Antena 3.</p><br />
+				
+				<div style="text-align: center;">
+					<span id="a3dCodeSwitch" style="text-align:center;" class="text color theme">
+						> Mostrar el código <
+					</span><br/><br />
+				</div>
+				<script>
+					var flag=true;
+					$('#a3dCodeSwitch').click(function(){
+						if (flag) {
+							var posMenu = $("#a3dCodeSwitch").offset();
+	    					$('html, body').animate({ scrollTop: posMenu.top},1000);
+							$('#a3dCode').slideDown();
+							$('#a3dCodeSwitch').html('> Mejor vuelve a ocultarlo <');
+							flag=false;
+						} else {
+							var posMenu = $("#a3mtitle").offset();
+	    					$('html, body').animate({ scrollTop: posMenu.top},1000);
+							$('#a3dCodeSwitch').html('> Mostrar el código <');
+							$('#a3dCode').slideUp();
+							flag=true;
+						}
+					});
+				</script>
+				<style>
+					#a3dCodeSwitch:hover {
+						cursor:pointer;cursor:hand;
+					}
+				</style>
+
+	    		<pre id="a3dCode" style="text-align: left; display:none;"><code data-language="shell" data-line="1">#!/bin/sh
+
+#########################################
+#   a3Downloader.sh                     #
+#   aabilio@gmail.com                   #
+#   http://en.wikipedia.org/wiki/WTFPL  #
+#########################################
+
+# No "valida" ningún dato, si hay error no devuelve info sobre el mismo.
+# Válido mientras mantengan la misma estructura de vídeos y URLs en el servidor.
+
+clear
+
+#Presentación:
+echo '==================================='
+echo '| Descargar vídeos de Antena3.com |'
+echo '==================================='
+echo ''
+
+#Borra antiguos .html, .xml y .mp4 (vídeos) que molesten:
+echo '[+] Borrando archivos antiguos'
+sleep 1.5
+find . -name "*.html*" -exec rm {} \;
+find . -name "*.xml*" -exec rm {} \;
+#find . -name "*.mp4*" -exec rm {} \;
+
+#Descarga la url pasada por parametro, la del cap.:
+HTML=`echo $1`
+echo '[+] Descargando '$HTML'...'
+sleep 1.5
+wget -nv $HTML
+
+#No modificar, servidores de a3 para web y vídeos:
+servidorDescarga="http://desprogresiva.antena3.com/"
+servidorAntena3="http://www.antena3.com"
+
+#Establecer nombre de archivos (mejorar esto ¿sed y awk?):
+nombreHTML=`echo $HTML | cut -d. -f2-3 | cut -d\/ -f5`
+XML=`cat $nombreHTML | grep "so.addVariable(\"xml\"" | cut -d'"' -f4`
+nombreXML=`echo $XML | cut -d/ -f8`
+
+#Establecer datos de la serie:
+serie=`echo $HTML | cut -d/ -f5`
+capitulo=`echo $nombreHTML | cut -d\- -f2 | cut -d. -f1`
+temporada=`echo $HTML | cut -d\/ -f6 | cut -d\- -f2`
+
+#Descargar xml:
+echo '[+] Descargando ' $nombreXML'...'
+sleep 1.5
+wget -nv $servidorAntena3$XML
+
+#Mostrar datos de la serie
+echo ''
+echo '\033[38;5;148m============================================\033[39m'
+echo '\033[38;5;148mSerie : \033[39m"'$serie'"'
+echo '\033[38;5;148mCap   : \033[39m"'$capitulo'"'
+echo '\033[38;5;148mTemp  : \033[39m"'$temporada'"'
+echo ''
+echo '\033[38;5;148mSe descargarán las partes: \033[39m'
+for i in `cat $nombreXML | grep .mp4 | cut -d[ -f3 | cut -d] -f1`
+do
+	nombreMp4=$serie'-'$temporada'x'$capitulo'_parte'`echo $i | cut -d. -f1 | cut -d/ -f6`'.mp4'
+	echo $nombreMp4" ($i)"
+done
+echo '\033[38;5;148m============================================\033[39m'
+echo ''
+echo ''
+sleep 4
+
+#Sacar caps de .xml y descargar los caps.:
+for i in `cat $nombreXML | grep .mp4 | cut -d[ -f3 | cut -d] -f1`
+do
+	nombreMp4=$serie'-'$temporada'x'$capitulo'_parte'`echo $i | cut -d. -f1 | cut -d/ -f6`'.mp4'
+	echo "[+] \033[38;5;148mDescargando: "$nombreMp4"\033[39m ($i)"
+	wget $servidorDescarga$i -O $nombreMp4
+	echo ''
+done
+
+#Borra antiguos .html, .xml que molesten:
+echo '[+] Borrando archivos temporales'
+sleep 1.5
+find . -name "*.html*" -exec rm {} \;
+find . -name "*.xml*" -exec rm {} \;
+
+echo '[FIN] \033[38;5;148mDescargas Finalizadas\033[39m'</code>
+	    		</pre>
+
+	    		<p>
+	    			En todo este tiempo soportando la obtención de enlaces a vídeos de sítios como el "Modo Salón" de antena3.com o los vídeos de La Sexta, PyDownTV no había recibido ninguna queja por parte de las cadenas de TV. Pero ayer, 15/07/2014, poco tiempo después de que la propia Atresmedia (y RTVE) arremetiera contra Casteando (<a href="#casteandoCita">**</a>), una app que también utilizaba la API de PyDownTV, ese momento llegó.
+	    		</p><br />
+	    		<p>
+	    			Atresmedia me ha mandado un <a class="text color theme" href="https://en.wikipedia.org/wiki/Cease_and_desist">"Cease and desist"</a> en un <a class="text color theme" href="https://es.wikipedia.org/wiki/Burofax">Burofax</a> (cuyo contenido es confidencial y no puedo reproducir aquí) y he decidio claudicar.
+	    		</p><br />
+
+	    		<p>
+	    			<p class="question text bold color theme">
+			            ¿Por qué me rindo tan facilmente?
+			        </p>
+			        <div class="answer-wrapper" style="padding-top:0">
+			            <p class="answer text normal color normal">
+			            	PyDownTV no es un negocio. Yo (<a href="https://twitter.com/aabilio"><span class="icon twitter-sign"></span></a> <a href="http://www.linkedin.com/pub/abilio-almeida-eiroa/22/50a/1b9"><span class="icon linkedin-sign"></span></a>) le dedico todo mi tiempo a cosas como <a href="https://www.dropbox.com/s/ewttiipsyne2wnk/Presentacion-Weknow_App%202.pdf">esta</a> o <a href="https://www.dropbox.com/s/pnzfm5xcgww2i1n/bogoaBasuraCeroPresentacion.pdf">esta</a> en <a href="http://weknowcreative.co/">WeKnow Creative.</a><br />
+			            	A través de PyDownTV, yo no obtengo ningún beneficio, y no existe ningún tipo de ánimo de lucro ni directo ni indirecto. Por lo tanto, sin tiempo ni recursos, y aunque tentado de ver a dónde llegaría esto, prefiero no meterme en ninguna batalla. Simplemente por eso.
+			            </p>
+			        </div>
+			        <p class="question text bold color theme">
+			            Entonces, ¿por qué este "Cease and desist"?
+			        </p>
+			        <div class="answer-wrapper" style="padding-top:0">
+			            <p class="answer text normal color normal">
+			            	Pues la verdad, no lo sé. Sus motivos tendrán para utilizar esta vía. <br />
+			            	PyDownTV <span class="text bold underline">no almacena ni procesa</span> (manipulación de vídeos) en sus servidores ningún dato de Atresmedia, simplemente busca dónde está alojado en sus propios servidores. Por lo tanto, PyDownTV <span class="text bold underline">no elimina ninguna publicidad, ni redistribuye el contenido de ninguna manera</span>, solo ofrece un link, y es el usuario el que interactúa con él.<br />
+			            	<span class="text bold underline">Tampoco considero que PyDownTV ponga medios técnicos para burlar la seguridad</span> de Atresmedia.<br />
+			            	PyDownTV es Software Libre y su código está disponible para ver y forkear en <a href="https://github.com/aabilio/PyDownTV2"><span class="icon github"></span> Github</a>. 
+			            </p>
+			        </div>
+			        <p class="question text bold color theme">
+			            ¿Cuándo y cómo se dejará de dar soporte?
+			        </p>
+			        <div class="answer-wrapper" style="padding-top:0">
+			            <p class="answer text normal color normal">
+			            	A lo largo de esta semana se eliminará el soporte de manera oficial para cumplir con los plazos requeridos. Se notificará a través de <a href="https://twitter.com/pydowntv">Twitter</a> y <a href="https://www.facebook.com/webpydowntv">Facebook</a>.<br />
+			            	El proceso es sencillo: eliminaré la clase que maneja la búsqueda de enlaces de todo el Grupo de Atresmedia del proyecto <a href="https://github.com/aabilio/PyDownTV2/blob/master/spaintvs/grupo_a3.py">"spaintvs"</a>, así como las referencias a la misma y los logos.
+			            	Así, tanto el <a href="https://github.com/aabilio/PyDownTV2/tree/master/Script">Script</a>, como la <a href="http://www.pydowntv.com/">versión web</a>, como la <a href="http://www.pydowntv.com/api">API</a> (y por tanto la <a href="https://play.google.com/store/apps/details?id=com.aabilio.pydowntv2">app de Android</a>) dejarán de arrojar resultados a los vídeos de las cadenas pertenecientes al grupo Atresmedia.
+			            </p>
+			        </div>
+	    		</p><br /><br />
+	    		<h3>
+	    			Por todo esto, y después de tanto tiempo, ¡bye bye Atresmedia!
+	    		</h3>
+	    	</div>
+	    </div>
+	</section>
+
+	<section class="bck darkest landing text color white links" style="padding: 3em 0;">
+		<div class="row">
+			<div class="column_8 offset_2">
+				<a href="#" id="casteandoCita">**</a>
+				<ul class="circle">
+					<li><a href="http://www.xatakandroid.com/aplicaciones-android/casteando-es-eliminada-por-google-play-tras-una-denuncia-de-rtve">Casteando es eliminada por Google Play tras una denuncia de RTVE</a> - Xakata Android</li>
+					<li><a href="http://www.elandroidelibre.com/2014/06/rtve-denuncia-al-creador-de-casteando-y-consigue-eliminar-su-app-de-google-play.html">RTVE denuncia al creador de Casteando y consigue eliminar su App de Google Play</a> - El Androide Libre</li>
+					<li><a href="http://alt1040.com/2014/06/casteando-chromecast">El caso Casteando, o por qué Netflix huye de España</a> - alt1040.com</li>
+					<li><a href="http://computerhoy.com/noticias/internet/rtve-antena-3-cargan-app-chromecast-casteando-14325">RTVE y Antena 3 se cargan la app de Chromecast, Casteando</a> - Computer Hoy</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+	
+	<section class="bck darkest landing text color white links" style="padding: 0em 0;">
+		<div class="row">
+			<div class="column_8 offset_2">
+				<div class="addthis_sharing_toolbox" style="float: right;"></div>
+				<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53c479e203b07d68"></script>
+			</div>
+		</div>
+	</section>
+	
+	<section class="bck darkest landing text color white links" style="padding: 3em 0;">
+		<div class="row">
+			<div class="column_8 offset_2">
+				<div id="disqus_thread"></div>
+			    <script type="text/javascript">
+			        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+			        var disqus_shortname = 'pydowntvweb'; // required: replace example with your forum shortname
+
+			        /* * * DON'T EDIT BELOW THIS LINE * * */
+			        (function() {
+			            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+			            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+			        })();
+			    </script>
+			    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+			    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+			   	<script type="text/javascript">
+				    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+				    var disqus_shortname = 'pydowntvweb'; // required: replace example with your forum shortname
+
+				    /* * * DON'T EDIT BELOW THIS LINE * * */
+				    (function () {
+				        var s = document.createElement('script'); s.async = true;
+				        s.type = 'text/javascript';
+				        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+				        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+				    }());
+				</script>
+			</div>
+		</div>
+	</section>
+    
+     
+    <!-- TUKTUK.WIDGETS -->
+    <script src="/static/js/tuktuk.js"></script>
+    <!-- Histats.com  START (hidden counter)-->
+	<script type="text/javascript">
+		document.write(unescape("%3Cscript src=%27http://s10.histats.com/js15.js%27 type=%27text/javascript%27%3E%3C/script%3E"));
+	</script>
+	<a href="http://www.histats.com" target="_blank" title="free contadores" >
+		<script  type="text/javascript" >
+			try {
+				Histats.start(1,2598970,4,0,0,0,"");
+				Histats.track_hits();
+			} catch(err) {};
+		</script>
+	</a>
+	<noscript>
+		<a href="http://www.histats.com" target="_blank">
+			<img  src="http://sstatic1.histats.com/0.gif?2598970&101" alt="free contadores" border="0">
+		</a>
+	</noscript>
+	<!-- Histats.com  END  -->
+</body>
+</html>

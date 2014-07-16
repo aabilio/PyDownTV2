@@ -66,6 +66,10 @@ app.add_url_rule('/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzM/<episode>', 'utils3', view_
 app.add_url_rule('/utils/YXRyZXNwbGF5ZXJfcmFuZG9tXzI/<path:toenc>', 'utils2', view_func=utils.random2)
 app.add_url_rule('/utils/cnR2ZV9yYW5kb21fNA/', 'utils4', view_func=utils.random4, methods=['POST'])
 
+# Denuncia Atresmedia
+@app.route('/cease_and_desist_atresmedia')
+def cease_and_desist_atresmedia():
+	return render_template('cease_and_desist_atresmedia.html')
 
 # Examples list page
 #app.add_url_rule('/examples', 'list_examples', view_func=views.list_examples, methods=['GET', 'POST'])
