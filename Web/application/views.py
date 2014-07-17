@@ -595,6 +595,7 @@ def api(urlOrig=None):
     if not urlOrig.startswith("http://"): urlOrig ="http://"+urlOrig
     if compURL(urlOrig):
         canal = qCanal(urlOrig, opcs)
+        
         if canal == None:
             js = json.dumps(TVnoSoportada)
             if request.args.has_key("jsoncallback"):
@@ -612,6 +613,11 @@ def api(urlOrig=None):
             return resp 
         #return render_template("api.html", messages=URLmalFormada)
 
+    # Bloqueo Atresmedia:
+    if canal.name == "grupo_a3":
+        #return redirect(url_for('cease_and_desist_atresmedia'))
+        msg = { "exito": False, "mensaje": "Atresmedia no soportado por petición de sus servicios jurídicos"}
+        return Response(json.dumps(msg), status=200, mimetype='application/json')
 
     try:
         info = canal.getInfo()
