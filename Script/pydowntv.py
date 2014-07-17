@@ -215,7 +215,10 @@ if __name__ == "__main__":
                 uiUtiles.salir(unicode(e))
             #except Exception, e:
             #    Utiles.salir(unicode(e))
-             
+
+            if canal.name == "spaintvs.grupo_a3":
+              uiUtiles.salir(u"[ERROR] Atresmedia no soportado por petición de sus servicios jurídicos. Más info aquí: http://www.pydowntv.com/cease_and_desist_atresmedia")
+
             if info["exito"]: ## TODO OK
                 if options.show: # Solo mostrar enlaces
                     for video in info["videos"]: # No importa si solo es un vídeo o varios, muestra todo

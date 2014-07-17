@@ -89,6 +89,20 @@
 
 	    <div class="row">
 	    	<div class="column_8 offset_2">
+	    		<p>
+	    			<span class="text color theme">[ACTUALIZACIÓN - 17/07/2014]</span> Desde PyDownTV hemos eliminado el soporte para los canales de Atresmedia:<br /><br />
+	    			<ul class="circle">
+	    				<li>Se ha editado (borrado contenido) la clase que manejaba Atresmedia en el código del proyecto.</li>
+	    				<li>Atresmedia inaccesible desde API.</li>
+	    				<li>La app para Android dará error al buscar contenido de Atresmedia.</li>
+	    				<li>PyDownTV Web redirige a esta página si se busca contenido de Atresmedia (En el modo "AGranel" si una de las URLs pertenece a Atresmedia, también se redirigirá a esta página).</li>
+	    				<li>El Script data error al pasarle una url de Atresmedia</li>
+	    				<li>Algunos de los hilos de Github han sido eliminados.</li>
+	    				<li>Algún manual de Youtube ha sido eliminado.</li>
+	    			</ul>
+	    		</p>
+	    		<hr class="text color theme" />
+	    		<br/>
 	    		<p>Hace más de cuatro años que creé la primera versión a3Downloader, un <a class="text color theme" href="https://es.wikipedia.org/wiki/Bash">Bash Script</a> que más tarde se convertiría en PyDownTV, para obtener los enlaces de series precisamente de la web de Antena 3.</p><br />
 				
 				<div style="text-align: center;">
@@ -309,6 +323,11 @@ echo '[FIN] \033[38;5;148mDescargas Finalizadas\033[39m'</code>
 			</div>
 		</div>
 	</section>
+
+	<script>
+		var posMenu = $("#a3mtitle").offset();
+	   	$('html, body').animate({scrollTop: posMenu.top},1000);
+	</script>
     
      
     <!-- TUKTUK.WIDGETS -->

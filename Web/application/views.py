@@ -351,6 +351,10 @@ def home(urlOrig=None):
         #    last = None
         #return last[0].urlOrig
 
+    # Bloqueo Atresmedia:
+    if canal.name == "spaintvs.grupo_a3":
+        return redirect(url_for('cease_and_desist_atresmedia'))
+
     try:
         info = canal.getInfo()
     except Error.GeneralPyspainTVsError, e:
@@ -507,6 +511,10 @@ def agranel(urlOrig=None): #TODO: Hacer HILOS!!!
             continue
             #flash(u"ERROR al recuperar el vídeo. ¿Es una URL válida?")
             #return redirect(url_for('agranel'))
+    
+        # Bloqueo Atresmedia:
+        if canal.name == "spaintvs.grupo_a3":
+            return redirect(url_for('cease_and_desist_atresmedia'))
         
         # Guardar Registro antes de renderizar: ##.decode('iso-8859-1').encode('utf8')
         # try: 
@@ -614,7 +622,7 @@ def api(urlOrig=None):
         #return render_template("api.html", messages=URLmalFormada)
 
     # Bloqueo Atresmedia:
-    if canal.name == "grupo_a3":
+    if canal.name == "spaintvs.grupo_a3":
         #return redirect(url_for('cease_and_desist_atresmedia'))
         msg = { "exito": False, "mensaje": "Atresmedia no soportado por petición de sus servicios jurídicos"}
         return Response(json.dumps(msg), status=200, mimetype='application/json')
@@ -788,6 +796,10 @@ def embed(urlOrig=None):
         #except:
         #    last = None
         #return last[0].urlOrig
+
+    # Bloqueo Atresmedia:
+    if canal.name == "spaintvs.grupo_a3":
+        return redirect(url_for('cease_and_desist_atresmedia'))
 
     try:
         info = canal.getInfo()
