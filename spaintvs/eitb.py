@@ -203,7 +203,7 @@ class EITB(Canal.Canal):
                         #Convertir a HTTP, paso intermedio (thanks @denobis)
                         try: change = re.findall("rtmp://.*\&mp4:", url)[0]
                         except: change = "#####"
-                        url = url.replace(change, "http://brightcove04.brightcove.com/")
+                        url = url.replace(change, "http://uds.ak.o.brightcove.com/")
                         if url.startswith("http://"): typem = "http"
                     else: #Antiguo: brightcove, hay más?
                         app = url.split("/&")[0].split(".net/")[1]  +"?videoId="+videoID+"&lineUpId=&pubId="+publisherID+"&playerId="+playerID

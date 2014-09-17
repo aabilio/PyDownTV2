@@ -277,10 +277,9 @@ class TVE(Canal.Canal):
             s = "".join([ads[int(n)] for n in inverted_str1[1:]])
             url  = "http://ztnr.rtve.es/ztnr/pub/%s/%s/%s/%s/%s" % (s[0],s[1],s[2],s[3],s)
             self.debug(u"Probando url:", url)
-            xmldata = Descargar.doPOST("www.pydowntv.com", "/utils/cnR2ZV9yYW5kb21fNA/", {"encrypted":Descargar.get(url)})
-            self.debug(xmldata.replace(xmldata[xmldata.find("</quality>")+10:],""))
-
+            xmldata = Descargar.doPOST("pydowntv.com", "/utils/cnR2ZV9yYW5kb21fNA/", {"encrypted":Descargar.get(url),"new":"ok"})
             try:
+                self.debug(xmldata.replace(xmldata[xmldata.find("</quality>")+10:],""))
                 xmltree = xml.etree.ElementTree.fromstring(xmldata.replace(xmldata[xmldata.find("</quality>")+10:],""))
                 for node in xmltree.findall("./preset"):
                     if node.attrib.get('type') == "Alta":
@@ -295,7 +294,7 @@ class TVE(Canal.Canal):
         
         if urlVideo != "":
             if not urlVideo.endswith(".mp4"): urlVideo = urlVideo.replace(urlVideo.split(".mp4")[1], "")
-            url_video = urlVideo.replace("www.rtve.es", "media5.rtve.es").replace("iphonelive","mvod")
+            url_video = urlVideo.replace("www.rtve.es", "media5.rtve.es").replace("iphonelive","mvod").replace("NGVA", "ngva").replace("GLESP","ngva").replace("mvodt.lvlt.rtve","mvod.lvlt.rtve").replace("resorces", "resources")
             
             titulo = sourceHTML.split("<title>")[1].split("</")[0].replace("RTVE.es", "").replace("-", "").strip()
             filename = titulo + ".mp4"
@@ -315,13 +314,13 @@ class TVE(Canal.Canal):
         
         desc = None
         try: #obtener descripción del video
-            desc = Utiles.recortar(sourceHTML, "<meta itemprop=\"description\" content=\"", "\"").strip()
+            desc = Utiles.recortar(sourceHTML, "<meta name=\"description\" content=\"", "\"").strip()
         except:
             try:
                 desc = Utiles.recortar(sourceHTML, "<meta property=\"og:description\" content=\"", "\"").strip()
             except:
                 try:
-                    desc = Utiles.recortar(sourceHTML, "<meta name=\"description\" content=\"", "\"").strip()
+                   desc = Utiles.recortar(sourceHTML, "<meta itemprop=\"description\" content=\"", "\"").strip()
                 except:
                     desc = u"Vídeos de Televión Española"
         
